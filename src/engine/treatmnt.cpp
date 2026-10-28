@@ -162,7 +162,7 @@ int  Project::treatmnt_readExpression(char* tok[], int ntoks)
     // --- create a parsed expression tree from the string expr
     //     (getVariableIndex is the function that converts a treatment
     //      variable's name into an index number) 
-    equation = mathexpr_create(expr, &Project::treatmnt_getVariableIndex);
+    equation = mathexpr_create(expr, [this](char* v) { return treatmnt_getVariableIndex(v); });
     if ( equation == NULL )
         return error_setInpError(ERR_MATH_EXPR, "");
 
@@ -451,7 +451,7 @@ double  Project::getRemoval(int p)
 
     // --- apply treatment eqn.
     treatment = &Node[treatmnt_->J].treatment[p];
-    r = mathexpr_eval(treatment->equation, &Project::treatmnt_getVariableValue);
+    r = mathexpr_eval(treatment->equation, [this](int i) { return treatmnt_getVariableValue(i); });
     r = MAX(0.0, r);
 
     // --- case where treatment eqn. is for removal

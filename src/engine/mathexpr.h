@@ -11,6 +11,8 @@
 #ifndef MATHEXPR_H
 #define MATHEXPR_H
 
+#include <functional>
+
 
 //  Node in a tokenized math expression list
 struct ExprNode
@@ -32,5 +34,13 @@ typedef struct ExprNode MathExpr;
 //  Deletes a tokenized math expression
 
 
+
+// swmm5-cplus: free functions with callable callbacks (no Project needed)
+using MathExprVarIndex = std::function<int(char*)>;     // variable name  -> index (or -1)
+using MathExprVarValue = std::function<double(int)>;    // variable index -> current value
+
+MathExpr* mathexpr_create(char* s, const MathExprVarIndex& getVar);
+double    mathexpr_eval(MathExpr* expr, const MathExprVarValue& getVal);
+void      mathexpr_delete(MathExpr* expr);
 
 #endif //MATHEXPR_H

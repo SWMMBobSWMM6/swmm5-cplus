@@ -39,7 +39,7 @@
 
 #include <math.h>
 #include "headers.h"
-#include "findroot.h"
+#include "findroot.hpp"
 
 #define  RECT_ALFMAX        0.97
 #define  RECT_TRIANG_ALFMAX 0.98
@@ -1395,7 +1395,8 @@ double Project::generic_getAofS(TXsect* xsect, double s)
 
     // use the Newton-Raphson root finder function to find A
     tol = 0.0001 * xsect->aFull;
-    findroot_Newton(a1, a2, &a, tol, &Project::evalSofA, &xsectStar);
+    swmm::findroot_Newton(a1, a2, &a, tol,
+        [this](double x, double* f, double* df, void* p) { evalSofA(x, f, df, p); }, &xsectStar);
     return a;
 }
 
@@ -1743,7 +1744,8 @@ double Project::getYcritRidder(TXsect* xsect, double q, double y0)
 
     // --- call Ridder root finding procedure with error tolerance
     //     of 0.001 ft. to find critical depth yc
-    yc = findroot_Ridder(y1, y2, 0.001, &Project::getQcritical, &xsectStar);
+    yc = swmm::findroot_Ridder(y1, y2, 0.001,
+        [this](double y, void* p) { return getQcritical(y, p); }, &xsectStar);
     return yc;
 }
 

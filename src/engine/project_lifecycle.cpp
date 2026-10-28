@@ -17,9 +17,7 @@ Project::Project()
     lid_createState();
     lidproc_createState();
     massbal_createState();
-    mathexpr_createState();
     mempool_createState();
-    odesolve_createState();
     output_createState();
     project_createState();
     rain_createState();
@@ -56,9 +54,7 @@ Project::~Project()
     lid_destroyState();
     lidproc_destroyState();
     massbal_destroyState();
-    mathexpr_destroyState();
     mempool_destroyState();
-    odesolve_destroyState();
     output_destroyState();
     project_destroyState();
     rain_destroyState();

@@ -22,7 +22,7 @@
 
 #include <math.h>
 #include "headers.h"
-#include "findroot.h"
+#include "findroot.hpp"
 
 //-----------------------------------------------------------------------------
 //  Constants 
@@ -246,7 +246,8 @@ int Project::solveContinuity(double qin, double ain, double* aout)
         // --- call the Newton root finder method passing it the 
         //     evalContinuity function to evaluate the function
         //     and its derivatives
-        n = findroot_Newton(aLo, aHi, aout, tol, &Project::evalContinuity, NULL);
+        n = swmm::findroot_Newton(aLo, aHi, aout, tol,
+            [this](double a, double* f, double* df, void* p) { evalContinuity(a, f, df, p); }, NULL);
 
         // --- check if root finder succeeded
         if ( n <= 0 ) n = -1;

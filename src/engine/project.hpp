@@ -30,11 +30,12 @@
 #include "exfil.h"
 #include "lid.h"
 #include "inlet.h"
+#include "odesolve.hpp"
+#include "findroot.hpp"
 
 #include "controls_types.h"
 #include "culvert_types.h"
 #include "inlet_types.h"
-#include "mathexpr_types.h"
 #include "mempool_types.h"
 struct ClimateState;
 struct ControlsState;
@@ -50,9 +51,7 @@ struct KinwaveState;
 struct LidState;
 struct LidprocState;
 struct MassbalState;
-struct MathexprState;
 struct MempoolState;
-struct OdesolveState;
 struct OutputState;
 struct ProjectState;
 struct RainState;
@@ -273,15 +272,9 @@ public:
     struct MassbalState* massbal_ = nullptr;   // 7 variables of massbal.c
     void massbal_createState();
     void massbal_destroyState();
-    struct MathexprState* mathexpr_ = nullptr;   // 11 variables of mathexpr.c
-    void mathexpr_createState();
-    void mathexpr_destroyState();
     struct MempoolState* mempool_ = nullptr;   // 1 variables of mempool.c
     void mempool_createState();
     void mempool_destroyState();
-    struct OdesolveState* odesolve_ = nullptr;   // 7 variables of odesolve.c
-    void odesolve_createState();
-    void odesolve_destroyState();
     struct OutputState* output_ = nullptr;   // 15 variables of output.c
     void output_createState();
     void output_destroyState();
@@ -327,6 +320,11 @@ public:
     struct TreatmntState* treatmnt_ = nullptr;   // 7 variables of treatmnt.c
     void treatmnt_createState();
     void treatmnt_destroyState();
+
+    //=========================================================================
+    // Numerical components owned by the project
+    //=========================================================================
+    swmm::OdeSolver odesolver;     // runoff & groundwater ODE integrator (was odesolve.c globals)
 
     //=========================================================================
     // The engine: every function of every module, now a member
@@ -463,9 +461,6 @@ public:
     void exfil_initState(int k);
     double exfil_getLoss(TExfil* exfil, double tStep, double depth, double area);
     int createStorageExfil(int k, double x[]);
-    // ---- findroot.c
-    int findroot_Newton(double x1, double x2, double* rts, double xacc, void (Project::*func) (double x, double* f, double* df, void* p), void* p);
-    double findroot_Ridder(double x1, double x2, double xacc, double (Project::*func)(double, void* p), void* p);
     // ---- flowrout.c
     void flowrout_init(int routingModel);
     void flowrout_close(int routingModel);
@@ -820,25 +815,6 @@ public:
     double massbal_getQualError();
     double massbal_getStepFlowError();
     double massbal_getStoredMass(int p);
-    // ---- mathexpr.c
-    int sametext(char *s1, char *s2);
-    int isDigit(char c);
-    int isLetter(char c);
-    void getToken();
-    int getMathFunc();
-    int getVariable();
-    double getNumber();
-    int getOperand();
-    int getLex();
-    ExprTree * newNode();
-    ExprTree * getSingleOp(int *lex);
-    ExprTree * getOp(int *lex);
-    ExprTree * getTree();
-    void traverseTree(ExprTree *tree, MathExpr **expr);
-    void deleteTree(ExprTree *tree);
-    double mathexpr_eval(MathExpr *expr, double (Project::*getVariableValue) (int));
-    void mathexpr_delete(MathExpr *expr);
-    MathExpr * mathexpr_create(char *formula, int (Project::*getVar) (char *));
     // ---- mempool.c
     alloc_hdr_t * AllocHdr();
     alloc_handle_t * AllocInit();
@@ -877,12 +853,6 @@ public:
     double divider_getOutflow(int j, int k);
     int outfall_readParams(int j, int k, char* tok[], int ntoks);
     void outfall_setOutletDepth(int j, double yNorm, double yCrit, double z);
-    // ---- odesolve.c
-    int odesolve_open(int n);
-    void odesolve_close();
-    int odesolve_integrate(double ystart[], int n, double x1, double x2, double eps, double h1, void (Project::*derivs)(double, double*, double*));
-    int rkqs(double* x, int n, double htry, double eps, double* hdid, double* hnext, void (Project::*derivs)(double, double*, double*));
-    void rkck(double x, int n, double h, void (Project::*derivs)(double, double*, double*));
     // ---- output.c
     int output_open();
     void output_openOutFile();

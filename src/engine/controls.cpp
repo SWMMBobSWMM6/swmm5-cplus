@@ -351,7 +351,7 @@ int  Project::controls_addExpression(char* tok[], int nToks)
         sstrcat(s, tok[i], MAXLINE);
     }
 
-    expr = mathexpr_create(s, &Project::getVariableIndex);
+    expr = mathexpr_create(s, [this](char* v) { return getVariableIndex(v); });
     if (expr == NULL)
         return error_setInpError(ERR_MATH_EXPR, "");
 
@@ -1225,7 +1225,7 @@ int Project::evaluatePremise(struct TPremise* p, double tStep)
     // --- check if left hand side (lhs) of premise is an expression
     if (p->exprIndex >= 0)
         lhsValue = mathexpr_eval(controls_->Expression[p->exprIndex].expression,
-            &Project::getNamedVariableValue);
+            [this](int i) { return getNamedVariableValue(i); });
 
     // --- otherwise get value of the lhs variable
     else

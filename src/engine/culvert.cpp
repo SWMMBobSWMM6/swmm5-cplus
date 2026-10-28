@@ -19,7 +19,7 @@
 #define _CRT_SECURE_NO_DEPRECATE
 
 #include <math.h>
-#include "findroot.h"
+#include "findroot.hpp"
 #include "headers.h"
 
 //-----------------------------------------------------------------------------
@@ -340,7 +340,8 @@ double Project::getForm1Flow(double h, TCulvert* culvert)
 
     // --- use Ridder's method to solve Equation Form 1 for critical depth
     //     between a range of 0.01h and h
-    findroot_Ridder(0.01*h, h, 0.001, &Project::form1Eqn, culvert);
+    swmm::findroot_Ridder(0.01*h, h, 0.001,
+        [this](double x, void* p) { return form1Eqn(x, p); }, culvert);
 
     // --- return the flow value used in evaluating Equation Form 1
     return culvert->qc;

@@ -50,29 +50,71 @@
 #include <stdlib.h>
 #include <math.h>
 #include "mathexpr.h"
-#include "project.hpp"   // swmm5-cplus: functions are Project members
+#include <functional>
 
 #define MAX_STACK_SIZE  1024
 
 //  Local declarations
 //--------------------
 //  Structure for binary tree representation of math expression
+struct TreeNode
+{
+    int    opcode;                // operator code
+    int    ivar;                  // variable index
+    double fvalue;                // numerical value
+    struct TreeNode *left;        // left sub-tree of tokenized formula
+    struct TreeNode *right;       // right sub-tree of tokenized formula
+};
+typedef struct TreeNode ExprTree;
 
+//-----------------------------------------------------------------------------
+//  swmm5-cplus: the parser's state (formerly ten file-scope statics and a
+//  static callback pointer) lives in a parser object created for each
+//  formula, so parsing is reentrant and needs no Project at all.
+//-----------------------------------------------------------------------------
+namespace {
+class MathExprParser
+{
+public:
+    explicit MathExprParser(const MathExprVarIndex& getVar) : getVariableIndex(getVar) {}
+    MathExpr* create(char* formula);
+
+private:
+    int    Err = 0;
+    int    Bc = 0;
+    int    PrevLex = 0, CurLex = 0;
+    int    Len = 0, Pos = 0;
+    char   *S = nullptr;
+    char   Token[255] = {};
+    int    Ivar = 0;
+    double Fvalue = 0.0;
+    const MathExprVarIndex& getVariableIndex;   // returns index of a named variable
+
+    int        sametext(char *, char *);
+    int        isDigit(char);
+    int        isLetter(char);
+    void       getToken(void);
+    int        getMathFunc(void);
+    int        getVariable(void);
+    int        getOperand(void);
+    int        getLex(void);
+    double     getNumber(void);
+    ExprTree * newNode(void);
+    ExprTree * getSingleOp(int *);
+    ExprTree * getOp(int *);
+    ExprTree * getTree(void);
+    void       traverseTree(ExprTree *, MathExpr **);
+    void       deleteTree(ExprTree *);
+};
+} // namespace
 
 
 // Local variables
 //----------------
 
 
-
-
-
-
-
-
-
 // math function names
-char *MathFunc[] =  {"COS", "SIN", "TAN", "COT", "ABS", "SGN",
+static char *MathFunc[] =  {"COS", "SIN", "TAN", "COT", "ABS", "SGN",
                      "SQRT", "LOG", "EXP", "ASIN", "ACOS", "ATAN",
                      "ACOT", "SINH", "COSH", "TANH", "COTH", "LOG10",
                      "STEP", NULL};
@@ -81,46 +123,12 @@ char *MathFunc[] =  {"COS", "SIN", "TAN", "COT", "ABS", "SGN",
 //----------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Callback functions
 
-// ---- mathexpr module state: formerly file-scope variables of mathexpr.c.
-// ---- One instance per Project, so two models never share it.
-struct MathexprState
-{
-    int Err{};   // was static
-    int Bc{};   // was static
-    int PrevLex{};   // was static
-    int CurLex{};   // was static
-    int Len{};   // was static
-    int Pos{};   // was static
-    char * S{};   // was static
-    char Token[255]{};   // was static
-    int Ivar{};   // was static
-    double Fvalue{};   // was static
-    using getVariableIndex_fn_t = int (Project::*)(char *);
-    getVariableIndex_fn_t getVariableIndex{};   // was static
-};
-void Project::mathexpr_createState() { mathexpr_ = new MathexprState(); }
-void Project::mathexpr_destroyState() { delete mathexpr_; mathexpr_ = nullptr; }
- // return index of named variable
 
 //=============================================================================
 
-int  Project::sametext(char *s1, char *s2)
+int  MathExprParser::sametext(char *s1, char *s2)
 /*
 **  Purpose:
 **    performs case insensitive comparison of two strings.
@@ -141,7 +149,7 @@ int  Project::sametext(char *s1, char *s2)
 
 //=============================================================================
 
-int Project::isDigit(char c)
+int MathExprParser::isDigit(char c)
 {
     if (c >= '1' && c <= '9') return 1;
     if (c == '0') return 1;
@@ -150,7 +158,7 @@ int Project::isDigit(char c)
 
 //=============================================================================
 
-int Project::isLetter(char c)
+int MathExprParser::isLetter(char c)
 {
     if (c >= 'a' && c <= 'z') return 1;
     if (c >= 'A' && c <= 'Z') return 1;
@@ -160,28 +168,28 @@ int Project::isLetter(char c)
 
 //=============================================================================
 
-void Project::getToken()
+void MathExprParser::getToken()
 {
     char c[] = " ";
-    mathexpr_->Token[0] = '\0';
-    while ( mathexpr_->Pos <= mathexpr_->Len &&
-        ( isLetter(mathexpr_->S[mathexpr_->Pos]) || isDigit(mathexpr_->S[mathexpr_->Pos]) ) )
+    Token[0] = '\0';
+    while ( Pos <= Len &&
+        ( isLetter(S[Pos]) || isDigit(S[Pos]) ) )
     {
-        c[0] = mathexpr_->S[mathexpr_->Pos];
-        strcat(mathexpr_->Token, c);
-        mathexpr_->Pos++;
+        c[0] = S[Pos];
+        strcat(Token, c);
+        Pos++;
     }
-    mathexpr_->Pos--;
+    Pos--;
 }
 
 //=============================================================================
 
-int Project::getMathFunc()
+int MathExprParser::getMathFunc()
 {
     int i = 0;
     while (MathFunc[i] != NULL)
     {
-        if (sametext(MathFunc[i], mathexpr_->Token)) return i+10;
+        if (sametext(MathFunc[i], Token)) return i+10;
         i++;
     }
     return(0);
@@ -189,17 +197,17 @@ int Project::getMathFunc()
 
 //=============================================================================
 
-int Project::getVariable()
+int MathExprParser::getVariable()
 {
-    if ( !mathexpr_->getVariableIndex ) return 0;
-    mathexpr_->Ivar = (this->*mathexpr_->getVariableIndex)(mathexpr_->Token);
-    if (mathexpr_->Ivar >= 0) return 8;
+    if ( !getVariableIndex ) return 0;
+    Ivar = getVariableIndex(Token);
+    if (Ivar >= 0) return 8;
     return 0;
 }
 
 //=============================================================================
 
-double Project::getNumber()
+double MathExprParser::getNumber()
 {
     char c[] = " ";
     char sNumber[255];
@@ -208,76 +216,76 @@ double Project::getNumber()
 
     /* --- get whole number portion of number */
     sNumber[0] = '\0';
-    while (mathexpr_->Pos < mathexpr_->Len && isDigit(mathexpr_->S[mathexpr_->Pos]))
+    while (Pos < Len && isDigit(S[Pos]))
     {
-        c[0] = mathexpr_->S[mathexpr_->Pos];
+        c[0] = S[Pos];
         strcat(sNumber, c);
-        mathexpr_->Pos++;
+        Pos++;
     }
 
     /* --- get fractional portion of number */
-    if (mathexpr_->Pos < mathexpr_->Len)
+    if (Pos < Len)
     {
-        if (mathexpr_->S[mathexpr_->Pos] == '.')
+        if (S[Pos] == '.')
         {
             decimalCount++;
-            if (decimalCount > 1) mathexpr_->Err = 1;
+            if (decimalCount > 1) Err = 1;
             strcat(sNumber, ".");
-            mathexpr_->Pos++;
-            while (mathexpr_->Pos < mathexpr_->Len && isDigit(mathexpr_->S[mathexpr_->Pos]))
+            Pos++;
+            while (Pos < Len && isDigit(S[Pos]))
             {
-                c[0] = mathexpr_->S[mathexpr_->Pos];
+                c[0] = S[Pos];
                 strcat(sNumber, c);  
-                mathexpr_->Pos++;
+                Pos++;
             }
         }
 
         /* --- get exponent */
-        if (mathexpr_->Pos < mathexpr_->Len && (mathexpr_->S[mathexpr_->Pos] == 'e' || mathexpr_->S[mathexpr_->Pos] == 'E'))
+        if (Pos < Len && (S[Pos] == 'e' || S[Pos] == 'E'))
         {
             strcat(sNumber, "E");  
-            mathexpr_->Pos++;
-            if (mathexpr_->Pos >= mathexpr_->Len) errflag = 1;
+            Pos++;
+            if (Pos >= Len) errflag = 1;
             else
             {
-                if (mathexpr_->S[mathexpr_->Pos] == '-' || mathexpr_->S[mathexpr_->Pos] == '+')
+                if (S[Pos] == '-' || S[Pos] == '+')
                 {
-                    c[0] = mathexpr_->S[mathexpr_->Pos];
+                    c[0] = S[Pos];
                     strcat(sNumber, c);  
-                    mathexpr_->Pos++;
+                    Pos++;
                 }
-                if (mathexpr_->Pos >= mathexpr_->Len || !isDigit(mathexpr_->S[mathexpr_->Pos])) errflag = 1;
-                else while ( mathexpr_->Pos < mathexpr_->Len && isDigit(mathexpr_->S[mathexpr_->Pos]))
+                if (Pos >= Len || !isDigit(S[Pos])) errflag = 1;
+                else while ( Pos < Len && isDigit(S[Pos]))
                 {
-                    c[0] = mathexpr_->S[mathexpr_->Pos];
+                    c[0] = S[Pos];
                     strcat(sNumber, c);  
-                    mathexpr_->Pos++;
+                    Pos++;
                 }
             }
         }
     }
-    mathexpr_->Pos--;
+    Pos--;
     if (errflag) return 0;
     else return atof(sNumber);
 }
 
 //=============================================================================
 
-int Project::getOperand()
+int MathExprParser::getOperand()
 {
     int code;
-    switch(mathexpr_->S[mathexpr_->Pos])
+    switch(S[Pos])
     {
       case '(': code = 1;  break;
       case ')': code = 2;  break;
       case '+': code = 3;  break;
       case '-': code = 4;
-        if (mathexpr_->Pos < mathexpr_->Len-1 &&
-            isDigit(mathexpr_->S[mathexpr_->Pos+1]) &&
-            (mathexpr_->CurLex <= 6 || mathexpr_->CurLex == 31))
+        if (Pos < Len-1 &&
+            isDigit(S[Pos+1]) &&
+            (CurLex <= 6 || CurLex == 31))
         {
-            mathexpr_->Pos++;
-            mathexpr_->Fvalue = -getNumber();
+            Pos++;
+            Fvalue = -getNumber();
             code = 7;
         }
         break;
@@ -291,13 +299,13 @@ int Project::getOperand()
 
 //=============================================================================
 
-int Project::getLex()
+int MathExprParser::getLex()
 {
     int n;
 
     /* --- skip spaces */
-    while ( mathexpr_->Pos < mathexpr_->Len && mathexpr_->S[mathexpr_->Pos] == ' ' ) mathexpr_->Pos++;
-    if ( mathexpr_->Pos >= mathexpr_->Len ) return 0;
+    while ( Pos < Len && S[Pos] == ' ' ) Pos++;
+    if ( Pos >= Len ) return 0;
 
     /* --- check for operand */
     n = getOperand();
@@ -305,31 +313,31 @@ int Project::getLex()
     /* --- check for function/variable/number */
     if ( n == 0 )
     {
-        if ( isLetter(mathexpr_->S[mathexpr_->Pos]) )
+        if ( isLetter(S[Pos]) )
         {
             getToken();
             n = getMathFunc();
             if ( n == 0 ) n = getVariable();
         }
-        else if ( mathexpr_->S[mathexpr_->Pos] == '.' || isDigit(mathexpr_->S[mathexpr_->Pos]) )
+        else if ( S[Pos] == '.' || isDigit(S[Pos]) )
         {
             n = 7;
-            mathexpr_->Fvalue = getNumber();
+            Fvalue = getNumber();
         }
     }
-    mathexpr_->Pos++;
-    mathexpr_->PrevLex = mathexpr_->CurLex;
-    mathexpr_->CurLex = n;
+    Pos++;
+    PrevLex = CurLex;
+    CurLex = n;
     return n;
 }
 
 //=============================================================================
 
-ExprTree * Project::newNode()
+ExprTree * MathExprParser::newNode()
 {
     ExprTree *node;
     node = (ExprTree *) malloc(sizeof(ExprTree));
-    if (!node) mathexpr_->Err = 2;
+    if (!node) Err = 2;
     else
     {
         node->opcode = 0;
@@ -343,7 +351,7 @@ ExprTree * Project::newNode()
 
 //=============================================================================
 
-ExprTree * Project::getSingleOp(int *lex)
+ExprTree * MathExprParser::getSingleOp(int *lex)
 {
     int opcode;
     ExprTree *left;
@@ -352,7 +360,7 @@ ExprTree * Project::getSingleOp(int *lex)
     /* --- open parenthesis, so continue to grow the tree */
     if ( *lex == 1 )
     {
-        mathexpr_->Bc++;
+        Bc++;
         left = getTree();
     }
 
@@ -361,7 +369,7 @@ ExprTree * Project::getSingleOp(int *lex)
         /* --- Error if not a singleton operand */
         if ( *lex < 7 || *lex == 9 || *lex > 30)
         {
-            mathexpr_->Err = 1;
+            Err = 1;
             return NULL;
         }
 
@@ -372,8 +380,8 @@ ExprTree * Project::getSingleOp(int *lex)
         {
             left = newNode();
             left->opcode = opcode;
-            if ( *lex == 7 ) left->fvalue = mathexpr_->Fvalue;
-            if ( *lex == 8 ) left->ivar = mathexpr_->Ivar;
+            if ( *lex == 7 ) left->fvalue = Fvalue;
+            if ( *lex == 8 ) left->ivar = Ivar;
         }
 
         /* --- function which must have a '(' after it */
@@ -382,10 +390,10 @@ ExprTree * Project::getSingleOp(int *lex)
             *lex = getLex();
             if ( *lex != 1 )
             {
-               mathexpr_->Err = 1;
+               Err = 1;
                return NULL;
             }
-            mathexpr_->Bc++;
+            Bc++;
             left = newNode();
             left->left = getTree();
             left->opcode = opcode;
@@ -408,7 +416,7 @@ ExprTree * Project::getSingleOp(int *lex)
 
 //=============================================================================
 
-ExprTree * Project::getOp(int *lex)
+ExprTree * MathExprParser::getOp(int *lex)
 {
     int opcode;
     ExprTree *left;
@@ -417,7 +425,7 @@ ExprTree * Project::getOp(int *lex)
     int neg = 0;
 
     *lex = getLex();
-    if (mathexpr_->PrevLex == 0 || mathexpr_->PrevLex == 1)
+    if (PrevLex == 0 || PrevLex == 1)
     {
         if ( *lex == 4 )
         {
@@ -433,7 +441,7 @@ ExprTree * Project::getOp(int *lex)
         *lex = getLex();
         right = getSingleOp(lex);
         node = newNode();
-        if (mathexpr_->Err) return NULL;
+        if (Err) return NULL;
         node->left = left;
         node->right = right;
         node->opcode = opcode;
@@ -442,7 +450,7 @@ ExprTree * Project::getOp(int *lex)
     if ( neg )
     {
         node = newNode();
-        if (mathexpr_->Err) return NULL;
+        if (Err) return NULL;
         node->left = left;
         node->right = NULL;
         node->opcode = 9;
@@ -453,7 +461,7 @@ ExprTree * Project::getOp(int *lex)
 
 //=============================================================================
 
-ExprTree * Project::getTree()
+ExprTree * MathExprParser::getTree()
 {
     int      lex;
     int      opcode;
@@ -466,20 +474,20 @@ ExprTree * Project::getTree()
     {
         if ( lex == 0 || lex == 2 )
         {
-            if ( lex == 2 ) mathexpr_->Bc--;
+            if ( lex == 2 ) Bc--;
             break;
         }
 
         if (lex != 3 && lex != 4 )
         {
-            mathexpr_->Err = 1;
+            Err = 1;
             break;
         }
 
         opcode = lex;
         right = getOp(&lex);
         node = newNode();
-        if (mathexpr_->Err) break;
+        if (Err) break;
         node->left = left;
         node->right = right;
         node->opcode = opcode;
@@ -490,7 +498,7 @@ ExprTree * Project::getTree()
 
 //=============================================================================
 
-void Project::traverseTree(ExprTree *tree, MathExpr **expr)
+void MathExprParser::traverseTree(ExprTree *tree, MathExpr **expr)
 // Converts binary tree to linked list (postfix format)
 {
     MathExpr *node;
@@ -512,7 +520,7 @@ void Project::traverseTree(ExprTree *tree, MathExpr **expr)
 
 //=============================================================================
 
-void Project::deleteTree(ExprTree *tree)
+void MathExprParser::deleteTree(ExprTree *tree)
 {
     if (tree)
     {
@@ -527,7 +535,7 @@ void Project::deleteTree(ExprTree *tree)
 // Turn on "precise" floating point option
 #pragma float_control(precise, on, push)
 
-double Project::mathexpr_eval(MathExpr *expr, double (Project::*getVariableValue) (int))
+double mathexpr_eval(MathExpr *expr, const MathExprVarValue& getVariableValue)
 //  Mathematica expression evaluation using a stack
 {
     
@@ -583,9 +591,9 @@ double Project::mathexpr_eval(MathExpr *expr, double (Project::*getVariableValue
 		break;
 
             case 8:
-                if (getVariableValue != NULL)
+                if (getVariableValue)
                 {
-                    r1 = (this->*getVariableValue)(node->ivar);
+                    r1 = getVariableValue(node->ivar);
                 }
                 else r1 = 0.0;
 		stackindex++;
@@ -746,7 +754,7 @@ double Project::mathexpr_eval(MathExpr *expr, double (Project::*getVariableValue
 
 //=============================================================================
 
-void Project::mathexpr_delete(MathExpr *expr)
+void mathexpr_delete(MathExpr *expr)
 {
     if (expr) mathexpr_delete(expr->next);
     free(expr);
@@ -754,21 +762,20 @@ void Project::mathexpr_delete(MathExpr *expr)
 
 //=============================================================================
 
-MathExpr * Project::mathexpr_create(char *formula, int (Project::*getVar) (char *))
+MathExpr * MathExprParser::create(char *formula)
 {
     ExprTree *tree;
     MathExpr *expr = NULL;
     MathExpr *result = NULL;
-    mathexpr_->getVariableIndex = getVar;
-    mathexpr_->Err = 0;
-    mathexpr_->PrevLex = 0;
-    mathexpr_->CurLex = 0;
-    mathexpr_->S = formula;
-    mathexpr_->Len = (int)strlen(mathexpr_->S);
-    mathexpr_->Pos = 0;
-    mathexpr_->Bc = 0;
+    Err = 0;
+    PrevLex = 0;
+    CurLex = 0;
+    S = formula;
+    Len = (int)strlen(S);
+    Pos = 0;
+    Bc = 0;
     tree = getTree();
-    if (mathexpr_->Bc == 0 && mathexpr_->Err == 0)
+    if (Bc == 0 && Err == 0)
     {
         traverseTree(tree, &expr);
         while (expr)
@@ -779,4 +786,13 @@ MathExpr * Project::mathexpr_create(char *formula, int (Project::*getVar) (char 
     }
     deleteTree(tree);
     return result;
+}
+
+//=============================================================================
+
+MathExpr * mathexpr_create(char *formula, const MathExprVarIndex& getVar)
+//  swmm5-cplus: one parser object per formula
+{
+    MathExprParser parser(getVar);
+    return parser.create(formula);
 }

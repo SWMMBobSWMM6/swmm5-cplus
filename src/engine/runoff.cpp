@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "headers.h"
-#include "odesolve.h"
+#include "odesolve.hpp"
 
 //-----------------------------------------------------------------------------
 // Shared variables
@@ -106,7 +106,7 @@ int Project::runoff_open()
     runoff_->Nsteps = 0;
 
     // --- open the Ordinary Differential Equation solver
-    if ( !odesolve_open(MAXODES) ) report_writeErrorMsg(ERR_ODE_SOLVER, "");
+    if ( !odesolver.open(MAXODES) ) report_writeErrorMsg(ERR_ODE_SOLVER, "");
 
     // --- allocate memory for pollutant runoff loads
     OutflowLoad = NULL;
@@ -143,7 +143,7 @@ void Project::runoff_close()
 //
 {
     // --- close the ODE solver
-    odesolve_close();
+    odesolver.close();
 
     // --- free memory for pollutant runoff loads
     FREE(OutflowLoad);

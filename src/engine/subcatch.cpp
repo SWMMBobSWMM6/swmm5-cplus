@@ -44,7 +44,7 @@
 #include <string.h>
 #include "headers.h"
 #include "lid.h"
-#include "odesolve.h"
+#include "odesolve.hpp"
 
 //-----------------------------------------------------------------------------
 // Constants 
@@ -1087,8 +1087,8 @@ void Project::updatePondedDepth(TSubarea* subarea, double* dt)
         if ( subcatch_->Alpha > 0.0 && tx > 0.0 )
         {
             subcatch_->theSubarea = subarea;
-            odesolve_integrate(&(subarea->depth), 1, 0, tx, ODETOL, tx,
-                               &Project::getDdDt);
+            odesolver.integrate(&(subarea->depth), 1, 0, tx, ODETOL, tx,
+                [this](double t, double* d, double* dddt) { getDdDt(t, d, dddt); });
         }
         else
         {

@@ -44,7 +44,7 @@
 #include <string.h>
 #include <math.h>
 #include "headers.h"
-#include "findroot.h"
+#include "findroot.hpp"
 
 //-----------------------------------------------------------------------------                  
 //  Local Declarations
@@ -878,8 +878,9 @@ double Project::storage_getDepth(int j, double v)
         // area = a0 + a1*d^a2
         {
             d = v / (a0 + a1);
-            findroot_Newton(0.0, Node[j].fullDepth*UCF(LENGTH), &d,
-                0.001, &Project::storage_getVolDiff, &storageVol);
+            swmm::findroot_Newton(0.0, Node[j].fullDepth*UCF(LENGTH), &d, 0.001,
+                [this](double y, double* f, double* df, void* p) { storage_getVolDiff(y, f, df, p); },
+                &storageVol);
         }
         break;
 
@@ -887,8 +888,9 @@ double Project::storage_getDepth(int j, double v)
         case PYRAMIDAL:
         // area = a0 + a1*d + a2*d^2; v = a0*d + (a1/2)*d^2 + (a2/3)*d^3
         d = v / a0;
-        findroot_Newton(0.0, Node[j].fullDepth*UCF(LENGTH), &d,
-            0.001, &Project::storage_getVolDiff, &storageVol);
+        swmm::findroot_Newton(0.0, Node[j].fullDepth*UCF(LENGTH), &d, 0.001,
+            [this](double y, double* f, double* df, void* p) { storage_getVolDiff(y, f, df, p); },
+            &storageVol);
         break;
 
         default:

@@ -27,7 +27,7 @@
 #include <string.h>
 #include <math.h>
 #include "headers.h"
-#include "odesolve.h"
+#include "odesolve.hpp"
 
 //-----------------------------------------------------------------------------
 //  Constants
@@ -333,7 +333,7 @@ int Project::gwater_readFlowExpression(char* tok[], int ntoks)
     // --- create a parsed expression tree from the string expr
     //     (getVariableIndex is the function that converts a GW
     //      variable's name into an index number) 
-    expr = mathexpr_create(exprStr, &Project::gwater_getVariableIndex);
+    expr = mathexpr_create(exprStr, [this](char* v) { return gwater_getVariableIndex(v); });
     if ( expr == NULL ) return error_setInpError(ERR_MATH_EXPR, "");
 
     // --- save expression tree with the subcatchment
@@ -595,7 +595,8 @@ void Project::gwater_getGroundwater(int j, double evap, double infil, double tSt
     
     // --- integrate eqns. for d(Theta)/dt and d(LowerDepth)/dt
     //     NOTE: ODE solver must have been initialized previously
-    odesolve_integrate(x, 2, 0, tStep, GWTOL, tStep, &Project::getDxDt);
+    odesolver.integrate(x, 2, 0, tStep, GWTOL, tStep,
+        [this](double t, double* xs, double* dxdt) { getDxDt(t, xs, dxdt); });
     
     // --- keep state variables within allowable bounds
     x[THETA] = MAX(x[THETA], gwater_->A.wiltingPoint);
@@ -688,7 +689,8 @@ void  Project::getFluxes(double theta, double lowerDepth)
 
     // --- find loss rate to deep GW
     if ( gwater_->DeepFlowExpr != NULL )
-        gwater_->LowerLoss = mathexpr_eval(gwater_->DeepFlowExpr, &Project::gwater_getVariableValue) /
+        gwater_->LowerLoss = mathexpr_eval(gwater_->DeepFlowExpr,
+            [this](int i) { return gwater_getVariableValue(i); }) /
                     UCF(RAINFALL);
     else
         gwater_->LowerLoss = gwater_->A.lowerLossCoeff * lowerDepth / gwater_->TotalDepth;
@@ -698,7 +700,8 @@ void  Project::getFluxes(double theta, double lowerDepth)
     gwater_->GWFlow = getGWFlow(lowerDepth);
     if ( gwater_->LatFlowExpr != NULL )
     {
-        gwater_->GWFlow += mathexpr_eval(gwater_->LatFlowExpr, &Project::gwater_getVariableValue) / UCF(GWFLOW);
+        gwater_->GWFlow += mathexpr_eval(gwater_->LatFlowExpr,
+            [this](int i) { return gwater_getVariableValue(i); }) / UCF(GWFLOW);
     }
     if ( gwater_->GWFlow >= 0.0 ) gwater_->GWFlow = MIN(gwater_->GWFlow, gwater_->MaxGWFlowPos);
     else gwater_->GWFlow = MAX(gwater_->GWFlow, gwater_->MaxGWFlowNeg);
