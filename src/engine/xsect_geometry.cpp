@@ -1364,65 +1364,67 @@ public:
     }
 };
 
+// the shape objects: immutable and stateless, so one set serves every Project
+static const XsectShape s_base;
+static const Shape_DUMMY s_DUMMY;
+static const Shape_CIRCULAR s_CIRCULAR;
+static const Shape_FILLED_CIRCULAR s_FILLED_CIRCULAR;
+static const Shape_RECT_CLOSED s_RECT_CLOSED;
+static const Shape_RECT_OPEN s_RECT_OPEN;
+static const Shape_TRAPEZOIDAL s_TRAPEZOIDAL;
+static const Shape_TRIANGULAR s_TRIANGULAR;
+static const Shape_PARABOLIC s_PARABOLIC;
+static const Shape_POWERFUNC s_POWERFUNC;
+static const Shape_RECT_TRIANG s_RECT_TRIANG;
+static const Shape_RECT_ROUND s_RECT_ROUND;
+static const Shape_MOD_BASKET s_MOD_BASKET;
+static const Shape_HORIZ_ELLIPSE s_HORIZ_ELLIPSE;
+static const Shape_VERT_ELLIPSE s_VERT_ELLIPSE;
+static const Shape_ARCH s_ARCH;
+static const Shape_EGGSHAPED s_EGGSHAPED;
+static const Shape_HORSESHOE s_HORSESHOE;
+static const Shape_GOTHIC s_GOTHIC;
+static const Shape_CATENARY s_CATENARY;
+static const Shape_SEMIELLIPTICAL s_SEMIELLIPTICAL;
+static const Shape_BASKETHANDLE s_BASKETHANDLE;
+static const Shape_SEMICIRCULAR s_SEMICIRCULAR;
+static const Shape_IRREGULAR s_IRREGULAR;
+static const Shape_CUSTOM s_CUSTOM;
+static const Shape_FORCE_MAIN s_FORCE_MAIN;
+static const Shape_STREET_XSECT s_STREET_XSECT;
+static const XsectShape* const ShapeTable[] = {
+    &s_DUMMY,
+    &s_CIRCULAR,
+    &s_FILLED_CIRCULAR,
+    &s_RECT_CLOSED,
+    &s_RECT_OPEN,
+    &s_TRAPEZOIDAL,
+    &s_TRIANGULAR,
+    &s_PARABOLIC,
+    &s_POWERFUNC,
+    &s_RECT_TRIANG,
+    &s_RECT_ROUND,
+    &s_MOD_BASKET,
+    &s_HORIZ_ELLIPSE,
+    &s_VERT_ELLIPSE,
+    &s_ARCH,
+    &s_EGGSHAPED,
+    &s_HORSESHOE,
+    &s_GOTHIC,
+    &s_CATENARY,
+    &s_SEMIELLIPTICAL,
+    &s_BASKETHANDLE,
+    &s_SEMICIRCULAR,
+    &s_IRREGULAR,
+    &s_CUSTOM,
+    &s_FORCE_MAIN,
+    &s_STREET_XSECT
+};
+
 const XsectShape& shapeOf(int type)
 {
-    static const XsectShape base;
-    static const Shape_DUMMY s_DUMMY;
-    static const Shape_CIRCULAR s_CIRCULAR;
-    static const Shape_FILLED_CIRCULAR s_FILLED_CIRCULAR;
-    static const Shape_RECT_CLOSED s_RECT_CLOSED;
-    static const Shape_RECT_OPEN s_RECT_OPEN;
-    static const Shape_TRAPEZOIDAL s_TRAPEZOIDAL;
-    static const Shape_TRIANGULAR s_TRIANGULAR;
-    static const Shape_PARABOLIC s_PARABOLIC;
-    static const Shape_POWERFUNC s_POWERFUNC;
-    static const Shape_RECT_TRIANG s_RECT_TRIANG;
-    static const Shape_RECT_ROUND s_RECT_ROUND;
-    static const Shape_MOD_BASKET s_MOD_BASKET;
-    static const Shape_HORIZ_ELLIPSE s_HORIZ_ELLIPSE;
-    static const Shape_VERT_ELLIPSE s_VERT_ELLIPSE;
-    static const Shape_ARCH s_ARCH;
-    static const Shape_EGGSHAPED s_EGGSHAPED;
-    static const Shape_HORSESHOE s_HORSESHOE;
-    static const Shape_GOTHIC s_GOTHIC;
-    static const Shape_CATENARY s_CATENARY;
-    static const Shape_SEMIELLIPTICAL s_SEMIELLIPTICAL;
-    static const Shape_BASKETHANDLE s_BASKETHANDLE;
-    static const Shape_SEMICIRCULAR s_SEMICIRCULAR;
-    static const Shape_IRREGULAR s_IRREGULAR;
-    static const Shape_CUSTOM s_CUSTOM;
-    static const Shape_FORCE_MAIN s_FORCE_MAIN;
-    static const Shape_STREET_XSECT s_STREET_XSECT;
-    static const XsectShape* const table[] = {
-        &s_DUMMY,
-        &s_CIRCULAR,
-        &s_FILLED_CIRCULAR,
-        &s_RECT_CLOSED,
-        &s_RECT_OPEN,
-        &s_TRAPEZOIDAL,
-        &s_TRIANGULAR,
-        &s_PARABOLIC,
-        &s_POWERFUNC,
-        &s_RECT_TRIANG,
-        &s_RECT_ROUND,
-        &s_MOD_BASKET,
-        &s_HORIZ_ELLIPSE,
-        &s_VERT_ELLIPSE,
-        &s_ARCH,
-        &s_EGGSHAPED,
-        &s_HORSESHOE,
-        &s_GOTHIC,
-        &s_CATENARY,
-        &s_SEMIELLIPTICAL,
-        &s_BASKETHANDLE,
-        &s_SEMICIRCULAR,
-        &s_IRREGULAR,
-        &s_CUSTOM,
-        &s_FORCE_MAIN,
-        &s_STREET_XSECT
-    };
-    if ( type < 0 || type >= 26 ) return base;
-    return *table[type];
+    if ( type < 0 || type >= 26 ) return s_base;
+    return *ShapeTable[type];
 }
 
 int shapeOverrides(int type)
