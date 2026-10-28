@@ -1,0 +1,69 @@
+--- /home/claude/epa524/src/solver/link.c	2026-10-27 23:47:13.570444720 -0400
++++ src_e1/link.c	2026-10-28 13:29:32.111857819 -0400
+@@ -505,6 +505,8 @@
+ 
+ //=============================================================================
+ 
++double MemoHits = 0, MemoMisses = 0;    // instrumentation for the experiment
++
+ void link_initState(int j)
+ //
+ //  Input:   j = link index
+@@ -512,6 +514,8 @@
+ //  Purpose: initializes a link's state variables at start of simulation.
+ //
+ {
++    Link[j].memoQ = -1.0;    // no memoized outfall depth yet
++
+     int   p;
+ 
+     // --- initialize hydraulic state
+@@ -757,8 +761,24 @@
+     {
+         k = Link[j].subIndex;
+         q = fabs(Link[j].newFlow / Conduit[k].barrels);
+-        yNorm = link_getYnorm(j, q);
+-        yCrit = link_getYcrit(j, q);
++        // normal and critical depth are pure functions of q for a given link,
++        // so a repeated q (a bypassed link, a steady spell, a dry outfall)
++        // can reuse the last answer bit for bit
++        if ( q == Link[j].memoQ )
++        {
++            yNorm = Link[j].memoYnorm;
++            yCrit = Link[j].memoYcrit;
++            MemoHits++;
++        }
++        else
++        {
++            yNorm = link_getYnorm(j, q);
++            yCrit = link_getYcrit(j, q);
++            Link[j].memoQ = q;
++            Link[j].memoYnorm = yNorm;
++            Link[j].memoYcrit = yCrit;
++            MemoMisses++;
++        }
+     }
+ 
+     // --- set new depth at node
+--- /home/claude/epa524/src/solver/objects.h	2026-10-27 23:47:13.570444720 -0400
++++ src_e1/objects.h	2026-10-28 13:29:32.111161560 -0400
+@@ -703,6 +703,9 @@
+    char          bypassed;        // bypass dynwave calc. flag
+    char          normalFlow;      // normal flow limited flag
+    char          inletControl;    // culvert inlet control flag
++   double        memoQ;           // outfall depth memo: last flow (-1 = none)
++   double        memoYnorm;       // normal depth at memoQ
++   double        memoYcrit;       // critical depth at memoQ
+ }  TLink;
+ 
+ //---------------
+--- /home/claude/epa524/src/solver/swmm5.c	2026-10-27 23:47:13.570444720 -0400
++++ src_e1/swmm5.c	2026-10-28 13:29:32.112121040 -0400
+@@ -622,6 +622,7 @@
+ //  Purpose: ends a SWMM simulation.
+ //
+ {
++    { extern double MemoHits, MemoMisses; if (getenv("SWMM_MEMO_STATS")) fprintf(stderr, "outfall memo hits %.0f misses %.0f\n", MemoHits, MemoMisses); }
+     // --- check that project opened and run started
+     if ( !IsOpenFlag )
+         return (ErrorCode = ERR_API_NOT_OPEN);

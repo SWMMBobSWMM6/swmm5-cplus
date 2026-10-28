@@ -79,8 +79,30 @@ text and their meaning.
 | S5CP-7 | infil.h declares `HortInfil`, `GAInfil`, `CNInfil`; nothing defines them | noted |
 | S5CP-8 | odesolve.c work arrays (`nmax, y, yscal, yerr, ytemp, dydx, ak`) are linker-visible globals | fixed in R2 |
 | S5CP-9 | Twelve files reach other modules' variables through local `extern` declarations | open (made explicit) |
+| S5CP-10 | report.c declares `extern char ErrString[81]`; error.c defines `char ErrString[256]` (found by link-time optimization's type check) | gone in C++: one member, one type |
 
-## Using it
+## Speed (R4)
+
+Measured on 8 corpus models chosen to span big dynamic-wave networks, continuous runoff, LID,
+water quality and a short-conduit case; CPU time of the child process, three interleaved
+repetitions, a repeat of the reference build as noise floor (±7–11 % per model). Raw rows are in
+`results/perf/`, the scripts in `tools/perf/`.
+
+| Build | CPU time vs EPA 5.2.4 (Ubuntu's default gcc -O2) | Output |
+|---|---|---|
+| EPA C, -O3 + LTO + PGO | 0.90 | byte-identical 8/8 |
+| swmm5-cplus be57fec, -O2 -flto | 0.89–0.93 (two runs) | byte-identical 8/8 |
+| swmm5-cplus R4 (outfall memo), -O3 -flto + PGO (`tools/build_pgo.sh`) | 0.79 (0.46 on the water-quality model) | byte-identical 8/8; gate: 217 of 221 smoke and coverage models identical, 4 crash decks crash both alike |
+| EPA C with OpenMP, 2 threads | wall time slower on 6 of 8 models, up to 1.75× | .out identical |
+| EPA C, -march=native (FMA) / -ffast-math | 0.96 / 0.91 | changed; the largest link-peak change was 6 % (FMA) and 11 % (fast-math) |
+
+R4 adds one change to the engine: the outfall conduit's normal and critical depth are pure
+functions of its flow, so a repeated flow reuses the last answer instead of re-running the
+Newton solve. A sampling profile (gprof) put cross-section geometry plus the math library at
+25–72 % of run time and `pow` alone at 10–39 % in four of the eight models; the outfall solve was
+up to half the time of short-step models.
+
+
 
 C, with a handle:
 

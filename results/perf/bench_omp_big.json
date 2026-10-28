@@ -1,0 +1,102 @@
+{
+ "builds": [
+  [
+   "ref",
+   "/home/claude/perf/v_o2plain/runswmm"
+  ],
+  [
+   "omp2",
+   "/home/claude/perf/v_omp/runswmm"
+  ]
+ ],
+ "reps": 2,
+ "threads": 2,
+ "results": {
+  "SWMM5_NCIMM/2015_H&H_Elements.inp": {
+   "ref": [
+    {
+     "cpu": 13.106209,
+     "wall": 13.242013097999916,
+     "rc": 0,
+     "out": "d94f613afd270564",
+     "rpt": "c453f06517ec75a6"
+    },
+    {
+     "cpu": 13.0563,
+     "wall": 13.246852018000027,
+     "rc": 0,
+     "out": "d94f613afd270564",
+     "rpt": "c453f06517ec75a6"
+    }
+   ],
+   "omp2": [
+    {
+     "cpu": 24.858788,
+     "wall": 12.636647820000235,
+     "rc": 0,
+     "out": "d94f613afd270564",
+     "rpt": "11de3679b34ccdc9"
+    },
+    {
+     "cpu": 24.585607,
+     "wall": 12.468336225999792,
+     "rc": 0,
+     "out": "d94f613afd270564",
+     "rpt": "11de3679b34ccdc9"
+    }
+   ]
+  },
+  "SWMM5_NCIMM/969_Nodes.inp": {
+   "ref": [
+    {
+     "cpu": 10.013347,
+     "wall": 10.206550906999837,
+     "rc": 0,
+     "out": "66d4373307e809a8",
+     "rpt": "fc5b91b70d677c2d"
+    },
+    {
+     "cpu": 9.896125000000001,
+     "wall": 10.019504053000219,
+     "rc": 0,
+     "out": "66d4373307e809a8",
+     "rpt": "fc5b91b70d677c2d"
+    }
+   ],
+   "omp2": [
+    {
+     "cpu": 24.700882,
+     "wall": 12.534903441999631,
+     "rc": 0,
+     "out": "66d4373307e809a8",
+     "rpt": "76edcb6b8a3ddaed"
+    },
+    {
+     "cpu": 24.060927,
+     "wall": 12.181682507999994,
+     "rc": 0,
+     "out": "66d4373307e809a8",
+     "rpt": "76edcb6b8a3ddaed"
+    }
+   ]
+  }
+ },
+ "summary": {
+  "ref": {
+   "median_ratio": 1.0,
+   "geomean_ratio": 1.0,
+   "min_ratio": 1.0,
+   "max_ratio": 1.0,
+   "identical": 2,
+   "models": 2
+  },
+  "omp2": {
+   "median_ratio": 2.169535702054561,
+   "geomean_ratio": 2.1514381797733146,
+   "min_ratio": 1.8898950020428087,
+   "max_ratio": 2.4491764020663127,
+   "identical": 0,
+   "models": 2
+  }
+ }
+}

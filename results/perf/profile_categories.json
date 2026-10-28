@@ -1,0 +1,82 @@
+{
+ "Semi_Real_Models/375_H&H_Elements (1).inp": {
+  "conduit momentum (dwflow)": 31.41,
+  "node continuity, links and outfalls": 31.029999999999998,
+  "math library (pow, sin, cos, exp)": 11.110000000000001,
+  "cross-section geometry": 14.18,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 9.59,
+  "other": 2.69,
+  "runoff, infiltration, LID": 0.0,
+  "water quality": 0.0
+ },
+ "XPSWMM/MAYBR.inp": {
+  "math library (pow, sin, cos, exp)": 16.439999999999998,
+  "conduit momentum (dwflow)": 18.900000000000002,
+  "node continuity, links and outfalls": 23.540000000000003,
+  "cross-section geometry": 24.920000000000005,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 14.51,
+  "other": 1.37,
+  "runoff, infiltration, LID": 0.27,
+  "water quality": 0.0
+ },
+ "Hydrology/46_Subs.inp": {
+  "math library (pow, sin, cos, exp)": 40.11000000000001,
+  "conduit momentum (dwflow)": 13.36,
+  "cross-section geometry": 24.050000000000004,
+  "node continuity, links and outfalls": 13.349999999999998,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 6.94,
+  "other": 1.07,
+  "runoff, infiltration, LID": 1.07,
+  "water quality": 0.0
+ },
+ "Hydrology/10_Subs_Continuous.inp": {
+  "cross-section geometry": 16.990000000000002,
+  "math library (pow, sin, cos, exp)": 13.21,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 33.949999999999996,
+  "node continuity, links and outfalls": 11.32,
+  "conduit momentum (dwflow)": 9.43,
+  "runoff, infiltration, LID": 13.21,
+  "other": 1.89,
+  "water quality": 0.0
+ },
+ "SWMM5_NCIMM/lid1d.inp": {
+  "conduit momentum (dwflow)": 19.650000000000002,
+  "math library (pow, sin, cos, exp)": 17.23,
+  "cross-section geometry": 27.220000000000002,
+  "node continuity, links and outfalls": 16.519999999999996,
+  "water quality": 4.83,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 9.95,
+  "other": 2.75,
+  "runoff, infiltration, LID": 1.72
+ },
+ "Training/Exercise5_transect.inp": {
+  "cross-section geometry": 33.28,
+  "conduit momentum (dwflow)": 22.61,
+  "math library (pow, sin, cos, exp)": 11.71,
+  "node continuity, links and outfalls": 17.580000000000013,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 9.430000000000005,
+  "other": 5.449999999999999,
+  "runoff, infiltration, LID": 0.0,
+  "water quality": 0.0
+ },
+ "WQ/Peter Klaver_WQ_Tracer.inp": {
+  "math library (pow, sin, cos, exp)": 35.81,
+  "cross-section geometry": 26.779999999999998,
+  "conduit momentum (dwflow)": 8.08,
+  "node continuity, links and outfalls": 10.64,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 13.560000000000004,
+  "water quality": 2.58,
+  "other": 1.62,
+  "runoff, infiltration, LID": 0.96
+ },
+ "Hydraulics/short_trap_SW5.inp": {
+  "math library (pow, sin, cos, exp)": 44.709999999999994,
+  "cross-section geometry": 27.339999999999996,
+  "conduit momentum (dwflow)": 7.9399999999999995,
+  "node continuity, links and outfalls": 6.46,
+  "bookkeeping (stats, mass balance, output, inflows, time)": 12.009999999999993,
+  "other": 0.8799999999999999,
+  "runoff, infiltration, LID": 0.59,
+  "water quality": 0.0
+ }
+}

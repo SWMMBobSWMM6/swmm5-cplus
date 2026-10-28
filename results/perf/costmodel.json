@@ -1,0 +1,98 @@
+[
+ {
+  "model": "Semi_Real_Models/375_H&H_Elements (1).inp",
+  "subcatchments": 0,
+  "nodes": 202,
+  "links": 197,
+  "duration_h": 47.0,
+  "avg_step_s": 8.56,
+  "steps": 19766.355140186915,
+  "iterations": 7.97,
+  "cpu_s": 3.7157169999999997,
+  "ns_per_link_iteration": 119.72683109656555
+ },
+ {
+  "model": "XPSWMM/MAYBR.inp",
+  "subcatchments": 0,
+  "nodes": 168,
+  "links": 122,
+  "duration_h": 24.0,
+  "avg_step_s": 1.0,
+  "steps": 86400.0,
+  "iterations": 2.01,
+  "cpu_s": 4.751041,
+  "ns_per_link_iteration": 224.24313050714858
+ },
+ {
+  "model": "Hydrology/46_Subs.inp",
+  "subcatchments": 46,
+  "nodes": 70,
+  "links": 69,
+  "duration_h": 24.0,
+  "avg_step_s": 2.61,
+  "steps": 33103.44827586207,
+  "iterations": 2.01,
+  "cpu_s": 2.2454769999999997,
+  "ns_per_link_iteration": 489.09162670944784
+ },
+ {
+  "model": "Hydrology/10_Subs_Continuous.inp",
+  "subcatchments": 10,
+  "nodes": 10,
+  "links": 9,
+  "duration_h": 5824.0,
+  "avg_step_s": 283.39,
+  "steps": 73984.26197113519,
+  "iterations": 2.05,
+  "cpu_s": 0.7431709999999999,
+  "ns_per_link_iteration": 544.4437766835506
+ },
+ {
+  "model": "SWMM5_NCIMM/lid1d.inp",
+  "subcatchments": 228,
+  "nodes": 228,
+  "links": 333,
+  "duration_h": 24.0,
+  "avg_step_s": 7.22,
+  "steps": 11966.759002770084,
+  "iterations": 3.53,
+  "cpu_s": 3.567723,
+  "ns_per_link_iteration": 253.6270932169185
+ },
+ {
+  "model": "Training/Exercise5_transect.inp",
+  "subcatchments": 12,
+  "nodes": 42,
+  "links": 46,
+  "duration_h": 767.0,
+  "avg_step_s": 9.95,
+  "steps": 277507.5376884422,
+  "iterations": 2.01,
+  "cpu_s": 6.492221,
+  "ns_per_link_iteration": 253.02569243955264
+ },
+ {
+  "model": "WQ/Peter Klaver_WQ_Tracer.inp",
+  "subcatchments": 2,
+  "nodes": 5,
+  "links": 2,
+  "duration_h": 744.0,
+  "avg_step_s": 2.0,
+  "steps": 1339200.0,
+  "iterations": 2.0,
+  "cpu_s": 4.075057999999999,
+  "ns_per_link_iteration": 760.726179808841
+ },
+ {
+  "model": "Hydraulics/short_trap_SW5.inp",
+  "subcatchments": 0,
+  "nodes": 2,
+  "links": 1,
+  "duration_h": 2.0,
+  "avg_step_s": 0.0,
+  "steps": NaN,
+  "iterations": 2.0,
+  "cpu_s": 4.952583,
+  "ns_per_link_iteration": NaN
+ }
+]

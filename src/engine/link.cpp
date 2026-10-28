@@ -509,6 +509,8 @@ void Project::link_initState(int j)
 //  Purpose: initializes a link's state variables at start of simulation.
 //
 {
+    Link[j].memoQ = -1.0;                // no outfall depth memoized yet
+
     int   p;
 
     // --- initialize hydraulic state
@@ -754,8 +756,24 @@ void Project::link_setOutfallDepth(int j)
     {
         k = Link[j].subIndex;
         q = fabs(Link[j].newFlow / Conduit[k].barrels);
-        yNorm = link_getYnorm(j, q);
-        yCrit = link_getYcrit(j, q);
+
+        // --- normal and critical depth are pure functions of q for a given
+        //     link (its section, beta and qMax do not change during a run),
+        //     so a repeated q (a bypassed link, a steady spell, a dry outfall)
+        //     reuses the last answer bit for bit instead of re-solving
+        if ( q == Link[j].memoQ )
+        {
+            yNorm = Link[j].memoYnorm;
+            yCrit = Link[j].memoYcrit;
+        }
+        else
+        {
+            yNorm = link_getYnorm(j, q);
+            yCrit = link_getYcrit(j, q);
+            Link[j].memoQ = q;
+            Link[j].memoYnorm = yNorm;
+            Link[j].memoYcrit = yCrit;
+        }
     }
 
     // --- set new depth at node

@@ -1,0 +1,401 @@
+{
+ "Semi_Real_Models/375_H&H_Elements (1).inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": 1,
+    "peakPct": 0,
+    "volPct": 0,
+    "maxAbs": 0,
+    "differ": 0,
+    "n": 47
+   },
+   "linkFlow": {
+    "n": 163,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "nodeDepth": {
+    "n": 168,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "routingContinuity": [
+    1.31,
+    1.31
+   ],
+   "runoffContinuity": null,
+   "avgStep": [
+    8.56,
+    8.56
+   ],
+   "avgIter": [
+    7.97,
+    7.97
+   ]
+  }
+ },
+ "XPSWMM/MAYBR.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": null,
+    "peakPct": null,
+    "volPct": null,
+    "maxAbs": 0,
+    "differ": 0,
+    "n": 96
+   },
+   "linkFlow": {
+    "n": 16,
+    "peakMedian": 0,
+    "peakP90": 0.011419743520666398,
+    "peakMax": 0.15050600912216006,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0.0036001205444335938,
+    "shapeP90": 13.060961558979397,
+    "shapeMax": 19.790244618847872
+   },
+   "nodeDepth": {
+    "n": 78,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0.0014940169410028671,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 3.3425019173806456e-05,
+    "shapeMax": 2.5277713417834824
+   },
+   "routingContinuity": [
+    2.511,
+    2.512
+   ],
+   "runoffContinuity": null,
+   "avgStep": [
+    1,
+    1
+   ],
+   "avgIter": [
+    2.01,
+    2.01
+   ]
+  }
+ },
+ "Hydrology/46_Subs.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": 1,
+    "peakPct": 0,
+    "volPct": 0,
+    "maxAbs": 0,
+    "differ": 0,
+    "n": 1440
+   },
+   "linkFlow": {
+    "n": 60,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "nodeDepth": {
+    "n": 61,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "routingContinuity": [
+    -0.014,
+    -0.014
+   ],
+   "runoffContinuity": [
+    -0.002,
+    -0.002
+   ],
+   "avgStep": [
+    2.61,
+    2.61
+   ],
+   "avgIter": [
+    2.01,
+    2.01
+   ]
+  }
+ },
+ "Hydrology/10_Subs_Continuous.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": 0.9991086941380879,
+    "peakPct": -0.10904671030206883,
+    "volPct": -0.12662177536386326,
+    "maxAbs": 191.3544921875,
+    "differ": 21555,
+    "n": 69888
+   },
+   "linkFlow": {
+    "n": 9,
+    "peakMedian": 0.11406532540411435,
+    "peakP90": 3.2414806390117676,
+    "peakMax": 3.2414806390117676,
+    "over1": 1,
+    "over5": 0,
+    "shapeMedian": 5.2990383682704145,
+    "shapeP90": 49.76858482932667,
+    "shapeMax": 49.76858482932667
+   },
+   "nodeDepth": {
+    "n": 9,
+    "peakMedian": 0.043164115393266776,
+    "peakP90": 1.0182187524847295,
+    "peakMax": 1.0182187524847295,
+    "over1": 1,
+    "over5": 0,
+    "shapeMedian": 5.815832196240374,
+    "shapeP90": 68.42857401236037,
+    "shapeMax": 68.42857401236037
+   },
+   "routingContinuity": [
+    -1.182,
+    -1.184
+   ],
+   "runoffContinuity": [
+    -0.299,
+    -0.299
+   ],
+   "avgStep": [
+    283.39,
+    283.38
+   ],
+   "avgIter": [
+    2.05,
+    2.05
+   ]
+  }
+ },
+ "SWMM5_NCIMM/lid1d.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": 0.999908012807828,
+    "peakPct": 0.001057321615340408,
+    "volPct": -0.25807838921568305,
+    "maxAbs": 6.443626403808594,
+    "differ": 856,
+    "n": 1440
+   },
+   "linkFlow": {
+    "n": 333,
+    "peakMedian": 0.03916564818282012,
+    "peakP90": 1.0013901322216465,
+    "peakMax": 27.9043962736518,
+    "over1": 34,
+    "over5": 14,
+    "shapeMedian": 3.8555973901682785,
+    "shapeP90": 19.066216912100543,
+    "shapeMax": 103.85965871677605
+   },
+   "nodeDepth": {
+    "n": 228,
+    "peakMedian": 0.0022146012776797174,
+    "peakP90": 0.16215791680817307,
+    "peakMax": 4.426203740666912,
+    "over1": 5,
+    "over5": 0,
+    "shapeMedian": 2.981130778265731,
+    "shapeP90": 31.74813985853788,
+    "shapeMax": 64.54568698525921
+   },
+   "routingContinuity": [
+    0.238,
+    0.378
+   ],
+   "runoffContinuity": [
+    -0.011,
+    -0.011
+   ],
+   "avgStep": [
+    7.22,
+    7.23
+   ],
+   "avgIter": [
+    3.53,
+    3.53
+   ]
+  }
+ },
+ "Training/Exercise5_transect.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": 1,
+    "peakPct": 0,
+    "volPct": 0,
+    "maxAbs": 0,
+    "differ": 0,
+    "n": 3068
+   },
+   "linkFlow": {
+    "n": 31,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "nodeDepth": {
+    "n": 32,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "routingContinuity": [
+    1.448,
+    1.448
+   ],
+   "runoffContinuity": [
+    -0.617,
+    -0.617
+   ],
+   "avgStep": [
+    9.95,
+    9.95
+   ],
+   "avgIter": [
+    2.01,
+    2.01
+   ]
+  }
+ },
+ "WQ/Peter Klaver_WQ_Tracer.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": 1,
+    "peakPct": 0,
+    "volPct": 0,
+    "maxAbs": 0,
+    "differ": 0,
+    "n": 2976
+   },
+   "linkFlow": {
+    "n": 2,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "nodeDepth": {
+    "n": 4,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "routingContinuity": [
+    -0.041,
+    -0.041
+   ],
+   "runoffContinuity": [
+    0,
+    0
+   ],
+   "avgStep": [
+    2,
+    2
+   ],
+   "avgIter": [
+    2,
+    2
+   ]
+  }
+ },
+ "Hydraulics/short_trap_SW5.inp": {
+  "warm": {
+   "sameShape": true,
+   "outflow": {
+    "nse": null,
+    "peakPct": 0,
+    "volPct": 0,
+    "maxAbs": 0,
+    "differ": 0,
+    "n": 119
+   },
+   "linkFlow": {
+    "n": 1,
+    "peakMedian": 0,
+    "peakP90": 0,
+    "peakMax": 0,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0,
+    "shapeP90": 0,
+    "shapeMax": 0
+   },
+   "nodeDepth": {
+    "n": 2,
+    "peakMedian": 0.18930410107615558,
+    "peakP90": 0.18930410107615558,
+    "peakMax": 0.18930410107615558,
+    "over1": 0,
+    "over5": 0,
+    "shapeMedian": 0.18930410107615558,
+    "shapeP90": 0.18930410107615558,
+    "shapeMax": 0.18930410107615558
+   },
+   "routingContinuity": [
+    0,
+    0
+   ],
+   "runoffContinuity": null,
+   "avgStep": [
+    0,
+    0
+   ],
+   "avgIter": [
+    2,
+    2
+   ]
+  }
+ }
+}

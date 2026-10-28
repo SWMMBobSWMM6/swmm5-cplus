@@ -1,0 +1,39 @@
+--- src_e1/xsect.c	2026-10-28 13:29:21.869347172 -0400
++++ src_e2/xsect.c	2026-10-28 14:06:45.086375258 -0400
+@@ -1390,12 +1390,15 @@
+     xsectStar.xsect = xsect;
+     xsectStar.s = s;
+ 
+-    // --- compute starting guess for A
++    // --- compute starting guess for A: the last solution for this section when it is
++    //     inside the bracket (EXPERIMENT E2: warm start; changes the last bits, within tol)
+     a = 0.5 * (a1 + a2);
++    if ( xsect->aLast > a1 && xsect->aLast < a2 ) a = xsect->aLast;
+ 
+     // use the Newton-Raphson root finder function to find A
+     tol = 0.0001 * xsect->aFull;
+     findroot_Newton(a1, a2, &a, tol, evalSofA, &xsectStar);
++    xsect->aLast = a;
+     return a;
+ }
+ 
+--- src_e1/objects.h	2026-10-28 13:29:32.111161560 -0400
++++ src_e2/objects.h	2026-10-28 14:06:45.086028604 -0400
+@@ -596,6 +596,7 @@
+    double        aBot;            // area of bottom section
+    double        sBot;            // slope of bottom section
+    double        rBot;            // radius of bottom section
++   double  aLast;           // warm start for the normal-flow area solve (0 = none)
+ }  TXsect;
+ 
+ //--------------------------------------
+--- src_e1/link.c	2026-10-28 13:29:32.111857819 -0400
++++ src_e2/link.c	2026-10-28 14:06:54.853275745 -0400
+@@ -515,6 +515,7 @@
+ //
+ {
+     Link[j].memoQ = -1.0;    // no memoized outfall depth yet
++    Link[j].xsect.aLast = 0.0;
+ 
+     int   p;
+ 

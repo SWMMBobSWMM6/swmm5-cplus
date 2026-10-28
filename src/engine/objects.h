@@ -711,6 +711,9 @@ typedef struct
    char          bypassed;        // bypass dynwave calc. flag
    char          normalFlow;      // normal flow limited flag
    char          inletControl;    // culvert inlet control flag
+   double        memoQ;           // outfall depth memo: last flow seen (-1 = none)
+   double        memoYnorm;       // normal depth at memoQ
+   double        memoYcrit;       // critical depth at memoQ
 }  TLink;
 
 //---------------

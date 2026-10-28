@@ -1,0 +1,2150 @@
+{
+ "Semi_Real_Models/375_H&H_Elements (1).inp": {
+  "options": {
+   "FLOW_UNITS": "GPM",
+   "INFILTRATION": "HORTON",
+   "FLOW_ROUTING": "DYNWAVE",
+   "LINK_OFFSETS": "DEPTH",
+   "MIN_SLOPE": "0",
+   "ALLOW_PONDING": "YES",
+   "SKIP_STEADY_STATE": "NO",
+   "START_DATE": "07/01/2008",
+   "START_TIME": "00:00:00",
+   "REPORT_START_DATE": "07/01/2008",
+   "REPORT_START_TIME": "00:00:00",
+   "END_DATE": "07/02/2008",
+   "END_TIME": "23:00:00",
+   "SWEEP_START": "01/01",
+   "SWEEP_END": "12/31",
+   "DRY_DAYS": "5.000000",
+   "REPORT_STEP": "01:00:00",
+   "WET_STEP": "01:00:00",
+   "DRY_STEP": "23:00:00",
+   "ROUTING_STEP": "0:00:09",
+   "INERTIAL_DAMPING": "NONE",
+   "NORMAL_FLOW_LIMITED": "SLOPE",
+   "FORCE_MAIN_EQUATION": "H-W",
+   "VARIABLE_STEP": "0.60",
+   "LENGTHENING_STEP": "10",
+   "MIN_SURFAREA": "0",
+   "MAX_TRIALS": "0",
+   "HEAD_TOLERANCE": "0",
+   "SYS_FLOW_TOL": "5",
+   "LAT_FLOW_TOL": "5",
+   "MINIMUM_STEP": "0.5",
+   "THREADS": "1"
+  },
+  "variants": [
+   {
+    "name": "as given",
+    "changes": {},
+    "cpu": 3.984057,
+    "wall": 4.057283708999876
+   },
+   {
+    "name": "ROUTING_STEP x2",
+    "changes": {
+     "ROUTING_STEP": "18"
+    },
+    "cpu": 2.12695,
+    "wall": 2.1403650369998104,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9018911510777764,
+      "peakPct": -12.117838728943319,
+      "volPct": -2.7346005832111944,
+      "maxAbs": 2488.134765625,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 6.3651172947438965,
+      "peakP90": 19.49892598011379,
+      "peakMax": 113.02464078943586,
+      "over1": 120,
+      "over5": 89,
+      "shapeMedian": 17.190021507399834,
+      "shapeP90": 53.34409241499247,
+      "shapeMax": 114.0348562179894
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 26.494568019689392,
+      "peakP90": 33.0387452249376,
+      "peakMax": 33.273248226326146,
+      "over1": 134,
+      "over5": 134,
+      "shapeMedian": 38.53185815031481,
+      "shapeP90": 45.59864153162736,
+      "shapeMax": 61.39156591954334
+     },
+     "routingContinuity": [
+      1.31,
+      4.332
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      15.97
+     ],
+     "avgIter": [
+      7.97,
+      7.94
+     ]
+    }
+   },
+   {
+    "name": "ROUTING_STEP x10",
+    "changes": {
+     "ROUTING_STEP": "90"
+    },
+    "cpu": 1.153232,
+    "wall": 1.1685393360003218,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.04674244745087974,
+      "peakPct": 1.5011693319006383,
+      "volPct": -3.642200133529083,
+      "maxAbs": 10372.979583740234,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 5.371559839991515,
+      "peakP90": 347.0692664329387,
+      "peakMax": 514199.05112098006,
+      "over1": 108,
+      "over5": 84,
+      "shapeMedian": 48.293548253795215,
+      "shapeP90": 465.787184853386,
+      "shapeMax": 514368.90912103554
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 5.152781985929421,
+      "peakP90": 18.253330923499306,
+      "peakMax": 100.31965988375657,
+      "over1": 115,
+      "over5": 86,
+      "shapeMedian": 54.92871457492937,
+      "shapeP90": 81.71601459416071,
+      "shapeMax": 137.29868238100838
+     },
+     "routingContinuity": [
+      1.31,
+      -38.764
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      32.77
+     ],
+     "avgIter": [
+      7.97,
+      7.99
+     ]
+    }
+   },
+   {
+    "name": "VARIABLE_STEP 1.0",
+    "changes": {
+     "VARIABLE_STEP": "1.0"
+    },
+    "cpu": 3.6655140000000004,
+    "wall": 3.735990830999981,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9995453688007713,
+      "peakPct": 0.06872162935081118,
+      "volPct": -0.11179096739010015,
+      "maxAbs": 353.54833984375,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 0.0021754506062974404,
+      "peakP90": 0.06699539179153696,
+      "peakMax": 351.43157272784765,
+      "over1": 3,
+      "over5": 2,
+      "shapeMedian": 1.6297208595877906,
+      "shapeP90": 27.886561286725286,
+      "shapeMax": 458.0547009604649
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 0.002198502443145768,
+      "peakP90": 0.009328108746348417,
+      "peakMax": 0.1556037134939489,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 1.157432687903593,
+      "shapeP90": 5.220813738677812,
+      "shapeMax": 7.083829546813697
+     },
+     "routingContinuity": [
+      1.31,
+      1.48
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      8.83
+     ],
+     "avgIter": [
+      7.97,
+      7.97
+     ]
+    }
+   },
+   {
+    "name": "MINIMUM_STEP 1 s",
+    "changes": {
+     "MINIMUM_STEP": "1"
+    },
+    "cpu": 3.506837,
+    "wall": 3.5163426290000643,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9999776353424976,
+      "peakPct": 0.05780227519868323,
+      "volPct": -0.027510131753639873,
+      "maxAbs": 69.1318359375,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 0.006942702628034012,
+      "peakP90": 0.05929864393986471,
+      "peakMax": 8.802125568553889,
+      "over1": 1,
+      "over5": 1,
+      "shapeMedian": 0.6081562829269954,
+      "shapeP90": 3.876127703781176,
+      "shapeMax": 50.95478034948693
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 0.009109059966927948,
+      "peakP90": 0.037112244582321444,
+      "peakMax": 0.25351063327110035,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.3140548649778407,
+      "shapeP90": 0.8508653793860205,
+      "shapeMax": 2.141950170022351
+     },
+     "routingContinuity": [
+      1.31,
+      1.333
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      8.57
+     ],
+     "avgIter": [
+      7.97,
+      7.97
+     ]
+    }
+   },
+   {
+    "name": "LENGTHENING_STEP 30 s",
+    "changes": {
+     "LENGTHENING_STEP": "30"
+    },
+    "cpu": 4.08411,
+    "wall": 4.124439042000176,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 1,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      1.31,
+      1.31
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      8.56
+     ],
+     "avgIter": [
+      7.97,
+      7.97
+     ]
+    }
+   },
+   {
+    "name": "MAX_TRIALS 4",
+    "changes": {
+     "MAX_TRIALS": "4"
+    },
+    "cpu": 2.193273,
+    "wall": 2.1990023889998156,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9668601320416497,
+      "peakPct": -7.466967824991067,
+      "volPct": -1.2543141213638214,
+      "maxAbs": 1368.3994140625,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 5.823707740682048,
+      "peakP90": 12.8615074916832,
+      "peakMax": 157.74579823365536,
+      "over1": 116,
+      "over5": 85,
+      "shapeMedian": 13.164276805795923,
+      "shapeP90": 37.494476632864874,
+      "shapeMax": 264.3689264662726
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 17.74839281217333,
+      "peakP90": 21.383255886231836,
+      "peakMax": 21.86948467639705,
+      "over1": 134,
+      "over5": 127,
+      "shapeMedian": 23.440371537524637,
+      "shapeP90": 27.831856560386402,
+      "shapeMax": 42.29821432259584
+     },
+     "routingContinuity": [
+      1.31,
+      2.71
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      8.55
+     ],
+     "avgIter": [
+      7.97,
+      3.99
+     ]
+    }
+   },
+   {
+    "name": "HEAD_TOLERANCE 0.01 ft",
+    "changes": {
+     "HEAD_TOLERANCE": "0.01"
+    },
+    "cpu": 3.2945860000000002,
+    "wall": 3.3555473950000305,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9999849430649522,
+      "peakPct": 0.07175299169664706,
+      "volPct": 0.009386546963057341,
+      "maxAbs": 21.955078125,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 0.00378159669121522,
+      "peakP90": 0.07059840177803099,
+      "peakMax": 20.121730117877494,
+      "over1": 5,
+      "over5": 2,
+      "shapeMedian": 0.321636832206658,
+      "shapeP90": 4.968277318522674,
+      "shapeMax": 68.06182681337381
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 0.003342844680914821,
+      "peakP90": 0.020019663441672247,
+      "peakMax": 0.23984742839704057,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.2129056653672041,
+      "shapeP90": 0.2881003574590126,
+      "shapeMax": 2.3699724481852904
+     },
+     "routingContinuity": [
+      1.31,
+      1.299
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      8.56
+     ],
+     "avgIter": [
+      7.97,
+      7.93
+     ]
+    }
+   },
+   {
+    "name": "SKIP_STEADY_STATE YES",
+    "changes": {
+     "SKIP_STEADY_STATE": "YES",
+     "SYS_FLOW_TOL": "5",
+     "LAT_FLOW_TOL": "5"
+    },
+    "cpu": 3.128509,
+    "wall": 3.1549174639999364,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9924945941386953,
+      "peakPct": 0.039665698780618375,
+      "volPct": 0.5045794167171975,
+      "maxAbs": 785.5126953125,
+      "differ": 39,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 0.028412423013186614,
+      "peakP90": 4.170240170413556,
+      "peakMax": 73.28314203895259,
+      "over1": 58,
+      "over5": 12,
+      "shapeMedian": 7.594127649813128,
+      "shapeP90": 24.607920050015966,
+      "shapeMax": 100
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 2.2705484812779337,
+      "peakP90": 6.652956127621215,
+      "peakMax": 11.719744742942725,
+      "over1": 84,
+      "over5": 57,
+      "shapeMedian": 5.478058308041765,
+      "shapeP90": 16.137130646017802,
+      "shapeMax": 22.529790900148264
+     },
+     "routingContinuity": [
+      1.31,
+      0.803
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      8.38
+     ],
+     "avgIter": [
+      7.97,
+      8
+     ]
+    }
+   },
+   {
+    "name": "SURCHARGE_METHOD SLOT",
+    "changes": {
+     "SURCHARGE_METHOD": "SLOT"
+    },
+    "cpu": 4.293726,
+    "wall": 4.376247437000075,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": -2860.6902631071225,
+      "peakPct": 2698.5906615980566,
+      "volPct": 997.7723683047114,
+      "maxAbs": 412943.1591796875,
+      "differ": 46,
+      "n": 47
+     },
+     "linkFlow": {
+      "n": 163,
+      "peakMedian": 1224.699377229009,
+      "peakP90": 200036.29708522034,
+      "peakMax": 7603340.287116998,
+      "over1": 138,
+      "over5": 127,
+      "shapeMedian": 1252.2399855959518,
+      "shapeP90": 200197.30245910163,
+      "shapeMax": 7603438.077315366
+     },
+     "nodeDepth": {
+      "n": 168,
+      "peakMedian": 78.58248507179181,
+      "peakP90": 197.54849979709067,
+      "peakMax": 3626.7321593338684,
+      "over1": 145,
+      "over5": 143,
+      "shapeMedian": 95.23081395893627,
+      "shapeP90": 251.2141977210464,
+      "shapeMax": 3645.9491111773377
+     },
+     "routingContinuity": [
+      1.31,
+      -16886.319
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      8.56,
+      7.97
+     ],
+     "avgIter": [
+      7.97,
+      7.44
+     ]
+    }
+   }
+  ]
+ },
+ "XPSWMM/MAYBR.inp": {
+  "options": {
+   "FLOW_UNITS": "CFS",
+   "INFILTRATION": "HORTON",
+   "FLOW_ROUTING": "DYNWAVE",
+   "LINK_OFFSETS": "DEPTH",
+   "MIN_SLOPE": "0.0",
+   "ALLOW_PONDING": "NO",
+   "SKIP_STEADY_STATE": "NO",
+   "ROUTING_STEP": "00:00:01",
+   "VARIABLE_STEP": "0.75",
+   "INERTIAL_DAMPING": "NONE",
+   "NORMAL_FLOW_LIMITED": "BOTH",
+   "MAX_TRIALS": "30",
+   "START_DATE": "01/01/2001",
+   "START_TIME": "00:00:00",
+   "REPORT_START_DATE": "01/01/2001",
+   "REPORT_START_TIME": "00:00:00",
+   "END_DATE": "01/02/2001",
+   "END_TIME": "00:00:00",
+   "SWEEP_START": "01/01",
+   "SWEEP_END": "12/31",
+   "DRY_DAYS": "0",
+   "REPORT_STEP": "00:15:00",
+   "WET_STEP": "00:05:00",
+   "DRY_STEP": "01:00:00"
+  },
+  "variants": [
+   {
+    "name": "as given",
+    "changes": {},
+    "cpu": 4.562727,
+    "wall": 4.595965337000052
+   },
+   {
+    "name": "ROUTING_STEP x2",
+    "changes": {
+     "ROUTING_STEP": "2"
+    },
+    "cpu": 2.383667,
+    "wall": 2.439457890000085,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0.00011920910480995625,
+      "peakP90": 0.2672412142696867,
+      "peakMax": 2.3706898990504794,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 15.914419293403625,
+      "shapeP90": 82.55918026503937,
+      "shapeMax": 99.64519037698702
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0.022384715363914752,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.010410944620768229,
+      "shapeP90": 6.7285742825889026,
+      "shapeMax": 27.113039026141855
+     },
+     "routingContinuity": [
+      2.511,
+      2.501
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      2
+     ],
+     "avgIter": [
+      2.01,
+      2.02
+     ]
+    }
+   },
+   {
+    "name": "ROUTING_STEP x10",
+    "changes": {
+     "ROUTING_STEP": "10"
+    },
+    "cpu": 0.467769,
+    "wall": 0.47313781499997276,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 3.1183115708904174,
+      "peakP90": 362.2937453062976,
+      "peakMax": 1281.3237703295185,
+      "over1": 10,
+      "over5": 7,
+      "shapeMedian": 99.90286827087402,
+      "shapeP90": 429.84852900857084,
+      "shapeMax": 1381.3237703295185
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0.00011503635330400754,
+      "peakMax": 0.1715693300796113,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.09189900897798084,
+      "shapeP90": 44.45664570667087,
+      "shapeMax": 99.95952768017136
+     },
+     "routingContinuity": [
+      2.511,
+      2.313
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      10
+     ],
+     "avgIter": [
+      2.01,
+      2.23
+     ]
+    }
+   },
+   {
+    "name": "VARIABLE_STEP 1.0",
+    "changes": {
+     "VARIABLE_STEP": "1.0"
+    },
+    "cpu": 4.593269,
+    "wall": 4.6363625620001585,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      2.511,
+      2.511
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "MINIMUM_STEP 1 s",
+    "changes": {
+     "MINIMUM_STEP": "1"
+    },
+    "cpu": 4.60846,
+    "wall": 4.62445150900021,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0.0006198609651855088,
+      "peakP90": 1.4797319882406255,
+      "peakMax": 2.166946359039005,
+      "over1": 2,
+      "over5": 0,
+      "shapeMedian": 6.240543723106384,
+      "shapeP90": 45.581358671188354,
+      "shapeMax": 54.95681621350016
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0.005899451510626706,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.006785759559044471,
+      "shapeP90": 0.8923229821666535,
+      "shapeMax": 10.149251797503565
+     },
+     "routingContinuity": [
+      2.511,
+      2.515
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "LENGTHENING_STEP 30 s",
+    "changes": {
+     "LENGTHENING_STEP": "30"
+    },
+    "cpu": 4.496748999999999,
+    "wall": 4.5337151130001985,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 5.980253113989422
+     },
+     "routingContinuity": [
+      2.511,
+      2.522
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "MAX_TRIALS 4",
+    "changes": {
+     "MAX_TRIALS": "4"
+    },
+    "cpu": 4.771882,
+    "wall": 4.80813338400003,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0.00013113001529095188,
+      "peakP90": 0.7752896649091976,
+      "peakMax": 1.4231155278490997,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 4.954693983671452,
+      "shapeP90": 43.09256850865395,
+      "shapeMax": 75.86235846059488
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0.007106157501436714,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 8.006594302237049e-05,
+      "shapeP90": 2.1515618772319,
+      "shapeMax": 9.478941021346024
+     },
+     "routingContinuity": [
+      2.511,
+      2.51
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2
+     ]
+    }
+   },
+   {
+    "name": "HEAD_TOLERANCE 0.01 ft",
+    "changes": {
+     "HEAD_TOLERANCE": "0.01"
+    },
+    "cpu": 4.687985,
+    "wall": 4.755010789999687,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 1.1920990062066635e-05,
+      "peakP90": 0.015184970660424934,
+      "peakMax": 0.6077905735937962,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.6077905735937962,
+      "shapeP90": 4.954723785947655,
+      "shapeMax": 6.846442818641663
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0.0003320037646673038,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0.005298569088890439,
+      "shapeP90": 0.12846617680329722,
+      "shapeMax": 1.5042698467073992
+     },
+     "routingContinuity": [
+      2.511,
+      2.508
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2
+     ]
+    }
+   },
+   {
+    "name": "SKIP_STEADY_STATE YES",
+    "changes": {
+     "SKIP_STEADY_STATE": "YES",
+     "SYS_FLOW_TOL": "5",
+     "LAT_FLOW_TOL": "5"
+    },
+    "cpu": 2.7887220000000004,
+    "wall": 2.8492466010002317,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0,
+      "peakP90": 0.27226521591732145,
+      "peakMax": 100,
+      "over1": 1,
+      "over5": 1,
+      "shapeMedian": 0,
+      "shapeP90": 0.2722889981736416,
+      "shapeMax": 100
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 100,
+      "over1": 4,
+      "over5": 4,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 100
+     },
+     "routingContinuity": [
+      2.511,
+      4.061
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "SURCHARGE_METHOD SLOT",
+    "changes": {
+     "SURCHARGE_METHOD": "SLOT"
+    },
+    "cpu": 5.099501,
+    "wall": 5.142037329999766,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": null,
+      "volPct": null,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 96
+     },
+     "linkFlow": {
+      "n": 16,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 2.901911709571303
+     },
+     "nodeDepth": {
+      "n": 78,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0.023323264467878094,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0.09286971319289435,
+      "shapeMax": 0.33392906188964844
+     },
+     "routingContinuity": [
+      2.511,
+      2.473
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      1,
+      1
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   }
+  ]
+ },
+ "Hydraulics/short_trap_SW5.inp": {
+  "options": {
+   "FLOW_UNITS": "CFS",
+   "INFILTRATION": "HORTON",
+   "FLOW_ROUTING": "DYNWAVE",
+   "LINK_OFFSETS": "DEPTH",
+   "MIN_SLOPE": "0",
+   "ALLOW_PONDING": "NO",
+   "SKIP_STEADY_STATE": "NO",
+   "START_DATE": "01/01/1988",
+   "START_TIME": "00:00:00",
+   "REPORT_START_DATE": "01/01/1988",
+   "REPORT_START_TIME": "00:00:00",
+   "END_DATE": "01/01/1988",
+   "END_TIME": "02:00:00",
+   "SWEEP_START": "01/01",
+   "SWEEP_END": "12/31",
+   "DRY_DAYS": "0",
+   "REPORT_STEP": "00:01:00",
+   "WET_STEP": "00:15:00",
+   "DRY_STEP": "01:00:00",
+   "ROUTING_STEP": ".01",
+   "INERTIAL_DAMPING": "NONE",
+   "NORMAL_FLOW_LIMITED": "BOTH",
+   "FORCE_MAIN_EQUATION": "H-W",
+   "VARIABLE_STEP": "0.75",
+   "LENGTHENING_STEP": "0",
+   "MIN_SURFAREA": "12.557",
+   "MAX_TRIALS": "8",
+   "HEAD_TOLERANCE": "0.0001",
+   "SYS_FLOW_TOL": "5",
+   "LAT_FLOW_TOL": "5",
+   "MINIMUM_STEP": "0",
+   "THREADS": "1"
+  },
+  "variants": [
+   {
+    "name": "as given",
+    "changes": {},
+    "cpu": 4.659178,
+    "wall": 4.717792768999971
+   },
+   {
+    "name": "ROUTING_STEP x2",
+    "changes": {
+     "ROUTING_STEP": "0.02"
+    },
+    "cpu": 4.478505,
+    "wall": 4.522793247000209,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "ROUTING_STEP x10",
+    "changes": {
+     "ROUTING_STEP": "0.1"
+    },
+    "cpu": 4.489247,
+    "wall": 4.544206298000063,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "VARIABLE_STEP 1.0",
+    "changes": {
+     "VARIABLE_STEP": "1.0"
+    },
+    "cpu": 3.4700439999999997,
+    "wall": 3.5542724910001198,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "MINIMUM_STEP 1 s",
+    "changes": {
+     "MINIMUM_STEP": "1"
+    },
+    "cpu": 3.314407,
+    "wall": 3.3298326690000977,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": -5.372565984725952,
+      "volPct": -5.372565984725954,
+      "maxAbs": 0.05372565984725952,
+      "differ": 119,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 5.372565984725952,
+      "peakP90": 5.372565984725952,
+      "peakMax": 5.372565984725952,
+      "over1": 1,
+      "over5": 1,
+      "shapeMedian": 5.372565984725952,
+      "shapeP90": 5.372565984725952,
+      "shapeMax": 5.372565984725952
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 47.54830211603277,
+      "peakP90": 47.54830211603277,
+      "peakMax": 47.54830211603277,
+      "over1": 2,
+      "over5": 1,
+      "shapeMedian": 47.54830211603277,
+      "shapeP90": 47.54830211603277,
+      "shapeMax": 47.54830211603277
+     },
+     "routingContinuity": [
+      0,
+      5.388
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0.01
+     ],
+     "avgIter": [
+      2,
+      5
+     ]
+    }
+   },
+   {
+    "name": "LENGTHENING_STEP 30 s",
+    "changes": {
+     "LENGTHENING_STEP": "30"
+    },
+    "cpu": 1.311861,
+    "wall": 1.3372477679999974,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0.01
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "MAX_TRIALS 4",
+    "changes": {
+     "MAX_TRIALS": "4"
+    },
+    "cpu": 4.424594,
+    "wall": 4.45542928299983,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "HEAD_TOLERANCE 0.01 ft",
+    "changes": {
+     "HEAD_TOLERANCE": "0.01"
+    },
+    "cpu": 4.362433,
+    "wall": 4.376714425000046,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "SKIP_STEADY_STATE YES",
+    "changes": {
+     "SKIP_STEADY_STATE": "YES",
+     "SYS_FLOW_TOL": "5",
+     "LAT_FLOW_TOL": "5"
+    },
+    "cpu": 0.600823,
+    "wall": 0.601159944000301,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": -4.987609386444092,
+      "volPct": -4.987609386444091,
+      "maxAbs": 0.04987609386444092,
+      "differ": 119,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 4.997432231903076,
+      "peakP90": 4.997432231903076,
+      "peakMax": 4.997432231903076,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 4.997432231903076,
+      "shapeP90": 4.997432231903076,
+      "shapeMax": 4.997432231903076
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 5.609128580796628,
+      "peakP90": 5.609128580796628,
+      "peakMax": 5.609128580796628,
+      "over1": 2,
+      "over5": 1,
+      "shapeMedian": 5.609128580796628,
+      "shapeP90": 5.609128580796628,
+      "shapeMax": 5.609128580796628
+     },
+     "routingContinuity": [
+      0,
+      4.997
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   },
+   {
+    "name": "SURCHARGE_METHOD SLOT",
+    "changes": {
+     "SURCHARGE_METHOD": "SLOT"
+    },
+    "cpu": 4.350421,
+    "wall": 4.353276499000003,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": null,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 119
+     },
+     "linkFlow": {
+      "n": 1,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 2,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      0,
+      0
+     ],
+     "runoffContinuity": null,
+     "avgStep": [
+      0,
+      0
+     ],
+     "avgIter": [
+      2,
+      2
+     ]
+    }
+   }
+  ]
+ },
+ "Training/Exercise5_transect.inp": {
+  "options": {
+   "FLOW_UNITS": "CFS",
+   "INFILTRATION": "HORTON",
+   "FLOW_ROUTING": "DYNWAVE",
+   "LINK_OFFSETS": "DEPTH",
+   "MIN_SLOPE": "0",
+   "ALLOW_PONDING": "NO",
+   "SKIP_STEADY_STATE": "NO",
+   "START_DATE": "05/01/2003",
+   "START_TIME": "00:00:00",
+   "REPORT_START_DATE": "05/01/2003",
+   "REPORT_START_TIME": "00:00:00",
+   "END_DATE": "06/01/2003",
+   "END_TIME": "23:00:00",
+   "SWEEP_START": "01/01",
+   "SWEEP_END": "12/31",
+   "DRY_DAYS": "5.000000",
+   "REPORT_STEP": "00:15:00",
+   "WET_STEP": "01:00:00",
+   "DRY_STEP": "23:00:00",
+   "ROUTING_STEP": "0:00:10",
+   "RULE_STEP": "00:00:00",
+   "INERTIAL_DAMPING": "NONE",
+   "NORMAL_FLOW_LIMITED": "BOTH",
+   "FORCE_MAIN_EQUATION": "H-W",
+   "VARIABLE_STEP": "0.75",
+   "LENGTHENING_STEP": "5",
+   "MIN_SURFAREA": "0",
+   "MAX_TRIALS": "0",
+   "HEAD_TOLERANCE": "0",
+   "SYS_FLOW_TOL": "5",
+   "LAT_FLOW_TOL": "5",
+   "MINIMUM_STEP": "0.5",
+   "THREADS": "1"
+  },
+  "variants": [
+   {
+    "name": "as given",
+    "changes": {},
+    "cpu": 6.331663,
+    "wall": 6.458267129999967
+   },
+   {
+    "name": "ROUTING_STEP x2",
+    "changes": {
+     "ROUTING_STEP": "20"
+    },
+    "cpu": 3.539138,
+    "wall": 3.5837357969999175,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9998462258634707,
+      "peakPct": -0.08082960418419066,
+      "volPct": -0.04643741484468474,
+      "maxAbs": 0.21842241287231445,
+      "differ": 2644,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.07030942351523252,
+      "peakP90": 0.25546923903653845,
+      "peakMax": 3.4500328200217,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 5.877926695439016,
+      "shapeP90": 28.671480556219187,
+      "shapeMax": 106.46861928279237
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.0290076831266373,
+      "peakP90": 0.0609686254274098,
+      "peakMax": 0.3204059514206545,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 10.592406813554234,
+      "shapeP90": 33.30819579785454,
+      "shapeMax": 42.70829879983974
+     },
+     "routingContinuity": [
+      1.448,
+      1.433
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      18.33
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "ROUTING_STEP x10",
+    "changes": {
+     "ROUTING_STEP": "100"
+    },
+    "cpu": 2.2948280000000003,
+    "wall": 2.327977192000162,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.99984453248267,
+      "peakPct": -0.10923857238278663,
+      "volPct": 0.056368026027541075,
+      "maxAbs": 0.2169475555419922,
+      "differ": 2645,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.1081268402186244,
+      "peakP90": 1.251342093055832,
+      "peakMax": 3.4782814510397224,
+      "over1": 4,
+      "over5": 0,
+      "shapeMedian": 5.878249599516544,
+      "shapeP90": 28.715562791445464,
+      "shapeMax": 100.49302982546175
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.041999700271063305,
+      "peakP90": 0.1444396849497594,
+      "peakMax": 1.3560847395137143,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 12.51709167231588,
+      "shapeP90": 33.24953703087358,
+      "shapeMax": 42.77145522163679
+     },
+     "routingContinuity": [
+      1.448,
+      1.329
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      34.07
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "VARIABLE_STEP 1.0",
+    "changes": {
+     "VARIABLE_STEP": "1.0"
+    },
+    "cpu": 6.060044,
+    "wall": 6.131604754999898,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9999858998682848,
+      "peakPct": 0.002478349668372031,
+      "volPct": -0.00589681791245179,
+      "maxAbs": 0.13158798217773438,
+      "differ": 2645,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.080652219111022,
+      "peakP90": 2.495243419018338,
+      "peakMax": 14.352748999585254,
+      "over1": 5,
+      "over5": 2,
+      "shapeMedian": 5.43308407279963,
+      "shapeP90": 30.129370128152047,
+      "shapeMax": 118.47949650104903
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.02638325145434351,
+      "peakP90": 0.2004964649393764,
+      "peakMax": 8.377082358807465,
+      "over1": 3,
+      "over5": 1,
+      "shapeMedian": 2.7513055031470772,
+      "shapeP90": 24.230280596850847,
+      "shapeMax": 57.66374493338341
+     },
+     "routingContinuity": [
+      1.448,
+      1.593
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.99
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "MINIMUM_STEP 1 s",
+    "changes": {
+     "MINIMUM_STEP": "1"
+    },
+    "cpu": 6.191286,
+    "wall": 6.263016317000165,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9999864503646458,
+      "peakPct": 0.019635610372558975,
+      "volPct": -0.002663780719975059,
+      "maxAbs": 0.13208866119384766,
+      "differ": 2645,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.015885707812111186,
+      "peakP90": 0.712239622038803,
+      "peakMax": 4.045080303078741,
+      "over1": 3,
+      "over5": 0,
+      "shapeMedian": 4.629753565469571,
+      "shapeP90": 27.455617259335334,
+      "shapeMax": 111.44061438807194
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.006852055840455212,
+      "peakP90": 0.11458035497920975,
+      "peakMax": 2.2329290225426064,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 2.076817986721063,
+      "shapeP90": 24.085685069054136,
+      "shapeMax": 42.417406951473296
+     },
+     "routingContinuity": [
+      1.448,
+      1.445
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.95
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "LENGTHENING_STEP 30 s",
+    "changes": {
+     "LENGTHENING_STEP": "30"
+    },
+    "cpu": 6.025549,
+    "wall": 6.091231856000377,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.8434100054748808,
+      "peakPct": -30.011256664193745,
+      "volPct": -2.8035823855905972,
+      "maxAbs": 6.580782413482666,
+      "differ": 2645,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 13.342056749648277,
+      "peakP90": 30.025288726884014,
+      "peakMax": 41.70730633954488,
+      "over1": 29,
+      "over5": 23,
+      "shapeMedian": 28.311481133241042,
+      "shapeP90": 99.18523480167279,
+      "shapeMax": 104.95061683395687
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 5.1048885645421045,
+      "peakP90": 14.946146614466237,
+      "peakMax": 17.328859140388506,
+      "over1": 26,
+      "over5": 16,
+      "shapeMedian": 33.593002521043644,
+      "shapeP90": 48.940514436767664,
+      "shapeMax": 98.48601829180349
+     },
+     "routingContinuity": [
+      1.448,
+      3.735
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.98
+     ],
+     "avgIter": [
+      2.01,
+      2
+     ]
+    }
+   },
+   {
+    "name": "MAX_TRIALS 4",
+    "changes": {
+     "MAX_TRIALS": "4"
+    },
+    "cpu": 5.887883,
+    "wall": 5.920642173000033,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9999998941164489,
+      "peakPct": 0.04814371255788982,
+      "volPct": 0.012749316309358164,
+      "maxAbs": 0.013296365737915039,
+      "differ": 2268,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.04891144953974687,
+      "peakP90": 0.7756310716717366,
+      "peakMax": 3.4187081130307533,
+      "over1": 3,
+      "over5": 0,
+      "shapeMedian": 0.2987482131462827,
+      "shapeP90": 7.872549429821117,
+      "shapeMax": 60.96351478782027
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.018430927567980166,
+      "peakP90": 0.09927463039508314,
+      "peakMax": 1.639026383256112,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 0.226860163081731,
+      "shapeP90": 1.1671664545384073,
+      "shapeMax": 3.3415106889118795
+     },
+     "routingContinuity": [
+      1.448,
+      1.575
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.95
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "HEAD_TOLERANCE 0.01 ft",
+    "changes": {
+     "HEAD_TOLERANCE": "0.01"
+    },
+    "cpu": 6.143367,
+    "wall": 6.22069342299983,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.9999951713698363,
+      "peakPct": 0.08090041417471558,
+      "volPct": 0.01931284028580986,
+      "maxAbs": 0.04918837547302246,
+      "differ": 2492,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.08108500613180146,
+      "peakP90": 0.9148924299711172,
+      "peakMax": 4.4756781144206625,
+      "over1": 3,
+      "over5": 0,
+      "shapeMedian": 2.041445343420069,
+      "shapeP90": 26.489543083023246,
+      "shapeMax": 116.34065708571536
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.028819783931729744,
+      "peakP90": 0.15960540098625547,
+      "peakMax": 3.1963680924154323,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 1.2812889139092947,
+      "shapeP90": 15.51507024555359,
+      "shapeMax": 33.84594761206763
+     },
+     "routingContinuity": [
+      1.448,
+      1.571
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.95
+     ],
+     "avgIter": [
+      2.01,
+      2
+     ]
+    }
+   },
+   {
+    "name": "SKIP_STEADY_STATE YES",
+    "changes": {
+     "SKIP_STEADY_STATE": "YES",
+     "SYS_FLOW_TOL": "5",
+     "LAT_FLOW_TOL": "5"
+    },
+    "cpu": 6.048648,
+    "wall": 6.109337945999869,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 0.999992753308822,
+      "peakPct": -0.26143756601703927,
+      "volPct": 0.00658190854231856,
+      "maxAbs": 0.05415058135986328,
+      "differ": 2645,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0.04146792418164133,
+      "peakP90": 1.177860123618311,
+      "peakMax": 3.418716657686234,
+      "over1": 5,
+      "over5": 0,
+      "shapeMedian": 2.189447658159515,
+      "shapeP90": 24.453819420608802,
+      "shapeMax": 118.37949198947094
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0.06528257868182623,
+      "peakP90": 0.14761418440264512,
+      "peakMax": 1.282807792723674,
+      "over1": 1,
+      "over5": 0,
+      "shapeMedian": 1.595537134087286,
+      "shapeP90": 14.553442411078901,
+      "shapeMax": 32.355248124095695
+     },
+     "routingContinuity": [
+      1.448,
+      1.443
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.94
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   },
+   {
+    "name": "SURCHARGE_METHOD SLOT",
+    "changes": {
+     "SURCHARGE_METHOD": "SLOT"
+    },
+    "cpu": 6.810112,
+    "wall": 6.877940420000414,
+    "diff": {
+     "sameShape": true,
+     "outflow": {
+      "nse": 1,
+      "peakPct": 0,
+      "volPct": 0,
+      "maxAbs": 0,
+      "differ": 0,
+      "n": 3068
+     },
+     "linkFlow": {
+      "n": 31,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "nodeDepth": {
+      "n": 32,
+      "peakMedian": 0,
+      "peakP90": 0,
+      "peakMax": 0,
+      "over1": 0,
+      "over5": 0,
+      "shapeMedian": 0,
+      "shapeP90": 0,
+      "shapeMax": 0
+     },
+     "routingContinuity": [
+      1.448,
+      1.448
+     ],
+     "runoffContinuity": [
+      -0.617,
+      -0.617
+     ],
+     "avgStep": [
+      9.95,
+      9.95
+     ],
+     "avgIter": [
+      2.01,
+      2.01
+     ]
+    }
+   }
+  ]
+ }
+}

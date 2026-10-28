@@ -1,0 +1,8 @@
+EPA/exam79.inp
+EPA/controlExample.inp
+Simon_EPA/Session73_527_H_Elements.inp
+XPSWMM/HEATHRHT.inp
+Hydrology/Simple_4_Sub_H&H (1).inp
+NCIMM_Training/Session_4_50_Examples/Session70_usgs_5_pollutants.inp
+EPA/HRSDtest_cim_7.inp
+OWA_USER/user2_force_main_hw.inp
