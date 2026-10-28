@@ -341,11 +341,16 @@ BLOCKS = [
 ('ol', [
     "<b>Try it here.</b> The Run tab runs any <code>.inp</code> through EPA 5.2.4 and swmm5-cplus side by side, "
     "both compiled to WebAssembly, and compares the outputs. Choose a sample or open your own file, plus any "
-    "rainfall or other data files it names.",
+    "rainfall or other data files it names. Under the graph, a table compares the two series statistic by "
+    "statistic: peak and its time, minimum, mean, volume, largest and mean absolute difference, RMSE, bias, "
+    "Nash–Sutcliffe efficiency and R². Below that, every value in both <code>.out</code> files is compared, and "
+    "then every number in both reports: headline results, the continuity and time-step tables, and each "
+    "summary table column by column. Each table saves as CSV.",
     "<b>See the reentrancy.</b> Many at once opens all the samples in one swmm5-cplus instance and steps them in "
     "turn, then repeats EPA's two-open experiment so you can watch the first model vanish.",
     "<b>Couple two models.</b> The Coupled tab runs the upstream and downstream models in lock step and draws "
-    "the result against the merged network.",
+    "the result against the merged network, with the same statistics table, the merged network as the "
+    "reference.",
     "<b>Build it.</b> Native: compile <code>src/engine/*.cpp</code> and <code>src/api/api.cpp</code> with "
     "<code>g++ -std=c++17 -O2 -flto</code> and link EPA's own <code>main.c</code> for the <code>runswmm</code> command "
     "line. WebAssembly: <code>build_wasm.sh</code> with Clang 18 and wasi-libc.",

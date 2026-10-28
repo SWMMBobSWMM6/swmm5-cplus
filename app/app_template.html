@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>swmm5-cplus</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="color-scheme" content="dark light">
@@ -131,6 +132,15 @@ table.t tr:last-child td{border-bottom:0}
 .tag.warn{color:var(--warn-ink);background:var(--warn-bg);border-color:var(--warn-line)}
 .tag.hi{color:var(--hi-ink);background:var(--hi-bg);border-color:var(--hi-line)}
 .tag.panel{color:var(--panel-ink);background:var(--panel);border-color:var(--panel-line)}
+h3.sub{font:600 12px/1.3 var(--font-ui);color:var(--ink-dim);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.06em}
+table.stats td.dif{color:var(--ok-ink)} table.stats td.dif.nz{color:var(--hi-ink)} table.stats td.lab{color:var(--ink-dim)}
+table.stats tr.grp td{background:var(--field);color:var(--ink-dim);font-weight:600}
+@media (max-width:560px){table.stats td.lab:first-child{min-width:10em}}
+details.more{margin-top:12px;border-top:1px solid var(--line-soft);padding-top:10px}
+details.more summary{cursor:pointer;font-weight:600;color:var(--ink);margin-bottom:8px}
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:900px){.panes{grid-template-columns:minmax(0,1fr)}}
+.panes pre.code{max-height:420px;margin:0;font-size:11px} .panes .kicker{margin:0 0 4px}
 pre.code{background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:10px 12px;overflow-x:auto;font:12px/1.5 var(--font-mono);margin:8px 0}
 .fig{margin:14px 0;min-width:0}
 .fig .frame{border:1px solid var(--line);border-radius:10px;overflow-x:auto;background:var(--f-face)}
@@ -255,17 +265,39 @@ footer.prov b{color:var(--ink)}
         <div class="row" style="justify-content:space-between">
           <h2 style="margin:0">Time series from the two .out files</h2>
           <div class="row">
-            <select id="seriesKind" aria-label="Quantity" style="width:auto"><option value="link:0">Link flow</option><option value="link:1">Link depth</option><option value="link:2">Link velocity</option><option value="node:0">Node depth</option><option value="node:4">Node total inflow</option></select>
+            <select id="seriesKind" aria-label="Quantity" style="width:auto"><option value="link:0">Link flow</option><option value="link:1">Link depth</option><option value="link:2">Link velocity</option><option value="link:4">Link capacity used</option><option value="node:0">Node depth</option><option value="node:1">Node head</option><option value="node:4">Node total inflow</option><option value="node:5">Node flooding</option><option value="sub:4">Subcatchment runoff</option><option value="sys:11">System outflow</option></select>
             <select id="seriesId" aria-label="Element" style="width:auto;max-width:180px"></select>
           </div>
         </div>
         <div class="chartbox" style="margin-top:10px" id="runChart"></div>
         <div class="legend"><span><i style="background:var(--epa)"></i>EPA 5.2.4</span><span><i style="background:var(--cpp)"></i>swmm5-cplus (dashed, on top)</span><span id="diffNote"></span></div>
+        <h3 class="sub">The graph, statistic by statistic</h3>
+        <div class="tablewrap"><table class="t stats" id="seriesStats"></table></div>
+        <p class="faint" id="seriesStatsNote" style="margin:6px 0 0"></p>
         <div class="row" style="margin-top:12px">
           <button class="btn ghost" id="saveSeries" type="button">Save series (.csv)</button>
+          <button class="btn ghost" id="saveStats" type="button">Save statistics (.csv)</button>
           <button class="btn ghost" id="saveZip" type="button">Save both engines' .out and .rpt (.zip)</button>
           <span class="faint" id="saveNote"></span>
         </div>
+      </div>
+      <div class="card" id="outAllCard">
+        <h2>Every value in the two .out files</h2>
+        <p class="muted" id="outAllLine" style="margin:0 0 10px"></p>
+        <div class="tablewrap"><table class="t" id="outAll"></table></div>
+      </div>
+      <div class="card" id="rptCard">
+        <div class="row" style="justify-content:space-between"><h2 style="margin:0">The two .rpt files, number by number</h2><button class="btn ghost" id="saveRpt" type="button">Save report comparison (.csv)</button></div>
+        <p class="muted" id="rptLine" style="margin:8px 0 10px"></p>
+        <h3 class="sub">Headline results</h3>
+        <div class="tablewrap"><table class="t stats" id="rptHead"></table></div>
+        <details class="more" open><summary>Continuity and time-step tables</summary><div class="tablewrap"><table class="t stats" id="rptItems"></table></div></details>
+        <details class="more"><summary>Every summary table, column by column</summary><div class="tablewrap" style="max-height:520px"><table class="t stats" id="rptCols"></table></div></details>
+        <details class="more"><summary>Section by section</summary><div class="tablewrap"><table class="t stats" id="rptSecs"></table></div></details>
+        <details class="more"><summary>Read a section in both reports</summary>
+          <select id="rptSecSel" aria-label="Report section" style="margin:8px 0"></select>
+          <div class="panes"><div><p class="kicker">EPA 5.2.4</p><pre class="code" id="rptPaneA"></pre></div><div><p class="kicker">swmm5-cplus</p><pre class="code" id="rptPaneB"></pre></div></div>
+        </details>
       </div>
     </div>
   </div>
@@ -319,6 +351,9 @@ footer.prov b{color:var(--ink)}
         <h2>Inflow to outfall OB, cfs</h2>
         <div class="chartbox" id="coupleChart"></div>
         <div class="legend"><span><i style="background:var(--f-ink)"></i>merged network</span><span><i style="background:var(--cpp)"></i>coupled (dashed)</span><span><i style="background:var(--epa)"></i>upstream OA, handed across</span></div>
+        <h3 class="sub">The graph, statistic by statistic</h3>
+        <div class="tablewrap"><table class="t stats" id="coupleStats"><tbody><tr><td class="muted">Run the coupling to compare the two hydrographs.</td></tr></tbody></table></div>
+        <p class="faint" id="coupleStatsNote" style="margin:6px 0 0"></p>
       </div>
       <div class="tiles" id="coupleTiles"></div>
     </div>
@@ -448,6 +483,7 @@ double xsect_getAofY(TXsect* xsect, double y)
 <script type="application/octet-stream" id="wasm-epa">/*__WASM_EPA__*/</script>
 <script type="application/octet-stream" id="docx-b64">/*__DOCX__*/</script>
 <script type="text/plain" id="engine-core-src">/*__ENGINE_CORE__*/</script>
+<script>/*__CMP__*/</script>
 <script>window.APPDATA = /*__DATA__*/;</script>
 <script>
 'use strict';
@@ -489,7 +525,7 @@ let DL = null;
 function updateSaveUI() {
   const note = DL ? '' : 'Saving files needs the claude.ai viewer; here the buttons are inactive.';
   $('#saveNote').textContent = note;
-  ['#saveSeries', '#saveZip', '#exportBtn', '#saveDocx'].forEach(s => { const b = $(s); if (b) b.disabled = !DL; });
+  ['#saveSeries', '#saveZip', '#exportBtn', '#saveDocx', '#saveStats', '#saveRpt'].forEach(s => { const b = $(s); if (b) b.disabled = !DL; });
 }
 async function save(filename, data) {
   if (!DL) { toast('Saving is available in the claude.ai viewer.'); return; }
@@ -558,40 +594,53 @@ function boot() {
 }
 
 /* ---------------------------------------------------------------- .out parser */
-function parseOut(bytes) {
-  if (!bytes || bytes.length < 60) return null;
-  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  const I = o => dv.getInt32(o, true), F = o => dv.getFloat32(o, true), Dd = o => dv.getFloat64(o, true);
-  const n = bytes.length;
-  if (I(0) !== 516114522 || I(n - 4) !== 516114522) return null;
-  const idPos = I(n - 24), inPos = I(n - 20), outPos = I(n - 16), nPer = I(n - 12);
-  const ver = I(4), flowUnits = I(8), nSub = I(12), nNode = I(16), nLink = I(20), nPol = I(24);
-  let p = idPos; const ids = { sub: [], node: [], link: [] };
-  const rd = () => { const l = I(p); p += 4; let s = ''; for (let i = 0; i < l; i++) s += String.fromCharCode(bytes[p + i]); p += l; return s; };
-  for (let i = 0; i < nSub; i++) ids.sub.push(rd());
-  for (let i = 0; i < nNode; i++) ids.node.push(rd());
-  for (let i = 0; i < nLink; i++) ids.link.push(rd());
-  // variable counts: after input section
-  p = inPos;
-  const sv = I(p); p += 4 + 4 * sv + 4 * nSub * sv;
-  const nv = I(p); p += 4 + 4 * nv + 4 * nNode * nv;
-  const lv = I(p); p += 4 + 4 * lv + 4 * nLink * lv;
-  const nSubV = I(p); p += 4 + 4 * nSubV;
-  const nNodeV = I(p); p += 4 + 4 * nNodeV;
-  const nLinkV = I(p); p += 4 + 4 * nLinkV;
-  const nSysV = I(p); p += 4 + 4 * nSysV;
-  const start = Dd(p); const step = I(p + 8);
-  const bpp = 8 + 4 * (nSub * nSubV + nNode * nNodeV + nLink * nLinkV + nSysV);
-  function series(kind, idx, v) {
-    const off = kind === 'node' ? 8 + 4 * (nSub * nSubV + idx * nNodeV + v)
-              : 8 + 4 * (nSub * nSubV + nNode * nNodeV + idx * nLinkV + v);
-    const a = new Float32Array(nPer);
-    for (let k = 0; k < nPer; k++) a[k] = F(outPos + k * bpp + off);
-    return a;
-  }
-  return { ver, flowUnits, nSub, nNode, nLink, nPol, ids, nPer, start, step, series };
-}
+const parseOut = SWCMP.parseOut;   // in rpt_compare.js, shared with test_compare.js
 const FLOW_UNITS = ['cfs', 'gpm', 'mgd', 'cms', 'lps', 'mld'];
+const isUS = p => p.flowUnits < 3;
+const FLOWISH = { link: [0], node: [3, 4, 5], sub: [4, 5], sys: [4, 5, 6, 7, 8, 9, 10, 11] };
+function unitOf(kind, v, p) {
+  const f = FLOW_UNITS[p.flowUnits] || 'flow', us = isUS(p), L = us ? 'ft' : 'm', r = us ? 'in/hr' : 'mm/hr', d = us ? 'in' : 'mm', e = us ? 'in/day' : 'mm/day';
+  const U = { link: [f, L, L + '/s', L + '³', 'fraction of full'], node: [L, L, L + '³', f, f, f],
+              sub: [r, d, e, r, f, f, L, 'fraction'], sys: [us ? '°F' : '°C', r, d, r, f, f, f, f, f, f, f, f, L + '³', e, e] };
+  return (U[kind] && U[kind][v]) || '';
+}
+// numbers for tables: exact zero stays "0"; everything else 6 significant figures
+function fs(v) { if (v === null || v === undefined || Number.isNaN(v)) return '—'; if (v === 0) return '0'; const a = Math.abs(v); return (a >= 1e6 || a < 1e-4) ? v.toExponential(3) : String(+v.toPrecision(6)); }
+function fsd(v) { return v === 0 ? '0' : (v > 0 ? '+' : '') + fs(v); }
+function hhmm(hours) { const m = Math.round(hours * 60), dd = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mi = m % 60; return (dd ? dd + ' d ' : '') + String(h).padStart(2, '0') + ':' + String(mi).padStart(2, '0'); }
+// one statistics table for two series; A is the reference
+function statsHtml(st, nameA, nameB, unit, volU) {
+  const dc = v => `<td class="num dif${v === 0 ? '' : ' nz'}">${v === null ? '—' : fsd(v)}</td>`;
+  const row = (lab, a, b, d, u) => `<tr><td class="lab">${lab}</td><td class="num">${a}</td><td class="num">${b}</td>${d}<td class="lab">${u || ''}</td></tr>`;
+  const span = (lab, v, u) => `<tr><td class="lab">${lab}</td><td class="num" colspan="3">${v}</td><td class="lab">${u || ''}</td></tr>`;
+  let h = `<thead><tr><th>Statistic</th><th class="num">${esc(nameA)}</th><th class="num">${esc(nameB)}</th><th class="num">Difference</th><th>Unit</th></tr></thead><tbody>`;
+  h += row('Peak', fs(st.A.peak), fs(st.B.peak), dc(st.peakDiff), unit);
+  h += row('Time of peak', hhmm(st.A.peakT), hhmm(st.B.peakT), dc(st.peakDtMin), 'hh:mm; difference in minutes');
+  h += row('Minimum', fs(st.A.min), fs(st.B.min), dc(st.B.min - st.A.min), unit);
+  h += row('Mean', fs(st.A.mean), fs(st.B.mean), dc(st.B.mean - st.A.mean), unit);
+  if (st.A.vol !== null) h += row('Volume (sum of values × step)', fs(st.A.vol), fs(st.B.vol), dc(st.B.vol - st.A.vol), volU);
+  h += `<tr class="grp"><td colspan="5">Agreement over ${fmt(st.n)} reporting periods of ${fmt(st.dtSec)} s, ${esc(nameA)} as the reference</td></tr>`;
+  h += span('Values identical, bit for bit', `${fmt(st.same)} of ${fmt(st.n)}`, st.differ ? fmt(st.differ) + ' differ' : 'none differ');
+  h += span('Largest |difference|', fs(st.maxAbs) + (st.maxAbs > 0 ? ' at ' + hhmm(st.maxAbsT) : ''), unit);
+  h += span('Mean absolute difference', fs(st.mae), unit);
+  h += span('Root-mean-square difference', fs(st.rmse), unit);
+  h += span('Mean difference (bias)', fsd(st.bias), unit);
+  h += span('Peak difference', fsd(st.peakDiff) + (st.peakPct === null ? '' : ` (${fsd(+st.peakPct.toFixed(3))}%)`), unit);
+  if (st.volPct !== null) h += span('Volume difference', fsd(+st.volPct.toFixed(4)) + '%', '');
+  h += span('Nash–Sutcliffe efficiency', st.nse === null ? 'not defined (the reference does not vary)' : (st.nse === 1 ? '1 (exact)' : st.nse.toFixed(6)), '1 is a perfect match');
+  h += span('R² (squared correlation)', st.r2 === null ? 'not defined (a series does not vary)' : (st.r2 === 1 ? '1 (exact)' : st.r2.toFixed(6)), '');
+  return h + '</tbody>';
+}
+function statsCsv(st, nameA, nameB, unit, volU) {
+  const q = x => `"${String(x).replace(/"/g, '""')}"`;
+  let c = `statistic,${q(nameA)},${q(nameB)},difference,unit\n`;
+  c += `peak,${st.A.peak},${st.B.peak},${st.peakDiff},${q(unit)}\npeak time (h),${st.A.peakT},${st.B.peakT},${st.peakDtMin / 60},h\n`;
+  c += `minimum,${st.A.min},${st.B.min},${st.B.min - st.A.min},${q(unit)}\nmean,${st.A.mean},${st.B.mean},${st.B.mean - st.A.mean},${q(unit)}\n`;
+  if (st.A.vol !== null) c += `volume,${st.A.vol},${st.B.vol},${st.B.vol - st.A.vol},${q(volU)}\n`;
+  c += `periods,${st.n},,,\nvalues identical,${st.same},,,\nmax abs difference,,,${st.maxAbs},${q(unit)}\nmean abs difference,,,${st.mae},${q(unit)}\nRMSE,,,${st.rmse},${q(unit)}\nbias,,,${st.bias},${q(unit)}\n`;
+  c += `volume difference %,,,${st.volPct === null ? '' : st.volPct},\nNSE,,,${st.nse === null ? '' : st.nse},\nR2,,,${st.r2 === null ? '' : st.r2},\n`;
+  return c;
+}
 
 /* ---------------------------------------------------------------- charts (SVG, theme tokens) */
 function lineChart(el, opt) {
@@ -680,33 +729,101 @@ function renderRun() {
   const kv = (eng, sha) => `<dt>engine build</dt><dd>${versionOf(eng.rpt)}</dd><dt>return code</dt><dd>${esc(eng.rc)}</dd><dt>run time</dt><dd>${fmt(eng.ms, 1)} ms</dd><dt>.out</dt><dd>${fmt((eng.out || []).length)} bytes</dd><dt>SHA-256</dt><dd>${sha.slice(0, 24)}&hellip;</dd><dt>.rpt</dt><dd>${fmt(normRpt(eng.rpt).split('\n').length)} lines</dd>`;
   $('#engEpa').innerHTML = kv(d.epa, L.ha);
   $('#engCpp').innerHTML = kv(d.cpp, L.hb);
-  fillSeriesIds(); drawRunChart();
+  fillSeriesIds(); drawRunChart(); renderOutAll(); renderRpt();
 }
 function fillSeriesIds() {
   const p = LAST && LAST.pa; const sel = $('#seriesId'); sel.innerHTML = '';
-  if (!p) { $('#runChart').innerHTML = '<p class="muted" style="padding:16px">No binary output to plot.</p>'; return; }
+  const none = (msg) => { $('#runChart').innerHTML = `<p class="muted" style="padding:16px">${msg}</p>`; $('#seriesStats').innerHTML = ''; $('#seriesStatsNote').textContent = ''; $('#diffNote').textContent = ''; if (LAST) LAST.series = null; };
+  if (!p) { none('No binary output to plot. The .rpt comparison below still applies.'); return false; }
   const [kind, v] = $('#seriesKind').value.split(':');
-  const list = kind === 'node' ? p.ids.node : p.ids.link;
+  const list = kind === 'sys' ? ['system'] : p.ids[kind];
+  if (!list.length) { none('This model has no ' + (kind === 'sub' ? 'subcatchments' : kind + 's') + '.'); return false; }
   let best = 0, bestv = -1;
-  list.forEach((id, i) => {
-    const o = document.createElement('option'); o.value = i; o.textContent = id; sel.appendChild(o);
-  });
-  if (kind === 'link') list.forEach((id, i) => { const a = p.series('link', i, 0); let m = 0; for (const x of a) m = Math.max(m, Math.abs(x)); if (m > bestv) { bestv = m; best = i; } });
+  list.forEach((id, i) => { const o = document.createElement('option'); o.value = i; o.textContent = id; sel.appendChild(o); });
+  // start on the element with the largest peak magnitude, so the default graph has something in it
+  if (list.length > 1 && list.length <= 20000) list.forEach((id, i) => { const a = p.series(kind, i, +v); let m = 0; for (const x of a) m = Math.max(m, Math.abs(x)); if (m > bestv) { bestv = m; best = i; } });
   sel.value = best;
+  return true;
 }
 function drawRunChart() {
-  const L = LAST; if (!L || !L.pa || !L.pb) return;
+  const L = LAST; if (!L || !L.pa || !L.pb || !$('#seriesId').options.length) return;
   const [kind, v] = $('#seriesKind').value.split(':');
   const idx = +$('#seriesId').value || 0;
   const ya = L.pa.series(kind, idx, +v), yb = L.pb.series(kind, idx, +v);
   const x = Array.from(ya, (_, k) => (k + 1) * L.pa.step / 3600);
-  let maxd = 0; for (let k = 0; k < ya.length; k++) maxd = Math.max(maxd, Math.abs(ya[k] - yb[k]));
-  const unit = kind === 'link' ? (v === '0' ? FLOW_UNITS[L.pa.flowUnits] : v === '1' ? 'ft' : 'ft/s') : (v === '0' ? 'ft' : FLOW_UNITS[L.pa.flowUnits]);
+  const unit = unitOf(kind, +v, L.pa);
+  const flow = FLOWISH[kind].includes(+v), V = SWCMP.VOL[L.pa.flowUnits] || null;
+  const st = SWCMP.seriesStats(ya, yb, L.pa.step, flow && V ? V.f : null), volU = flow && V ? V.u : '';
   lineChart($('#runChart'), { x, xlabel: 'hours from start', ylabel: unit, series: [{ y: ya, color: 'var(--epa)', w: 3 }, { y: yb, color: 'var(--cpp)', w: 1.6, dash: '6 4' }] });
-  $('#diffNote').textContent = `largest difference at any reporting step: ${maxd === 0 ? '0 (exactly)' : maxd.toPrecision(3) + ' ' + unit}`;
-  L.series = { kind, v, idx, id: (kind === 'node' ? L.pa.ids.node : L.pa.ids.link)[idx], x, ya, yb, unit };
+  $('#diffNote').textContent = `largest difference at any reporting step: ${st.maxAbs === 0 ? '0 (exactly)' : st.maxAbs.toPrecision(3) + ' ' + unit}`;
+  const id = kind === 'sys' ? 'system' : L.pa.ids[kind][idx];
+  $('#seriesStats').innerHTML = statsHtml(st, 'EPA 5.2.4', 'swmm5-cplus', unit, volU);
+  $('#seriesStatsNote').textContent = (st.differ === 0
+    ? `${id}: the two series are the same bits at all ${fmt(st.n)} reporting periods, so every difference is exactly 0, Nash–Sutcliffe and R² are exactly 1. The table is the instrument that would show a difference, and its arithmetic is checked against a deliberately changed model in test_compare.js.`
+    : `${id}: the two series differ at ${fmt(st.differ)} of ${fmt(st.n)} reporting periods.`) + (flow ? ` Volume is the sum of the reported flows times the ${fmt(L.pa.step)} s step, in the unit of EPA's continuity table.` : '');
+  L.series = { kind, v, idx, id, x, ya, yb, unit, st, volU };
 }
-$('#seriesKind').addEventListener('change', () => { fillSeriesIds(); drawRunChart(); });
+function renderOutAll() {
+  const L = LAST, r = L && SWCMP.compareOut(L.pa, L.pb);
+  if (!r) { $('#outAllLine').textContent = 'Neither engine wrote a binary output for this model, so there is nothing to compare here.'; $('#outAll').innerHTML = ''; return; }
+  if (!r.comparable) { $('#outAllLine').textContent = 'The two .out files have different layouts (element or period counts), so they cannot be compared value by value.'; $('#outAll').innerHTML = ''; return; }
+  $('#outAllLine').innerHTML = `${fmt(r.values)} values: every variable of every element at every one of ${fmt(r.nPer)} reporting periods, read from both files. <b>${fmt(r.differ)}</b> differ; ${fmt(r.dates)} of ${fmt(r.nPer)} time stamps differ.` + (r.differ === 0 ? ' That follows from the byte-identical files; the count is the place a difference would show.' : '');
+  const nm = { sub: 'Subcatchments', node: 'Nodes', link: 'Links', sys: 'System' };
+  $('#outAll').innerHTML = '<thead><tr><th>Group</th><th class="num">Elements</th><th class="num">Variables each</th><th class="num">Values</th><th class="num">Differ</th><th class="num">Largest |difference|</th><th>Where</th></tr></thead><tbody>' +
+    Object.entries(r.groups).map(([g, x]) => `<tr><td>${nm[g]}</td><td class="num">${fmt(x.elements)}</td><td class="num">${x.vars}</td><td class="num">${fmt(x.values)}</td><td class="num">${fmt(x.differ)}</td><td class="num">${fs(x.maxAbs)}</td><td>${esc(x.where || '—')}</td></tr>`).join('') + '</tbody>';
+}
+function renderRpt() {
+  const L = LAST, ta = L.d.epa.rpt ? dec.decode(L.d.epa.rpt) : '', tb = L.d.cpp.rpt ? dec.decode(L.d.cpp.rpt) : '';
+  const c = SWCMP.compareRpt(ta, tb); L.rpt = c;
+  const secs = c.sections.filter(s => s.title !== 'Header');
+  $('#rptLine').innerHTML = `${fmt(c.linesA)} lines in EPA's report and ${fmt(c.linesB)} in swmm5-cplus's, after dropping the wall-clock lines; <b>${fmt(c.sameLines)}</b> identical line for line. ` +
+    `${fmt(c.numbers)} numbers read from ${secs.length} sections: <b>${fmt(c.sameNumbers)}</b> identical as printed` +
+    (c.maxRel > 0 ? `; the largest relative difference is ${(100 * c.maxRel).toFixed(3)}%, at ${esc(c.maxRelWhere)}.` : ', so every difference below is exactly 0.');
+  const dcell = (va, vb) => (va === null || vb === null) ? `<td class="num dif">${'—'}</td>` : `<td class="num dif${va === vb ? '' : ' nz'}">${fsd(+(vb - va).toPrecision(6))}</td>`;
+  const head = SWCMP.headline(c);
+  $('#rptHead').innerHTML = '<thead><tr><th>Result</th><th class="num">EPA 5.2.4</th><th class="num">swmm5-cplus</th><th class="num">Difference</th></tr></thead><tbody>' +
+    (head.length ? head.map(h => `<tr><td class="lab">${esc(h.name)}</td><td class="num">${esc(h.a)}</td><td class="num">${esc(h.b)}</td>${dcell(h.va, h.vb)}</tr>`).join('') : '<tr><td colspan="4" class="muted">This report has no continuity or summary tables (an input error stops the run before they are written).</td></tr>') + '</tbody>';
+  const items = c.items.filter(i => /Continuity|Time Step Summary/.test(i.section) && i.va !== null);
+  let last = '';
+  $('#rptItems').innerHTML = '<thead><tr><th>Item</th><th class="num">EPA 5.2.4</th><th class="num">swmm5-cplus</th><th class="num">Difference</th><th>Unit</th></tr></thead><tbody>' +
+    (items.length ? items.map(i => { const g = i.section !== last ? `<tr class="grp"><td colspan="5">${esc(i.section)}</td></tr>` : ''; last = i.section; return g + `<tr><td class="lab">${esc(i.label)}</td><td class="num">${esc(i.a)}</td><td class="num">${esc(i.b)}</td>${dcell(i.va, i.vb)}<td class="lab">${esc(i.unit.replace(/^(Volume|Depth) /, ''))}</td></tr>`; }).join('') : '<tr><td colspan="5" class="muted">No continuity tables in this report.</td></tr>') + '</tbody>';
+  $('#rptCols').innerHTML = '<thead><tr><th>Table</th><th>Column</th><th class="num">Rows</th><th class="num">EPA largest</th><th class="num">swmm5-cplus largest</th><th class="num">Identical</th><th class="num">Largest |difference|</th></tr></thead><tbody>' +
+    (c.columns.length ? c.columns.map(k => `<tr><td class="lab">${esc(k.section)}</td><td>${esc(k.name)}</td><td class="num">${fmt(k.n)}</td><td class="num">${k.time ? hhmm(k.maxA / 60) : fs(k.maxA)}</td><td class="num">${k.time ? hhmm(k.maxB / 60) : fs(k.maxB)}</td><td class="num">${fmt(k.same)} of ${fmt(k.n)}</td><td class="num dif${k.maxAbs ? ' nz' : ''}">${fs(k.maxAbs)}${k.time && k.maxAbs ? ' min' : ''}</td></tr>`).join('') : '<tr><td colspan="7" class="muted">No summary tables in this report.</td></tr>') + '</tbody>';
+  $('#rptSecs').innerHTML = '<thead><tr><th>Section</th><th>Kind</th><th class="num">Rows</th><th class="num">Numbers</th><th class="num">Identical</th><th class="num">Text differences</th><th class="num">Largest relative difference</th></tr></thead><tbody>' +
+    secs.map(k => `<tr><td>${esc(k.title)}</td><td class="lab">${k.kind}</td><td class="num">${fmt(k.rows)}</td><td class="num">${fmt(k.numbers)}</td><td class="num">${fmt(k.same)}</td><td class="num">${fmt(k.textDiff)}</td><td class="num dif${k.maxRel ? ' nz' : ''}">${k.maxRel ? (100 * k.maxRel).toFixed(3) + '%' : '0'}</td></tr>`).join('') + '</tbody>';
+  const sel = $('#rptSecSel'); sel.innerHTML = '';
+  secs.forEach((k, i) => { const o = document.createElement('option'); o.value = i; o.textContent = k.title; sel.appendChild(o); });
+  L.rptSecs = secs; showRptSection();
+}
+function showRptSection() {
+  const L = LAST; if (!L || !L.rptSecs || !L.rptSecs.length) { $('#rptPaneA').textContent = ''; $('#rptPaneB').textContent = ''; return; }
+  const k = L.rptSecs[+$('#rptSecSel').value || 0];
+  const txt = s => s ? ['  ' + s.title, ...s.lines].join('\n').replace(/\s+$/, '') : '(section missing)';
+  $('#rptPaneA').textContent = txt(k.a); $('#rptPaneB').textContent = txt(k.b);
+}
+$('#rptSecSel').addEventListener('change', showRptSection);
+$('#saveRpt').addEventListener('click', () => {
+  const L = LAST; if (!L || !L.rpt) return;
+  const q = x => `"${String(x).replace(/"/g, '""')}"`;
+  let csv = 'section,row,column,EPA 5.2.4,swmm5-cplus,abs difference\n';
+  for (const k of L.rpt.sections) {
+    if (!k.b) continue;
+    k.a.rows.forEach((ra, r) => {
+      const rb = k.b.rows[r]; if (!rb) return;
+      ra.cells.forEach((ca, j) => {
+        const cb = rb.cells[j]; if (!ca || !cb || ca.v === null) return;
+        const col = k.a.cols ? k.a.cols[j] : (k.a.units && k.a.units[j]) || 'value ' + (j + 1);
+        csv += `${q(k.title)},${q(ra.key)},${q(col)},${q(ca.t)},${q(cb.t)},${cb.v === null ? '' : Math.abs(cb.v - ca.v)}\n`;
+      });
+    });
+  }
+  save(L.file.replace(/\.inp$/i, '') + '_rpt_comparison.csv', csv);
+});
+$('#saveStats').addEventListener('click', () => {
+  const s = LAST && LAST.series; if (!s) return;
+  save(LAST.file.replace(/\.inp$/i, '') + '_' + s.id + '_statistics.csv', statsCsv(s.st, 'EPA 5.2.4', 'swmm5-cplus', s.unit, s.volU));
+});
+$('#seriesKind').addEventListener('change', () => { if (fillSeriesIds()) drawRunChart(); });
 $('#seriesId').addEventListener('change', drawRunChart);
 $('#saveSeries').addEventListener('click', () => {
   const s = LAST && LAST.series; if (!s) return;
@@ -809,7 +926,10 @@ function drawCoupled() {
   const x = c.coupled.map((_, k) => (k + 1) * 5 / 60);
   lineChart($('#coupleChart'), { x, xlabel: 'hours', ylabel: 'cfs', series: [{ y: c.merged, color: 'var(--f-ink)', w: 2.4 }, { y: c.coupled, color: 'var(--cpp)', w: 2, dash: '6 4' }, { y: c.upstream, color: 'var(--epa)', w: 1.5 }] });
   const pk = a => Math.max(...a), sm = a => a.reduce((p, q) => p + q, 0);
-  const md = Math.max(...c.coupled.map((v, k) => Math.abs(v - c.merged[k])));
+  const st = SWCMP.seriesStats(c.merged, c.coupled, 300, 1 / 43560);
+  $('#coupleStats').innerHTML = statsHtml(st, 'merged network', 'coupled', 'cfs', 'acre-ft');
+  $('#coupleStatsNote').textContent = 'The merged network is the reference, so Nash–Sutcliffe 1 would mean the coupled hydrograph reproduced it exactly. Values are the inflow to OB every 5 minutes; volume is their sum times 300 s.';
+  COUPLED.st = st;
   $('#coupleTiles').innerHTML = [
     [fmt(pk(c.coupled), 1) + ' / ' + fmt(pk(c.merged), 1), 'peak cfs, coupled / merged (' + ((pk(c.coupled) - pk(c.merged)) / pk(c.merged) * 100).toFixed(1) + '%)'],
     [((sm(c.coupled) - sm(c.merged)) / sm(c.merged) * 100).toFixed(2) + '%', 'volume difference (sum of 5-min values)'],
@@ -878,7 +998,8 @@ const TOUR = [
   ['#sampleSel', 'Choose a model', 'Eight EPA example models are built in. You can also open your own .inp, plus any data files it names.'],
   ['#runBtn', 'Run both engines', 'EPA 5.2.4 and swmm5-cplus each run the model in a background worker, both compiled to WebAssembly.'],
   ['#verdictCard', 'Read the verdict', 'The .out files are compared byte for byte by SHA-256, the reports line for line minus the wall-clock lines.'],
-  ['#runChart', 'Check the series', 'The two engines’ time series are drawn on top of each other; the largest difference is printed under the chart.'],
+  ['#runChart', 'Check the series', 'The two engines’ time series are drawn on top of each other. Under the chart, a table compares them statistic by statistic: peak, time of peak, volume, RMSE, Nash–Sutcliffe, R².'],
+  ['#rptCard', 'Compare the reports', 'Every number in the two .rpt files is read and compared: headline results, the continuity tables, and every summary table column by column.'],
   ['[data-view="many"]', 'Open many models at once', 'This is what EPA’s engine cannot do. The tab also repeats EPA’s two-open experiment.'],
   ['#helpBtn', 'Come back any time', 'The ? button reopens this guide.']
 ];
@@ -887,7 +1008,7 @@ function endTour() { tourI = -1; $$('.tour,.spot').forEach(n => n.remove()); }
 function tourStep(i) {
   $$('.tour,.spot').forEach(n => n.remove());
   if (i < 0 || i >= TOUR.length) return endTour();
-  tourI = i; if (i <= 4) showView('run');
+  tourI = i; if (i <= 5) showView('run');
   const [sel, title, body] = TOUR[i], el = $(sel); if (!el) return tourStep(i + 1);
   el.scrollIntoView({ block: 'center' });
   const r = el.getBoundingClientRect();
