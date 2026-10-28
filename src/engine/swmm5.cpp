@@ -704,13 +704,22 @@ int Project::swmm_close()
     if ( Fout.file ) output_close();
     if ( swmm5_->IsOpenFlag ) project_close();
     report_writeSysTime();
+    // swmm5-cplus: clear each FILE* after closing it. EPA 5.2.4 left them dangling,
+    // so a second swmm_close() wrote into a freed FILE and closed it twice.
     if ( Finp.file != NULL )
+    {
         fclose(Finp.file);
+        Finp.file = NULL;
+    }
     if ( Frpt.file != NULL )
+    {
         fclose(Frpt.file);
+        Frpt.file = NULL;
+    }
     if ( Fout.file != NULL )
     {
         fclose(Fout.file);
+        Fout.file = NULL;
         if ( Fout.mode == SCRATCH_FILE ) remove(Fout.name);
     }
     swmm5_->IsOpenFlag = FALSE;
@@ -1521,8 +1530,17 @@ char* Project::getTempFileName(char* fname)
 #else
 
     // --- use system function mkstemp() to create a temporary file name
+    //     swmm5-cplus: mkstemp() returns an open descriptor that EPA 5.2.4 never
+    //     closed (one leaked fd per scratch file). Only the name is wanted.
     sstrncpy(fname, "swmmXXXXXX", MAXFNAME);
-    mkstemp(fname);
+    {
+        int fd = mkstemp(fname);
+        #ifndef __wasi__
+        if ( fd >= 0 ) close(fd);
+        #else
+        (void)fd;
+        #endif
+    }
     return fname;
 
 #endif
@@ -1600,19 +1618,25 @@ void Project::getAbsolutePath(const char* fname, char* absPath, size_t size)
         return;
 
     // --- if fname has a relative path then retrieve its full path
+    //     swmm5-cplus: realpath() requires a PATH_MAX buffer, and the absolute
+    //     branch copied strlen(fname) bytes without regard to size; both could
+    //     overrun InpDir. Resolve into a full-size buffer, then copy within size.
     if (isRelativePath(fname))
     {
         #ifdef WINDOWS
             GetFullPathName((LPCSTR)fname, (DWORD)size, (LPSTR)absPath, NULL);
         #else
-            realpath(fname, absPath);
+            char resolved[4096];
+            if ( realpath(fname, resolved) == NULL )
+                sstrncpy(resolved, fname, sizeof(resolved) - 1);
+            sstrncpy(absPath, resolved, size - 1);
         #endif
     }
 
     // --- otherwise copy fname to absPath
     else
     {
-        sstrncpy(absPath, fname, strlen(fname));
+        sstrncpy(absPath, fname, size - 1);
     }
 
     // --- trim file name portion of absPath

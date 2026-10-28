@@ -39,6 +39,9 @@ Project::Project()
 
 Project::~Project()
 {
+    // RAII: destroying a Project releases everything it holds, open or not.
+    // (swmm_close is idempotent in swmm5-cplus; see swmm5.cpp.)
+    swmm_close();
     climate_destroyState();
     controls_destroyState();
     datetime_destroyState();

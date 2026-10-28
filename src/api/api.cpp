@@ -40,10 +40,7 @@ swmm5cp_handle swmm5cp_create(void)
 void swmm5cp_destroy(swmm5cp_handle h)
 {
     if ( !h ) return;
-    Project* p = P(h);
-    // close an open project first so its files and memory are released
-    p->swmm_close();
-    delete p;
+    delete P(h);             // ~Project closes an open project first
     --g_live;
 }
 
