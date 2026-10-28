@@ -161,6 +161,14 @@ H.append('''//------------------------------------------------------------------
 
 extern double Amax[];          // max. area / full area, by shape type (EPA table)
 
+// xsect.dat tables used by xsect_setParams (defined in xsect_geometry.cpp)
+extern int    N_R_Circ;
+extern double R_Circ[51];
+extern int    NumCodesEllipse;
+extern double MinorAxis_Ellipse[23], MajorAxis_Ellipse[23], Afull_Ellipse[23], Rfull_Ellipse[23];
+extern int    NumCodesArch;
+extern double Yfull_Arch[102], Wmax_Arch[102], Afull_Arch[102], Rfull_Arch[102];
+
 namespace swmm { namespace xs {
 
 class XsectShape
@@ -268,6 +276,10 @@ ts = re.search(r'typedef struct\s*\{[^}]*\}\s*TXsectStar;\s*\n', xh, re.S)
 if ts:
     xh = xh[:ts.start()] + xh[ts.end():]
 xh = xh.replace('#include "findroot.hpp"', '#include "xsect_geometry.hpp"\nusing namespace swmm::xs;')
+# the geometry tables are defined once, in xsect_geometry.cpp (xsect.dat gives them
+# external linkage, so two including files would define them twice)
+xh = re.sub(r'#include "xsect.dat"[^\n]*\n', '// xsect.dat tables: defined in xsect_geometry.cpp; '
+            'the few that xsect_setParams needs are declared in xsect_geometry.hpp\n', xh)
 X.append(xh)
 BIND = {
  'xsect_setIrregXsectParams': '''

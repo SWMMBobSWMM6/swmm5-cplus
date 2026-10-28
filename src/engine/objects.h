@@ -596,6 +596,14 @@ typedef struct
    double        aBot;            // area of bottom section
    double        sBot;            // slope of bottom section
    double        rBot;            // radius of bottom section
+
+   // swmm5-cplus: geometry tables of IRREGULAR, CUSTOM and STREET sections,
+   // bound when the link is validated (EPA looked them up in the global
+   // Transect/Shape/Street arrays on every call)
+   const double* aTbl;            // normalized area v. depth
+   const double* rTbl;            // normalized hyd. radius v. depth
+   const double* wTbl;            // normalized top width v. depth
+   int           nTbl;            // number of table entries
 }  TXsect;
 
 //--------------------------------------
