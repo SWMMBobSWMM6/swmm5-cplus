@@ -1,0 +1,184 @@
+
+=================================================================
+==32244==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 287856 byte(s) in 18 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c5de8fe in HTcreate /home/claude/epa524/src/solver/hash.c:54
+
+Direct leak of 3312 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d3cd in createObjects /home/claude/epa524/src/solver/project.c:1019
+    #2 0x55833c62d3cd in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 2560 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d259 in createObjects /home/claude/epa524/src/solver/project.c:1015
+    #2 0x55833c62d259 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1224 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d42a in createObjects /home/claude/epa524/src/solver/project.c:1020
+    #2 0x55833c62d42a in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1080 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d76f in createObjects /home/claude/epa524/src/solver/project.c:1029
+    #2 0x55833c62d76f in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 80 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c5ebe2f in inlet_create /home/claude/epa524/src/solver/inlet.c:275
+
+Direct leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d2b6 in createObjects /home/claude/epa524/src/solver/project.c:1016
+    #2 0x55833c62d2b6 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d944 in createObjects /home/claude/epa524/src/solver/project.c:1036
+    #2 0x55833c62d944 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55833c61dc3e in AllocInit /home/claude/epa524/src/solver/mempool.c:95
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d7cc in createObjects /home/claude/epa524/src/solver/project.c:1030
+    #2 0x55833c62d7cc in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d712 in createObjects /home/claude/epa524/src/solver/project.c:1028
+    #2 0x55833c62d712 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d487 in createObjects /home/claude/epa524/src/solver/project.c:1021
+    #2 0x55833c62d487 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d4e4 in createObjects /home/claude/epa524/src/solver/project.c:1022
+    #2 0x55833c62d4e4 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d829 in createObjects /home/claude/epa524/src/solver/project.c:1031
+    #2 0x55833c62d829 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d6b5 in createObjects /home/claude/epa524/src/solver/project.c:1027
+    #2 0x55833c62d6b5 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d1fc in createObjects /home/claude/epa524/src/solver/project.c:1014
+    #2 0x55833c62d1fc in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d313 in createObjects /home/claude/epa524/src/solver/project.c:1017
+    #2 0x55833c62d313 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c5e546a in infil_create /home/claude/epa524/src/solver/infil.c:108
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c5ebddf in inlet_create /home/claude/epa524/src/solver/inlet.c:271
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d5fb in createObjects /home/claude/epa524/src/solver/project.c:1025
+    #2 0x55833c62d5fb in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d658 in createObjects /home/claude/epa524/src/solver/project.c:1026
+    #2 0x55833c62d658 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d370 in createObjects /home/claude/epa524/src/solver/project.c:1018
+    #2 0x55833c62d370 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d19d in createObjects /home/claude/epa524/src/solver/project.c:1013
+    #2 0x55833c62d19d in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d59e in createObjects /home/claude/epa524/src/solver/project.c:1024
+    #2 0x55833c62d59e in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d541 in createObjects /home/claude/epa524/src/solver/project.c:1023
+    #2 0x55833c62d541 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c660f89 in street_create /home/claude/epa524/src/solver/street.c:38
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d8e3 in createObjects /home/claude/epa524/src/solver/project.c:1033
+    #2 0x55833c62d8e3 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Direct leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62d886 in createObjects /home/claude/epa524/src/solver/project.c:1032
+    #2 0x55833c62d886 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Indirect leak of 64000 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55833c61db8e in AllocHdr /home/claude/epa524/src/solver/mempool.c:71
+
+Indirect leak of 528 byte(s) in 22 object(s) allocated from:
+    #0 0x7fb610afd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55833c5de97a in HTinsert /home/claude/epa524/src/solver/hash.c:64
+
+Indirect leak of 360 byte(s) in 15 object(s) allocated from:
+    #0 0x7fb610afd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55833c66c45c in table_addEntry /home/claude/epa524/src/solver/table.c:218
+
+Indirect leak of 144 byte(s) in 3 object(s) allocated from:
+    #0 0x7fb610afd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55833c5e8452 in inflow_setExtInflow /home/claude/epa524/src/solver/inflow.c:165
+
+Indirect leak of 32 byte(s) in 1 object(s) allocated from:
+    #0 0x7fb610afd9c7 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55833c61db9b in AllocHdr /home/claude/epa524/src/solver/mempool.c:72
+
+Indirect leak of 10 byte(s) in 10 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62df6f in createObjects /home/claude/epa524/src/solver/project.c:1072
+    #2 0x55833c62df6f in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Indirect leak of 10 byte(s) in 10 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62df9e in createObjects /home/claude/epa524/src/solver/project.c:1073
+    #2 0x55833c62df9e in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Indirect leak of 9 byte(s) in 9 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62e187 in createObjects /home/claude/epa524/src/solver/project.c:1084
+    #2 0x55833c62e187 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Indirect leak of 9 byte(s) in 9 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62e158 in createObjects /home/claude/epa524/src/solver/project.c:1083
+    #2 0x55833c62e158 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+Indirect leak of 9 byte(s) in 9 object(s) allocated from:
+    #0 0x7fb610afd340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x55833c62e129 in createObjects /home/claude/epa524/src/solver/project.c:1082
+    #2 0x55833c62e129 in project_readInput /home/claude/epa524/src/solver/project.c:141
+
+SUMMARY: AddressSanitizer: 361322 byte(s) leaked in 134 allocation(s).

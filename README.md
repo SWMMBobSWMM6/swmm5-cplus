@@ -35,12 +35,15 @@ inconclusive, never as a match.
 |---|---|
 | Smoke set, every commit | 40 / 40 identical |
 | Coverage set (all 26 shapes, every feature found, 36 error decks) | 187 / 187 identical |
-| Full corpus, native, smallest first | GATE_LINE |
+| Full corpus, native: every model under 125 KB of input, plus a seeded sample of 72 of the 853 larger (18 per size quartile, to 88 MB) | 3,743 identical, 0 different, 4 inconclusive (time cap), 12 crash decks crash both alike; 3,759 of 4,540 run |
 | WebAssembly, swmm5-cplus vs EPA C (smoke + coverage sets) | 221 / 221 identical |
 | Six models round-robin in one instance; six threads | each identical to its solo EPA run (native, ASan, wasm) |
 | Run time, both with LTO, 8 models × 5 interleaved reps | 1.003 × EPA (noise floor ±4.6 %) |
 
 The corpus is [SWMMBobSWMM6/1729-SWMM5-Models-2030](https://github.com/SWMMBobSWMM6/1729-SWMM5-Models-2030) (4,540 `.inp` files).
+The other 781 large models have not been run; at the sample's average run time they need at
+least 8 more hours on a two-core machine. Of the identical runs, 435 stop on an input error and
+write no `.out`, so the report is the whole comparison for them. Raw rows are in `results/`.
 
 ## The history is the method
 
@@ -154,6 +157,7 @@ coupling, and carries the essay *Same Numbers, Different Bones* in its Doc tab.
 - It is not a new engine and not more accurate. Every number is EPA 5.2.4's, EPA's own
   numerical defects included.
 - It fixes none of EPA's crashes: the crash decks in the corpus crash it the same way.
+- The full gate has not run 781 of the 853 models over 125 KB of input.
 - It is not faster. With link-time optimization it costs nothing measurable; at plain
   `-O2` it is about 6 % slower on the eight models timed. One machine, two cores.
 - Parity is per platform. EPA's own C source gives different bits natively and in

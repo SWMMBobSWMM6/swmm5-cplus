@@ -1,0 +1,15 @@
+engine: gate/final/multi_native (be57fec, -O2 -flto); reference: ref/runswmm (EPA 5.2.4, gcc -O2), one solo run per model
+extran1_semi_elliptical | 16342 B | rr: out same, rpt same | par: out same, rpt same
+extran1_power | 16342 B | rr: out same, rpt same | par: out same, rpt same
+exam79 | 449771 B | rr: out same, rpt same | par: out same, rpt same
+high_elevation_model | 843990 B | rr: out same, rpt same | par: out same, rpt same
+transect_example | 986895 B | rr: out same, rpt same | par: out same, rpt same
+attenuation_DW_High_CE | 57546553 B | rr: out same, rpt same | par: out same, rpt same
+live projects: 6
+extran1_semi_elliptical rc=0 steps=1440
+extran1_power rc=0 steps=1440
+exam79 rc=0 steps=8641
+high_elevation_model rc=0 steps=12465
+transect_example rc=0 steps=710
+attenuation_DW_High_CE rc=0 steps=566400
+live projects after: 0

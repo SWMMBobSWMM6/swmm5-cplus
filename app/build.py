@@ -23,7 +23,11 @@ features = J(f'{GATE}/features.json')
 commit = open(f'{GATE}/final/engine_commit.txt').read().strip()
 
 # ------------------------------------------------------------------ gate results
-full = jl(f'{GATE}/full.jsonl')
+full_main = jl(f'{GATE}/full.jsonl')
+# after the in-order gate was stopped, a seeded size-stratified sample of the unrun large models
+sample_rows = jl(f'{GATE}/large_sample.jsonl') if os.path.exists(f'{GATE}/large_sample.jsonl') else []
+full = full_main + sample_rows
+N_SAMPLE = len(sample_rows)
 corpus_n = sum(1 for l in open(f'{GATE}/full_by_size.txt') if l.strip())
 def inconclusive(r):
     bad = {'timeout'}
@@ -47,6 +51,21 @@ FULL_DIFF = sum(f['diff'] for f in fold.values())
 FULL_SAME = sum(f['same'] for f in fold.values())
 FULL_CRASH = sum(f['crash'] for f in fold.values())
 GATE_DONE = FULL_DONE >= corpus_n
+# a stopped gate: everything below the smallest unrun model's input size has been run
+GATE_STOPPED = (not GATE_DONE) and os.path.exists(f'{GATE}/full.stopped')
+_done = {r['inp'] for r in full_main}
+_rem = [l.strip()[len('corpus1729/'):] for l in open(f'{GATE}/full_by_size.txt') if l.strip() and l.strip()[len('corpus1729/'):] not in _done]
+_sz = lambda p: os.path.getsize(f'{CORPUS}/{p}')
+CUT_B = min((_sz(p) for p in _rem), default=0)
+GATE_EXTRA = sum(1 for r in full_main if _sz(r['inp']) >= CUT_B) if _rem else 0
+GATE_REMAIN = len(_rem)
+CUT_TXT = f'{CUT_B / 1e6:.2f} MB' if CUT_B >= 1e6 else f'{CUT_B / 1e3:.0f} KB'
+MAX_TXT = f'{max((_sz(p) for p in _rem), default=0) / 1e6:.0f} MB'
+# time to run the rest, from the stratified sample (equal quartiles, so the plain mean is fair);
+# a timed-out run counts at its cap, so this is a lower bound
+_cpu = [(300.0 if not isinstance(r.get('t_ref'), (int, float)) else r['t_ref']) +
+        (300.0 if not isinstance(r.get('t_test'), (int, float)) else r['t_test']) for r in sample_rows]
+EST_H = (sum(_cpu) / len(_cpu)) * (len(_rem) - N_SAMPLE) / 2 / 3600 if _cpu else 0   # two jobs in parallel
 EMPTY_OUT = sum(1 for r in full if r.get('out_bytes') == 0 and not inconclusive(r) and not crashed(r) and r['out_same'] and r['rpt_same'])
 FULL_COMPARED = FULL_DONE - FULL_INC
 diffs = [r for r in full if not inconclusive(r) and not crashed(r) and not (r['out_same'] and r['rpt_same'])]
@@ -84,9 +103,14 @@ NUM = dict(
     FULL_DONE=f'{FULL_DONE:,}', FULL_SAME=f'{FULL_SAME:,}', FULL_DIFF=f'{FULL_DIFF:,}', FULL_INC=f'{FULL_INC:,}',
     FULL_CRASH=FULL_CRASH, EMPTY_OUT=f'{EMPTY_OUT:,}', FUNCS_NOW=870, FUNCS_OUT=97,
     PRIV_STATIC=226, PRIV_EXTERN=47,
-    GATE_STATE=(f'It has finished all {FULL_DONE:,}' if GATE_DONE else f'At the time this was written it had finished {FULL_DONE:,}'),
-    GATE_REST=('' if GATE_DONE else '; the rest were still running'),
-    GATE_LIMIT=(f'The corpus gate ran all {corpus_n:,} models' if GATE_DONE else f'The corpus gate was still running when this was written ({FULL_DONE:,} of {corpus_n:,} done)'),
+    GATE_STATE=(f'It has finished all {FULL_DONE:,}' if GATE_DONE else
+                f'It ran {FULL_DONE:,} of them: every model with less than {CUT_TXT} of input, {GATE_EXTRA} larger ones from an earlier pass, and a seeded random sample of {N_SAMPLE} of the {GATE_REMAIN:,} larger models, {N_SAMPLE // 4} from each size quartile up to {MAX_TXT}' if GATE_STOPPED else
+                f'At the time this was written it had finished {FULL_DONE:,}'),
+    GATE_REST=('' if GATE_DONE else f'. The other {GATE_REMAIN - N_SAMPLE:,} large models have not been run; at the sample’s average run time they would take at least {EST_H:.0f} more hours on this two-core machine' if GATE_STOPPED else '; the rest were still running'),
+    GATE_LIMIT=(f'The corpus gate ran all {corpus_n:,} models' if GATE_DONE else
+                f'The corpus gate ran every model under {CUT_TXT} of input but only a sample of {N_SAMPLE} of the {GATE_REMAIN:,} larger ones; the other {GATE_REMAIN - N_SAMPLE:,} have not been run' if GATE_STOPPED else
+                f'The corpus gate was still running when this was written ({FULL_DONE:,} of {corpus_n:,} done)'),
+    GATE_SHORT=(f'all {corpus_n:,}' if GATE_DONE else f'{FULL_DONE:,} of {corpus_n:,}: all under {CUT_TXT}, plus a sample of {N_SAMPLE} larger' if GATE_STOPPED else f'{FULL_DONE:,} of {corpus_n:,} so far'),
     CORPUS_N=f'{corpus_n:,}', WASM_N=WASM_N, WASM_SAME=WASM_SAME, PLAT_DIFF=PLAT_DIFF,
     MULTI_STEPS='591,096',
     CPL_PEAK_C=f"{max(coupled['coupled']):.1f}", CPL_PEAK_M=f"{max(coupled['merged']):.1f}",
@@ -96,6 +120,7 @@ NUM = dict(
     T_LTO=f"{b_lto['summary']['median_ratio']:.3f}", T_LTO_FLOOR=f"±{100 * b_lto['summary']['max_abs_floor_dev']:.1f}%",
     GLOBAL_MODULES=len(cm['modules']),
 )
+NUM_GATE_SHORT = NUM['GATE_SHORT']
 def sub(s):
     return re.sub(r'\{([A-Z0-9_]+)\}', lambda m: str(NUM.get(m.group(1), m.group(0))), s)
 
@@ -103,7 +128,9 @@ def sub(s):
 multi6 = [dict(name='extran1_semi_elliptical', steps=1440), dict(name='extran1_power', steps=1440),
           dict(name='exam79', steps=8641), dict(name='high_elevation_model', steps=12465),
           dict(name='transect_example', steps=710), dict(name='attenuation_DW_High_CE', steps=566400)]
-gate_note = ((f'All {corpus_n:,} corpus models run; ' if GATE_DONE else f'{FULL_DONE:,} of {corpus_n:,} corpus models run so far; ') +
+gate_note = ((f'All {corpus_n:,} corpus models run; ' if GATE_DONE else
+              f'{FULL_DONE:,} of {corpus_n:,} models: all under {CUT_TXT}, plus a sample of {N_SAMPLE} larger; ' if GATE_STOPPED else
+              f'{FULL_DONE:,} of {corpus_n:,} corpus models run so far; ') +
              f'{FULL_SAME:,} identical, {FULL_CRASH} crash both engines alike, {FULL_DIFF} different, {FULL_INC} inconclusive. Log scale.')
 FIGS = dict(
     state=F.fig_state(lift), lookup=F.fig_lookup(), pipeline=F.fig_pipeline(lift),
@@ -240,7 +267,7 @@ parity = (f'<b>Parity contract.</b> swmm5-cplus matches EPA SWMM 5.2.4 built fro
           f'(analysis begun, ended, elapsed). Native: GCC 13.3, EPA at <code>-O2</code> with Ubuntu’s default fortify (so the gate passes absolute paths; see S5CP-2), swmm5-cplus at <code>-O2 -flto</code>, the build that ships. '
           f'WebAssembly: Clang 18 with wasi-libc, EPA at <code>-O2</code>, swmm5-cplus at <code>-O2 -flto</code>. The match holds across that flag difference. '
           f'A run that both engines abandon at the same limit is reported as inconclusive, never as a match.')
-verify_tiles = [[f'{FULL_SAME:,} / {FULL_COMPARED - FULL_CRASH:,}', f'full corpus, native, byte-identical; {FULL_CRASH} crash decks crash both alike' + ('' if GATE_DONE else f' ({FULL_DONE:,} of {corpus_n:,} run so far)')],
+verify_tiles = [[f'{FULL_SAME:,} / {FULL_COMPARED - FULL_CRASH:,}', f'full corpus, native, byte-identical; {FULL_CRASH} crash decks crash both alike ({NUM_GATE_SHORT})'],
                 ['187 / 187', 'coverage set: all 26 shapes and every feature found, incl. 36 error decks'],
                 [f'{WASM_SAME} / {WASM_N}', 'WebAssembly: swmm5-cplus vs EPA C, same toolchain'],
                 [NUM['T_LTO'] + '×', 'run time vs EPA with LTO on both (noise floor ' + NUM['T_LTO_FLOOR'] + ')']]
@@ -256,7 +283,7 @@ controls = [
 ]
 limits = ('<b>What this does not show.</b> It is not a new engine and not more accurate: every number is EPA 5.2.4’s, defects included. '
           'It is not faster. It does not promise that native and browser runs give identical bits. It fixes none of EPA’s crashes. '
-          + ('' if GATE_DONE else f'The full gate was still running ({FULL_DONE:,} of {corpus_n:,}). ') + f'Thread safety was tested, not audited. The coupling is a one-way demonstration, not a validated method. '
+          + ('' if GATE_DONE else f'The full gate ran only a sample of {N_SAMPLE} of the {GATE_REMAIN:,} models over {CUT_TXT}. ' if GATE_STOPPED else f'The full gate was still running ({FULL_DONE:,} of {corpus_n:,}). ') + f'Thread safety was tested, not audited. The coupling is a one-way demonstration, not a validated method. '
           'The design is a first floor: Project is still one large class and the modules still share the big arrays.')
 gate_csv = 'folder,models,identical,both_crash,different,inconclusive\n' + ''.join(f"{f['name']},{f['n']},{f['same']},{f['crash']},{f['diff']},{f['inc']}\n" for f in fold.values())
 
@@ -286,4 +313,4 @@ out = (tpl.replace('/*__WASM_CPLUS__*/', base64.b64encode(open(f'{W}/swmm5cplus.
           .replace('/*__DOCX__*/', base64.b64encode(open(DOCX, 'rb').read()).decode() if os.path.exists(DOCX) else '')
           .replace('/*__DATA__*/', json.dumps(data).replace('</', '<\\/')))
 open(f'{AB}/swmm5-cplus.html', 'w').write(out)
-print('wrote', len(out) // 1024, 'KB;', 'full', FULL_DONE, FULL_SAME, FULL_DIFF, FULL_INC, '| wasm', WASM_SAME, WASM_N, PLAT_DIFF, '| diffs', [d['inp'] for d in diffs][:5])
+print('wrote', len(out) // 1024, 'KB;', 'full', FULL_DONE, FULL_SAME, FULL_DIFF, FULL_INC, '| wasm', WASM_SAME, WASM_N, PLAT_DIFF, '| diffs', [d['inp'] for d in diffs][:5], '| stopped', GATE_STOPPED, 'cut', CUT_TXT, 'extra', GATE_EXTRA, 'remain', GATE_REMAIN, 'est_h', round(EST_H))

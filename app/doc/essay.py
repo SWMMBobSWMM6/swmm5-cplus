@@ -202,8 +202,8 @@ BLOCKS = [
                 "crash both engines alike, {FULL_DIFF} different, and {FULL_INC} inconclusive because both engines hit "
                 "the same time or file-size limit."),
 ('p', "The full gate runs every one of the {CORPUS_N} <code>.inp</code> files in Bob's 1729 corpus through both "
-      "engines. {GATE_STATE}: {FULL_SAME} identical, {FULL_DIFF} different, {FULL_INC} "
-      "inconclusive{GATE_REST}. Another {FULL_CRASH} are crash decks from the OpenSWMM code review, built to "
+      "engines. {GATE_STATE}. Of those, {FULL_SAME} came out identical, {FULL_DIFF} "
+      "different and {FULL_INC} inconclusive{GATE_REST}. Another {FULL_CRASH} are crash decks from the OpenSWMM code review, built to "
       "crash 5.2.4, and they crash both engines with the same signal and leave no output; they are counted "
       "apart, because a matching crash is bug-compatible, not correct. Of the identical runs, {EMPTY_OUT} stop "
       "on an input error and write no <code>.out</code>, so for those the report is the whole comparison. The WebAssembly gate ran the smoke and coverage "
