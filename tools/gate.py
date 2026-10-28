@@ -7,7 +7,7 @@ For each model: .out compared byte for byte; .rpt compared after dropping the th
 wall-clock lines (begun / ended / elapsed). Resumable: models already in RESULTS are
 skipped.
 """
-import sys, os, subprocess, hashlib, json, time, tempfile, argparse, shutil
+import sys, os, subprocess, hashlib, json, time, tempfile, argparse, shutil, resource
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ap = argparse.ArgumentParser()
@@ -26,18 +26,46 @@ def norm_rpt(b):
 def sha(b):
     return hashlib.sha256(b).hexdigest()[:16]
 
+def limits():
+    resource.setrlimit(resource.RLIMIT_AS, (3 << 30, 3 << 30))      # 3 GiB address space
+    resource.setrlimit(resource.RLIMIT_FSIZE, (2 << 30, 2 << 30))   # 2 GiB per file
+
+def file_digest(path, normalize=False):
+    # streamed: a 1000-year simulation's files never have to fit in memory
+    if not os.path.exists(path):
+        return hashlib.sha256(b'').hexdigest(), 0, b''
+    h = hashlib.sha256(); n = 0; head = b''
+    with open(path, 'rb') as f:
+        if normalize:
+            for line in f:
+                n += len(line)
+                if any(c in line for c in CLOCK):
+                    continue
+                h.update(line)
+                if len(head) < 400000: head += line
+        else:
+            while True:
+                b = f.read(1 << 20)
+                if not b: break
+                n += len(b); h.update(b)
+    return h.hexdigest(), n, head
+
 def run(exe, inp, work):
     rpt = os.path.join(work, 'm.rpt'); out = os.path.join(work, 'm.out')
     t0 = time.perf_counter()
     try:
         p = subprocess.run([exe, inp, rpt, out], cwd=os.path.dirname(inp),
-                           capture_output=True, timeout=a.timeout)
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                           timeout=a.timeout, preexec_fn=limits)
         rc = p.returncode
     except subprocess.TimeoutExpired:
         rc = 'timeout'
     dt = time.perf_counter() - t0
-    r = open(rpt, 'rb').read() if os.path.exists(rpt) else b''
-    o = open(out, 'rb').read() if os.path.exists(out) else b''
+    r = file_digest(rpt, normalize=True)
+    o = file_digest(out)
+    for fpath in (rpt, out):
+        try: os.remove(fpath)
+        except OSError: pass
     return rc, dt, r, o
 
 def one(inp):
@@ -48,11 +76,11 @@ def one(inp):
         rc2, t2, r2, o2 = run(a.test, inp, wt)
     rec = dict(inp=os.path.relpath(inp, a.corpus), rc_ref=rc1, rc_test=rc2,
                t_ref=round(t1, 4), t_test=round(t2, 4),
-               out_bytes=len(o1), out_same=(o1 == o2), out_sha=sha(o1),
-               rpt_same=(norm_rpt(r1) == norm_rpt(r2)),
-               rpt_err=(b'ERROR' in r1), rpt_bytes=len(r1))
+               out_bytes=o1[1], out_same=(o1[0] == o2[0] and o1[1] == o2[1]), out_sha=o1[0][:16],
+               rpt_same=(r1[0] == r2[0]),
+               rpt_err=(b'ERROR' in r1[2]), rpt_bytes=r1[1])
     if not rec['rpt_same']:
-        l1 = norm_rpt(r1).split(b'\n'); l2 = norm_rpt(r2).split(b'\n')
+        l1 = r1[2].split(b'\n'); l2 = r2[2].split(b'\n')
         for i, (x, y) in enumerate(zip(l1, l2)):
             if x != y:
                 rec['rpt_first_diff'] = [i, x.decode('latin-1')[:120], y.decode('latin-1')[:120]]

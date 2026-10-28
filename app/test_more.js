@@ -1,0 +1,12 @@
+const fs = require('fs'); const core = require('./engine_core.js');
+const W = '/home/claude/swmm5-cplus/build/wasm/';
+const mC = new WebAssembly.Module(fs.readFileSync(W + 'swmm5cplus.wasm'));
+const mE = new WebAssembly.Module(fs.readFileSync(W + 'swmm524_epa.wasm'));
+const M = '/home/claude/swmm5-cplus/examples/models/';
+const t0 = Date.now();
+const c = core.runCoupled(mC, fs.readFileSync(M + 'upstream.inp'), fs.readFileSync(M + 'downstream.inp'), fs.readFileSync(M + 'merged.inp'));
+const pk = a => Math.max(...a), sum = a => a.reduce((x, y) => x + y, 0);
+console.log('coupled', c.rc, 'steps', c.steps, 'skew', c.maxSkew, 'live', c.live, 'peak', pk(c.coupled).toFixed(2), pk(c.merged).toFixed(2), 'vol', sum(c.coupled).toFixed(1), sum(c.merged).toFixed(1), 'ms', Date.now() - t0);
+fs.writeFileSync('coupled_series.json', JSON.stringify(c));
+const two = core.epaTwoOpen(mE, fs.readFileSync('/home/claude/corpus1729/EPA/extran1_egg.inp'), fs.readFileSync('/home/claude/corpus1729/EPA/exam79.inp'));
+console.log('epaTwoOpen', JSON.stringify(two));

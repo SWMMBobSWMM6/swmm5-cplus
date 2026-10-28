@@ -1,0 +1,963 @@
+<title>swmm5-cplus</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="color-scheme" content="dark light">
+<meta name="bore-shell" content="1.0.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: a workbench. Header lockup, segmented tab bar, then a 1fr/2fr bench
+   (controls left, evidence right) that stacks below 900px. Dark first. */
+:root{
+  color-scheme: dark;
+  --bg:#0b1220; --card:#131c2e; --field:#1a2438; --line:#2a3752; --line-soft:#212c42;
+  --ink:#e6edf7; --ink-dim:#a3b1c6; --ink-faint:#8b9bb5; --ink-strong:#f8fafc; --head:#dbe7f7;
+  --headerbg:#0d1830; --onheader:#eaf2ff; --headersub:#b9cbe4; --tab-on:#60a5fa;
+  --accent:#60a5fa; --accent-ink:#0b1220;
+  --epa:#fbbf24; --cpp:#60a5fa;
+  --panel:#152238; --panel-line:#2b3d5c; --panel-ink:#c3d7f3;
+  --hi-bg:#2a1c0f; --hi-line:#7c4a1d; --hi-ink:#fdba74;
+  --warn-bg:#2a1416; --warn-line:#7f2b32; --warn-ink:#fca5a5;
+  --ok-bg:#0f2318; --ok-line:#245c39; --ok-ink:#86efac;
+  --code-bg:#070d18; --code-ink:#dbe4f0;
+  --shadow:rgba(0,0,0,.45);
+  --f-ink:#e6edf7; --f-dim:#a3b1c6; --f-line:#2e3c58; --f-face:#0f1a2c; --f-soft:#16223a;
+  --f-a:#60a5fa; --f-b:#fbbf24; --f-c:#4ade80; --f-d:#f87171; --f-e:#c084fc;
+  --font-display:"Archivo", "Arial Narrow", Arial, sans-serif;
+  --font-ui:"IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-read:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono:"IBM Plex Mono", Menlo, Consolas, monospace;
+  --r:12px; --gap:16px;
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --bg:#f5f7fa; --card:#ffffff; --field:#ffffff; --line:#dfe5ee; --line-soft:#eef2f7;
+  --ink:#1b2733; --ink-dim:#4f5d6e; --ink-faint:#6b7280; --ink-strong:#0b1220; --head:#1e3a5f;
+  --headerbg:#1e3a5f; --onheader:#ffffff; --headersub:#c7d7ea; --tab-on:#60a5fa;
+  --accent:#1f6fd1; --accent-ink:#ffffff;
+  --epa:#b45309; --cpp:#1f6fd1;
+  --panel:#eff6ff; --panel-line:#dbeafe; --panel-ink:#1e3a5f;
+  --hi-bg:#fff7ed; --hi-line:#fed7aa; --hi-ink:#9a3412;
+  --warn-bg:#fef2f2; --warn-line:#fecaca; --warn-ink:#991b1b;
+  --ok-bg:#f0fdf4; --ok-line:#bbf7d0; --ok-ink:#166534;
+  --code-bg:#0f172a; --code-ink:#e2e8f0;
+  --shadow:rgba(15,23,42,.06);
+  --f-ink:#1b2733; --f-dim:#5a6878; --f-line:#cfd8e3; --f-face:#ffffff; --f-soft:#eef3f8;
+  --f-a:#1f6fd1; --f-b:#c77700; --f-c:#1d8a4c; --f-d:#c2352b; --f-e:#6b4fbb;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:13px/1.5 var(--font-ui);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--headerbg)}
+a{color:var(--accent)}
+code,kbd{font-family:var(--font-mono);font-size:.92em}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header lockup */
+header.top{background:var(--headerbg);color:var(--onheader);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header.top .wrap{display:flex;align-items:center;gap:var(--gap);padding-block:12px;flex-wrap:wrap}
+.lockup{display:flex;align-items:center;gap:12px;min-width:0}
+.lockup svg{flex:none}
+.lockup h1{font:700 26px/1 var(--font-display);font-stretch:85%;margin:0;letter-spacing:.2px;color:var(--onheader)}
+.lockup .sub{font-size:11px;color:var(--headersub);letter-spacing:.4px}
+.pill{font:500 11px/1 var(--font-mono);border:1px solid var(--headersub);color:var(--headersub);border-radius:999px;padding:4px 8px}
+.cluster{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+header .seg{border-color:rgba(255,255,255,.25)}
+.seg button{background:transparent;border:0;color:inherit;padding:6px 10px;font-size:12px}
+header .seg button{color:var(--headersub)}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.hbtn{background:transparent;border:1px solid rgba(255,255,255,.25);color:var(--onheader);border-radius:8px;padding:6px 10px;font-size:12px}
+.hbtn:hover{border-color:var(--onheader)}
+
+/* tabs */
+nav.tabs{background:var(--headerbg);border-top:1px solid rgba(255,255,255,.08)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{background:none;border:0;color:var(--headersub);padding:10px 14px;font-size:13px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--onheader);border-bottom-color:var(--tab-on);font-weight:600}
+
+main{padding-block:20px 8px}
+.view{display:block}
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:var(--gap);align-items:start}
+@media (max-width:900px){.bench{grid-template-columns:minmax(0,1fr)}}
+.stack{display:flex;flex-direction:column;gap:var(--gap);min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;min-width:0;box-shadow:0 1px 2px var(--shadow)}
+.card h2{font:650 15px/1.3 var(--font-display);font-stretch:92%;margin:0 0 10px;color:var(--head);text-wrap:balance}
+.card h3{font:600 13px/1.3 var(--font-ui);margin:14px 0 6px;color:var(--head)}
+.lede{font-size:15px;color:var(--ink-dim);max-width:70ch;margin:0 0 4px}
+.kicker{font:600 11px/1 var(--font-ui);letter-spacing:.9px;text-transform:uppercase;color:var(--ink-faint);margin:0 0 6px}
+.box{border-radius:10px;padding:12px 14px;border:1px solid;min-width:0}
+.box.panel{background:var(--panel);border-color:var(--panel-line);color:var(--panel-ink)}
+.box.hi{background:var(--hi-bg);border-color:var(--hi-line);color:var(--hi-ink)}
+.box.warn{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+.box.ok{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-ink)}
+.box b{color:inherit}
+label.f{display:block;font-size:11px;color:var(--ink-dim);margin:10px 0 4px;letter-spacing:.3px}
+select,input[type=file]{width:100%;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:9px 14px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--ink-dim)} .faint{color:var(--ink-faint);font-size:11px}
+.engines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.engines{grid-template-columns:minmax(0,1fr)}}
+.eng{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--field);min-width:0}
+.eng .name{display:flex;align-items:center;gap:8px;font-weight:600;margin-bottom:6px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+dl.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 12px;margin:0;font-size:12px}
+dl.kv dt{color:var(--ink-dim)} dl.kv dd{margin:0;font-family:var(--font-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.verdict{display:flex;gap:12px;align-items:flex-start}
+.verdict .big{font:700 22px/1.1 var(--font-display);font-stretch:88%}
+.chartbox{position:relative;border:1px solid var(--line);border-radius:10px;background:var(--f-face);overflow:hidden}
+.chartbox svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-dim);margin-top:8px}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.tile .n{font:700 26px/1 var(--font-display);font-stretch:85%;color:var(--ink-strong);font-variant-numeric:tabular-nums}
+.tile .l{font-size:12px;color:var(--ink-dim);margin-top:6px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table.t{border-collapse:collapse;width:100%;font-size:12px}
+table.t th,table.t td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top}
+table.t th{color:var(--ink-dim);font-weight:600;background:var(--field);position:sticky;top:0}
+table.t td.num,table.t th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--font-mono)}
+table.t tr:last-child td{border-bottom:0}
+.prog{height:8px;background:var(--line-soft);border-radius:4px;overflow:hidden;min-width:80px}
+.prog > span{display:block;height:100%;background:var(--cpp);width:0}
+.tag{display:inline-block;font:600 11px/1 var(--font-ui);padding:3px 7px;border-radius:999px;border:1px solid}
+.tag.ok{color:var(--ok-ink);background:var(--ok-bg);border-color:var(--ok-line)}
+.tag.warn{color:var(--warn-ink);background:var(--warn-bg);border-color:var(--warn-line)}
+.tag.hi{color:var(--hi-ink);background:var(--hi-bg);border-color:var(--hi-line)}
+.tag.panel{color:var(--panel-ink);background:var(--panel);border-color:var(--panel-line)}
+pre.code{background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:10px 12px;overflow-x:auto;font:12px/1.5 var(--font-mono);margin:8px 0}
+.fig{margin:14px 0;min-width:0}
+.fig .frame{border:1px solid var(--line);border-radius:10px;overflow-x:auto;background:var(--f-face)}
+.fig svg{display:block;min-width:560px;width:100%;height:auto}
+.fig figcaption{font-size:12px;color:var(--ink-dim);margin-top:6px;max-width:75ch}
+.matrix-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--ink-dim)}
+.defect{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--field)}
+.defect .h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-weight:600}
+.defect .id{font-family:var(--font-mono);color:var(--accent)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
+
+/* Doc tab: reading measure, serif body */
+.doc{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:900px){.doc{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:120px;font-size:12px;border-left:2px solid var(--line);padding-left:12px}
+@media (max-width:900px){.toc{position:static}}
+.toc a{display:block;color:var(--ink-dim);text-decoration:none;padding:3px 0}
+.toc a:hover{color:var(--ink)}
+.essay{max-width:72ch;font:17px/1.65 var(--font-read);color:var(--ink)}
+.essay h1{font:700 34px/1.1 var(--font-display);font-stretch:85%;margin:0 0 6px;text-wrap:balance;color:var(--head)}
+.essay .dek{font:400 17px/1.5 var(--font-ui);color:var(--ink-dim);margin:0 0 18px}
+.essay h2{font:650 22px/1.2 var(--font-display);font-stretch:90%;margin:34px 0 10px;color:var(--head);text-wrap:balance;scroll-margin-top:120px}
+.essay p{margin:0 0 14px}
+.essay code{font-size:.82em}
+.essay ul,.essay ol{padding-left:22px;margin:0 0 14px} .essay li{margin:0 0 8px}
+.essay .fig{font-family:var(--font-ui)}
+.essay table.t{font-family:var(--font-ui)}
+.essay pre.code{font-size:12.5px}
+
+footer.prov{margin-top:24px;border-top:1px solid var(--line);background:var(--card)}
+footer.prov .wrap{padding-block:12px 16px;display:flex;gap:6px 24px;flex-wrap:wrap;font-size:11px;color:var(--ink-dim)}
+footer.prov b{color:var(--ink)}
+
+/* modal + tour */
+.modal{position:fixed;inset:0;background:rgba(3,7,18,.6);display:grid;place-items:center;z-index:50;padding:16px}
+.modal .sheet{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;max-width:560px;width:100%;padding:20px 22px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.modal h2{font:700 22px/1.15 var(--font-display);font-stretch:88%;margin:0 0 8px;color:var(--head)}
+.modal ol{padding-left:20px;margin:8px 0 14px} .modal li{margin-bottom:6px}
+.tour{position:fixed;z-index:60;background:var(--card);color:var(--ink);border:1px solid var(--accent);border-radius:12px;padding:12px 14px;max-width:320px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.tour h4{margin:0 0 4px;font:600 14px/1.3 var(--font-ui)}
+.tour .row{margin-top:10px;justify-content:space-between}
+.spot{position:fixed;z-index:55;border:2px solid var(--accent);border-radius:10px;pointer-events:none;box-shadow:0 0 0 9999px rgba(3,7,18,.45);transition:all .2s}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink-strong);color:var(--bg);padding:8px 14px;border-radius:8px;z-index:70;font-size:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="lockup">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17" fill="none" stroke="var(--headersub)" stroke-width="2.2"/>
+        <path d="M5.5 25 A17 17 0 0 0 34.5 25 Z" fill="var(--tab-on)" opacity=".85"/>
+        <path d="M11 17h7M14.5 13.5v7M22 17h7M25.5 13.5v7" stroke="var(--onheader)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>swmm5-cplus</h1>
+        <div class="sub">EPA SWMM 5.2.4, rebuilt in C++ &middot; same numbers, many models</div>
+      </div>
+      <span class="pill" id="verPill">v1.0 &middot; 5.2.4</span>
+    </div>
+    <div class="cluster">
+      <div class="seg" id="theme-toggle" role="group" aria-label="Colour theme">
+        <button data-t="dark" class="on" type="button">Dark</button><button data-t="light" type="button">Light</button><button data-t="auto" type="button">Auto</button>
+      </div>
+      <button class="hbtn" id="helpBtn" type="button" aria-label="How to use">?</button>
+      <button class="hbtn" id="gifBtn" type="button">Make a GIF</button>
+      <button class="hbtn" id="exportBtn" type="button">Export CSV</button>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="Sections">
+    <div class="wrap" role="tablist" id="tablist">
+      <button role="tab" data-view="run" aria-selected="true">Run</button>
+      <button role="tab" data-view="many" aria-selected="false">Many at once</button>
+      <button role="tab" data-view="coupled" aria-selected="false">Coupled</button>
+      <button role="tab" data-view="inside" aria-selected="false">Inside</button>
+      <button role="tab" data-view="verify" aria-selected="false">Verify</button>
+      <button role="tab" data-view="about" aria-selected="false">About</button>
+      <button role="tab" data-view="doc" aria-selected="false">Doc</button>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap" id="app">
+
+<!-- ============================== RUN -->
+<section class="view" id="view-run">
+  <div class="bench">
+    <div class="stack">
+      <div class="card">
+        <p class="kicker">One model, two engines</p>
+        <h2>Run EPA 5.2.4 and swmm5-cplus side by side</h2>
+        <p class="muted" style="margin:0">Both engines are compiled to WebAssembly from source and run here, in your browser, in a background worker.</p>
+        <label class="f" for="sampleSel">Sample model</label>
+        <select id="sampleSel"></select>
+        <label class="f" for="fileIn">Or open your own .inp (add any rainfall or data files it names)</label>
+        <input type="file" id="fileIn" multiple accept=".inp,.dat,.txt,.csv,.rff,.hsf,.ini">
+        <div class="row" style="margin-top:12px">
+          <button class="btn" id="runBtn" type="button">Run both engines</button>
+          <span class="faint" id="runStatus">Loading engines&hellip;</span>
+        </div>
+      </div>
+      <div class="box panel" id="runAbout">
+        <b>What gets compared.</b> The binary <code>.out</code> file byte for byte (SHA-256 shown), and the <code>.rpt</code> report line for line after dropping the three lines that print the wall clock. EPA runs through its own <code>swmm_run()</code>; swmm5-cplus through a <code>swmm5cp_</code> handle.
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card" id="verdictCard">
+        <div class="verdict">
+          <div style="min-width:0">
+            <p class="kicker" id="verdictKicker">Result</p>
+            <div class="big" id="verdictBig">Waiting for the first run</div>
+            <p class="muted" id="verdictLine" style="margin:6px 0 0"></p>
+          </div>
+        </div>
+        <div class="engines" style="margin-top:14px">
+          <div class="eng"><div class="name"><span class="dot" style="background:var(--epa)"></span>EPA SWMM 5.2.4 (C)</div><dl class="kv" id="engEpa"></dl></div>
+          <div class="eng"><div class="name"><span class="dot" style="background:var(--cpp)"></span>swmm5-cplus (C++)</div><dl class="kv" id="engCpp"></dl></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <h2 style="margin:0">Time series from the two .out files</h2>
+          <div class="row">
+            <select id="seriesKind" aria-label="Quantity" style="width:auto"><option value="link:0">Link flow</option><option value="link:1">Link depth</option><option value="link:2">Link velocity</option><option value="node:0">Node depth</option><option value="node:4">Node total inflow</option></select>
+            <select id="seriesId" aria-label="Element" style="width:auto;max-width:180px"></select>
+          </div>
+        </div>
+        <div class="chartbox" style="margin-top:10px" id="runChart"></div>
+        <div class="legend"><span><i style="background:var(--epa)"></i>EPA 5.2.4</span><span><i style="background:var(--cpp)"></i>swmm5-cplus (dashed, on top)</span><span id="diffNote"></span></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn ghost" id="saveSeries" type="button">Save series (.csv)</button>
+          <button class="btn ghost" id="saveZip" type="button">Save both engines' .out and .rpt (.zip)</button>
+          <span class="faint" id="saveNote"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== MANY -->
+<section class="view" id="view-many" hidden>
+  <div class="bench">
+    <div class="stack">
+      <div class="card">
+        <p class="kicker">Reentrancy</p>
+        <h2>Open every sample in one swmm5-cplus instance</h2>
+        <p class="muted" style="margin:0 0 8px">Each model gets its own handle. They are stepped in turn, one routing step each, inside a single WebAssembly instance. Then each result is checked against a solo EPA run of the same model.</p>
+        <div id="manyList"></div>
+        <div class="row" style="margin-top:12px"><button class="btn" id="manyBtn" type="button">Run them together</button><span class="faint" id="manyStatus"></span></div>
+      </div>
+      <div class="card">
+        <p class="kicker">The same request, made of EPA 5.2.4</p>
+        <h2>Ask EPA to open two models at once</h2>
+        <p class="muted" style="margin:0 0 10px">EPA 5.2.4 opens <code>extran1_egg</code>, then <code>exam79</code> without closing the first, then runs. swmm5-cplus is given the same two models on two handles.</p>
+        <button class="btn ghost" id="twoBtn" type="button">Run the experiment</button>
+        <div id="twoOut" style="margin-top:12px"></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <h2>Progress and results</h2>
+        <div class="tablewrap"><table class="t" id="manyTable"><thead><tr><th>Model</th><th>Progress</th><th class="num">Steps</th><th>.out SHA-256 (first 12)</th><th>vs solo EPA</th></tr></thead><tbody></tbody></table></div>
+        <p class="faint" id="manyFoot" style="margin:8px 0 0"></p>
+      </div>
+      <div class="box panel"><b>Why this is new.</b> EPA SWMM 5.2.4 keeps its {MUTABLE} working variables in process-wide storage, so a program can hold one model. In swmm5-cplus each <code>Project</code> owns its copy; the handles above are {N} complete, separate engines sharing nothing but read-only tables.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== COUPLED -->
+<section class="view" id="view-coupled" hidden>
+  <div class="bench">
+    <div class="stack">
+      <div class="card">
+        <p class="kicker">Two models, one process</p>
+        <h2>Couple an upstream model to a downstream model</h2>
+        <div id="coupleSchematic"></div>
+        <p class="muted">After every 5-second routing step, the flow arriving at the upstream outfall <b>OA</b> is set as lateral inflow at downstream node <b>IN</b>. The check is the same network built as one model, where the upstream pipe drops 5 ft into IN.</p>
+        <div class="row"><button class="btn" id="coupleBtn" type="button">Run the coupling</button><span class="faint" id="coupleStatus"></span></div>
+      </div>
+      <div class="box hi"><b>Read the difference honestly.</b> One-way coupling passes nothing back upstream, and a free outfall is not a drop structure, so coupled and merged should be close, not equal. What must be exact is the bookkeeping: both clocks advance together and every handle stays independent.</div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <h2>Inflow to outfall OB, cfs</h2>
+        <div class="chartbox" id="coupleChart"></div>
+        <div class="legend"><span><i style="background:var(--f-ink)"></i>merged network</span><span><i style="background:var(--cpp)"></i>coupled (dashed)</span><span><i style="background:var(--epa)"></i>upstream OA, handed across</span></div>
+      </div>
+      <div class="tiles" id="coupleTiles"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== INSIDE -->
+<section class="view" id="view-inside" hidden>
+  <div class="stack">
+    <div class="tiles" id="insideTiles"></div>
+    <div class="card"><h2>Where the state went</h2><div id="figStateIn"></div></div>
+    <div class="card">
+      <h2>The ladder: each step a commit, each commit gated on the output bytes</h2>
+      <div class="tablewrap"><table class="t" id="ladderTable"></table></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Cross sections: the switch, transposed</h2>
+        <p class="muted" style="margin:0 0 8px">Pick a shape to see which of the eight geometry methods it overrides and which it inherits from the base class.</p>
+        <select id="shapeSel" aria-label="Shape"></select>
+        <div id="shapeDetail" style="margin-top:12px"></div>
+      </div>
+      <div class="card">
+        <h2>How the shape classes read</h2>
+<pre class="code">class XsectShape {                // EPA's default branches
+  virtual double getAofY(TXsect*, double) const;
+  virtual double getWofY(TXsect*, double) const;
+  ...                              // 8 quantities
+};
+class Shape_EGGSHAPED final : public XsectShape {
+  double getAofY(TXsect* xsect, double y) const override {
+    double yNorm = y / xsect-&gt;yFull;    // prologue, repeated
+    if ( y &lt;= 0.0 ) return 0.0;
+    return xsect-&gt;aFull * lookup(yNorm, A_Egg, N_A_Egg);
+  }
+  ...
+};
+double xsect_getAofY(TXsect* xsect, double y)
+{ return shapeOf(xsect-&gt;type).getAofY(xsect, y); }</pre>
+        <p class="faint">Generated by tools/transpose_xsect.py: case bodies copied verbatim, so each method computes what the switch computed.</p>
+      </div>
+    </div>
+    <div class="card"><h2>Defect register</h2><p class="muted" style="margin:0 0 10px">Found while making the engine hold many models. Each shows the 5.2.4 code as it was.</p><div class="stack" id="defects"></div></div>
+    <div class="card"><h2>What the next step is up against</h2><div id="figHeatIn"></div></div>
+  </div>
+</section>
+
+<!-- ============================== VERIFY -->
+<section class="view" id="view-verify" hidden>
+  <div class="stack">
+    <div class="box ok" id="parityBox"></div>
+    <div class="tiles" id="verifyTiles"></div>
+    <div class="card"><h2>Full corpus gate, by folder</h2><div id="figGateV"></div></div>
+    <div class="grid2">
+      <div class="card"><h2>Coverage census: cross-section shapes in the corpus</h2><div class="tablewrap" style="max-height:420px"><table class="t" id="shapeCensus"></table></div></div>
+      <div class="card"><h2>Controls that ran</h2><div id="controls"></div></div>
+    </div>
+    <div class="card"><h2>Run time, with the noise floor</h2><div id="figTimingV"></div></div>
+    <div class="box warn" id="limitsBox"></div>
+  </div>
+</section>
+
+<!-- ============================== ABOUT -->
+<section class="view" id="view-about" hidden>
+  <div class="grid2">
+    <div class="stack">
+      <div class="card">
+        <h2>About swmm5-cplus</h2>
+        <p>swmm5-cplus is EPA SWMM 5.2.4 restructured as C++17 so that each simulation is an object. Nothing it computes differs from EPA's engine; what changes is that a program can hold, step and couple any number of models at once, in one process, a thread each, or one WebAssembly instance.</p>
+        <p>The EPA Storm Water Management Model is a work of the U.S. Environmental Protection Agency, in the public domain. Version 5.2.4's engine is Lewis Rossman's design; swmm5-cplus keeps every algorithm as he wrote it.</p>
+        <h3>Build provenance</h3>
+        <div class="tablewrap"><table class="t" id="provTable"></table></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card" id="aiUse">
+        <h2>AI use</h2>
+        <p>swmm5-cplus, this app and its Doc essay were built with Claude, Anthropic's AI model (Claude Opus 5.5), in one session on 27 and 28 October 2026, at the request of Robert (Bob) Dickinson, who asked the question and supplies the model corpus it was tested on. Responsibility for publishing the work is his.</p>
+        <p><b>What Claude did:</b> ran the libclang census of EPA's source; wrote the generators that made the C++ tree (<code>make_cplus.py</code>, <code>transpose_xsect.py</code>) and every hand-written change after them; found and fixed the resource defects; wrote the handle and C++ APIs, the coupling example, the WebAssembly builds, the in-memory file system they run on here, the gate and timing harnesses, this page, its figures and the essay.</p>
+        <p><b>How it was checked:</b> mechanically, not by the AI's judgment. Byte comparison of every <code>.out</code> and <code>.rpt</code> against EPA 5.2.4 built from the official tag; AddressSanitizer; interleaved timing with a noise floor. <b>Not yet checked by a person:</b> the generated C++ and the hand edits have not been reviewed line by line by Bob, and the gate has not been rerun on his machine.</p>
+      </div>
+      <div class="card">
+        <h2>Sources</h2>
+        <ul style="margin:0;padding-left:18px">
+          <li><a href="https://github.com/USEPA/Stormwater-Management-Model/tree/v5.2.4" target="_blank" rel="noopener">USEPA/Stormwater-Management-Model, tag v5.2.4</a> (the reference engine and the starting point)</li>
+          <li><a href="https://github.com/SWMMBobSWMM6/1729-SWMM5-Models-2030" target="_blank" rel="noopener">SWMMBobSWMM6/1729-SWMM5-Models-2030</a> (the corpus the gate ran on; samples here come from its EPA folder)</li>
+          <li>libclang 18 (LLVM) for the census and the generator; GCC 13.3 native; Clang 18 with wasi-libc for WebAssembly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DOC -->
+<section class="view" id="view-doc" hidden>
+  <div class="doc">
+    <nav class="toc" id="toc" aria-label="Contents"></nav>
+    <article class="essay" id="essay"></article>
+  </div>
+</section>
+</main>
+
+<footer class="prov">
+  <div class="wrap">
+    <span><b>Engines:</b> EPA SWMM 5.2.4 C and swmm5-cplus <span id="provCommit"></span>, both wasm32-wasi, Clang 18</span>
+    <span><b>Parity:</b> byte-identical .out and .rpt (minus wall-clock lines) on the same toolchain</span>
+    <span><b>What this does not show:</b> faster or more accurate results; native-vs-browser bit equality; a validated coupling method</span>
+    <span><b>AI use:</b> built with Claude; see About</span>
+  </div>
+</footer>
+
+<div class="modal" id="welcome" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+    <h2 id="wTitle">Same numbers, different bones</h2>
+    <p class="muted" style="margin:0 0 6px">EPA SWMM 5.2.4 can hold one model per program. swmm5-cplus is the same engine rebuilt in C++ so each model is an object: every output matches EPA's byte for byte, and a program can run as many models as it likes.</p>
+    <ol>
+      <li><b>Run</b> any sample or your own .inp through both engines and compare the bytes.</li>
+      <li><b>Many at once</b> opens every sample in one instance; then watch EPA lose a model.</li>
+      <li><b>Coupled</b> runs two models in lock step and checks them against one merged model.</li>
+      <li><b>Inside</b>, <b>Verify</b> and <b>Doc</b> show how it was built and how it was proven.</li>
+    </ol>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" id="tourBtn" type="button">Take the tour</button><button class="btn" id="welcomeClose" type="button">Start</button></div>
+  </div>
+</div>
+
+<script type="application/octet-stream" id="wasm-cplus">/*__WASM_CPLUS__*/</script>
+<script type="application/octet-stream" id="wasm-epa">/*__WASM_EPA__*/</script>
+<script type="application/octet-stream" id="docx-b64">/*__DOCX__*/</script>
+<script type="text/plain" id="engine-core-src">/*__ENGINE_CORE__*/</script>
+<script>window.APPDATA = /*__DATA__*/;</script>
+<script>
+'use strict';
+const D = window.APPDATA;
+const $ = (s, el) => (el || document).querySelector(s);
+const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
+const fmt = (n, d) => Number(n).toLocaleString('en-US', { maximumFractionDigits: d === undefined ? 0 : d, minimumFractionDigits: d === undefined ? 0 : d });
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
+
+/* ---------------------------------------------------------------- theme */
+let THEME_PREF = 'dark';
+function prefersDark() { try { return matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) { return true; } }
+function applyTheme(pref) {
+  THEME_PREF = (pref === 'light' || pref === 'auto') ? pref : 'dark';
+  const t = THEME_PREF === 'auto' ? (prefersDark() ? 'dark' : 'light') : THEME_PREF;
+  document.documentElement.setAttribute('data-theme', t);
+  $$('#theme-toggle button').forEach(b => b.classList.toggle('on', b.dataset.t === THEME_PREF));
+  try { localStorage.setItem('swmm5cplus_theme', THEME_PREF); } catch (e) {}
+  redrawCharts();
+}
+$$('#theme-toggle button').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.t)));
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (THEME_PREF === 'auto') applyTheme('auto'); }); } catch (e) {}
+
+/* ---------------------------------------------------------------- tabs */
+function showView(v) {
+  $$('#tablist button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === v)));
+  $$('.view').forEach(s => { s.hidden = s.id !== 'view-' + v; });
+  CURRENT = v;
+  if (location.hash !== '#' + v) history.replaceState(null, '', '#' + v);
+}
+let CURRENT = 'run';
+$$('#tablist button').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ($('#view-' + h)) showView(h); });
+
+/* ---------------------------------------------------------------- downloads capability */
+let DL = null;
+(async () => { try { if (window.claude && claude.use) DL = await claude.use('downloads'); } catch (e) { DL = null; } updateSaveUI(); })();
+function updateSaveUI() {
+  const note = DL ? '' : 'Saving files needs the claude.ai viewer; here the buttons are inactive.';
+  $('#saveNote').textContent = note;
+  ['#saveSeries', '#saveZip', '#exportBtn', '#saveDocx'].forEach(s => { const b = $(s); if (b) b.disabled = !DL; });
+}
+async function save(filename, data) {
+  if (!DL) { toast('Saving is available in the claude.ai viewer.'); return; }
+  try { await DL.save({ filename, data }); toast('Saved ' + filename); }
+  catch (e) { if (e && e.code !== 'declined') toast('Could not save: ' + (e.message || e.code)); }
+}
+
+/* ---------------------------------------------------------------- worker */
+function b64bytes(id) {
+  const s = $(id).textContent.trim(); const bin = atob(s); const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u;
+}
+const WORKER_SRC = $('#engine-core-src').textContent + `
+const mods = {};
+const H = (m, extra) => self.postMessage(Object.assign({ id: m.id }, extra));
+self.onmessage = async (e) => {
+  const m = e.data;
+  try {
+    if (m.type === 'init') {
+      mods.cplus = await WebAssembly.compile(m.cplus); mods.epa = await WebAssembly.compile(m.epa);
+      H(m, { type: 'ready' }); return;
+    }
+    const C = self.SwmmEngineCore;
+    if (m.type === 'run') {
+      const a = C.runLegacy(mods.epa, m.inp, m.files);
+      const b = C.runHandle(mods.cplus, m.inp, m.files);
+      H(m, { type: 'done', epa: a, cpp: b });
+    } else if (m.type === 'multi') {
+      const solo = m.models.map((md) => C.runLegacy(mods.epa, 'solo.inp', Object.assign({ 'solo.inp': md.inp }, md.extra || {})));
+      H(m, { type: 'solo', solo: solo.map(s => ({ rc: s.rc, out: s.out, ms: s.ms })) });
+      const r = C.runMulti(mods.cplus, m.models, (i, steps, t, done) => H(m, { type: 'progress', i, steps, t, done }), 500);
+      H(m, { type: 'done', r });
+    } else if (m.type === 'coupled') {
+      H(m, { type: 'done', r: C.runCoupled(mods.cplus, m.up, m.dn, m.merged) });
+    } else if (m.type === 'two') {
+      const epa = C.epaTwoOpen(mods.epa, m.a, m.b);
+      const cpp = C.runMulti(mods.cplus, [{ inp: m.a }, { inp: m.b }], null, 1e9);
+      H(m, { type: 'done', epa, cpp: { live: cpp.live, res: cpp.res.map(x => ({ rc: x.rc, steps: x.steps, rpt: (x.rpt || []).length, out: (x.out || []).length })) } });
+    }
+  } catch (err) { H(m, { type: 'error', message: String(err && err.message || err) }); }
+};`;
+let worker = null, msgId = 0; const pending = new Map();
+function startWorker() {
+  worker = new Worker(URL.createObjectURL(new Blob([WORKER_SRC], { type: 'text/javascript' })));
+  worker.onmessage = (e) => { const p = pending.get(e.data.id); if (p) p(e.data); };
+  worker.onerror = (e) => { console.error(e); $('#runStatus').textContent = 'The engine worker failed to start.'; };
+}
+function call(msg, onMsg) {
+  return new Promise((resolve, reject) => {
+    const id = ++msgId;
+    pending.set(id, (d) => {
+      if (d.type === 'done' || d.type === 'ready') { pending.delete(id); resolve(d); }
+      else if (d.type === 'error') { pending.delete(id); reject(new Error(d.message)); }
+      else if (onMsg) onMsg(d);
+    });
+    worker.postMessage(Object.assign({ id }, msg));
+  });
+}
+let READY = null;
+function boot() {
+  startWorker();
+  const cplus = b64bytes('#wasm-cplus').buffer, epa = b64bytes('#wasm-epa').buffer;
+  READY = call({ type: 'init', cplus, epa });
+  READY.then(() => { $('#runStatus').textContent = 'Engines ready.'; runSelected(); })
+       .catch(e => { $('#runStatus').textContent = 'Engines failed to load: ' + e.message; });
+}
+
+/* ---------------------------------------------------------------- .out parser */
+function parseOut(bytes) {
+  if (!bytes || bytes.length < 60) return null;
+  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const I = o => dv.getInt32(o, true), F = o => dv.getFloat32(o, true), Dd = o => dv.getFloat64(o, true);
+  const n = bytes.length;
+  if (I(0) !== 516114522 || I(n - 4) !== 516114522) return null;
+  const idPos = I(n - 24), inPos = I(n - 20), outPos = I(n - 16), nPer = I(n - 12);
+  const ver = I(4), flowUnits = I(8), nSub = I(12), nNode = I(16), nLink = I(20), nPol = I(24);
+  let p = idPos; const ids = { sub: [], node: [], link: [] };
+  const rd = () => { const l = I(p); p += 4; let s = ''; for (let i = 0; i < l; i++) s += String.fromCharCode(bytes[p + i]); p += l; return s; };
+  for (let i = 0; i < nSub; i++) ids.sub.push(rd());
+  for (let i = 0; i < nNode; i++) ids.node.push(rd());
+  for (let i = 0; i < nLink; i++) ids.link.push(rd());
+  // variable counts: after input section
+  p = inPos;
+  const sv = I(p); p += 4 + 4 * sv + 4 * nSub * sv;
+  const nv = I(p); p += 4 + 4 * nv + 4 * nNode * nv;
+  const lv = I(p); p += 4 + 4 * lv + 4 * nLink * lv;
+  const nSubV = I(p); p += 4 + 4 * nSubV;
+  const nNodeV = I(p); p += 4 + 4 * nNodeV;
+  const nLinkV = I(p); p += 4 + 4 * nLinkV;
+  const nSysV = I(p); p += 4 + 4 * nSysV;
+  const start = Dd(p); const step = I(p + 8);
+  const bpp = 8 + 4 * (nSub * nSubV + nNode * nNodeV + nLink * nLinkV + nSysV);
+  function series(kind, idx, v) {
+    const off = kind === 'node' ? 8 + 4 * (nSub * nSubV + idx * nNodeV + v)
+              : 8 + 4 * (nSub * nSubV + nNode * nNodeV + idx * nLinkV + v);
+    const a = new Float32Array(nPer);
+    for (let k = 0; k < nPer; k++) a[k] = F(outPos + k * bpp + off);
+    return a;
+  }
+  return { ver, flowUnits, nSub, nNode, nLink, nPol, ids, nPer, start, step, series };
+}
+const FLOW_UNITS = ['cfs', 'gpm', 'mgd', 'cms', 'lps', 'mld'];
+
+/* ---------------------------------------------------------------- charts (SVG, theme tokens) */
+function lineChart(el, opt) {
+  const W = 760, Hh = opt.h || 300, L = 62, R = 14, T = 16, B = Hh - 38;
+  let xs = opt.x, ymin = Infinity, ymax = -Infinity;
+  opt.series.forEach(s => s.y.forEach(v => { if (isFinite(v)) { ymin = Math.min(ymin, v); ymax = Math.max(ymax, v); } }));
+  if (!isFinite(ymin)) { ymin = 0; ymax = 1; }
+  if (ymin > 0) ymin = 0;
+  if (ymax === ymin) ymax = ymin + 1;
+  const span = ymax - ymin, mag = Math.pow(10, Math.floor(Math.log10(span))), stepY = [1, 2, 2.5, 5, 10].map(f => f * mag).find(s => span / s <= 6);
+  ymax = Math.ceil(ymax / stepY) * stepY; ymin = Math.floor(ymin / stepY) * stepY;
+  const x0 = xs[0], x1 = xs[xs.length - 1] || 1;
+  const X = v => L + (W - L - R) * (v - x0) / ((x1 - x0) || 1), Y = v => B - (B - T) * (v - ymin) / (ymax - ymin);
+  let s = `<svg viewBox="0 0 ${W} ${Hh}" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif"><rect width="${W}" height="${Hh}" fill="var(--f-face)"/>`;
+  for (let v = ymin; v <= ymax + 1e-9; v += stepY) {
+    s += `<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${W - R}" y2="${Y(v).toFixed(1)}" stroke="var(--f-line)" stroke-width="0.8"/><text x="${L - 8}" y="${(Y(v) + 4).toFixed(1)}" font-size="10" fill="var(--f-dim)" text-anchor="end">${+v.toFixed(6)}</text>`;
+  }
+  const xspan = x1 - x0, xstep = [0.25, 0.5, 1, 2, 3, 6, 12, 24, 48, 96, 168, 336, 720].find(st => xspan / st <= 10) || 720;
+  for (let v = Math.ceil(x0 / xstep) * xstep; v <= x1 + 1e-9; v += xstep) {
+    s += `<line x1="${X(v).toFixed(1)}" y1="${B}" x2="${X(v).toFixed(1)}" y2="${B + 4}" stroke="var(--f-dim)"/><text x="${X(v).toFixed(1)}" y="${B + 16}" font-size="10" fill="var(--f-dim)" text-anchor="middle">${+v.toFixed(2)}</text>`;
+  }
+  s += `<text x="${(L + W - R) / 2}" y="${Hh - 6}" font-size="11" fill="var(--f-dim)" text-anchor="middle">${esc(opt.xlabel || 'hours')}</text>`;
+  s += `<text x="14" y="${(T + B) / 2}" font-size="11" fill="var(--f-dim)" text-anchor="middle" transform="rotate(-90 14 ${(T + B) / 2})">${esc(opt.ylabel || '')}</text>`;
+  const stride = Math.max(1, Math.floor(xs.length / 1500));
+  opt.series.forEach(se => {
+    let pts = '';
+    for (let i = 0; i < xs.length; i += stride) if (isFinite(se.y[i])) pts += X(xs[i]).toFixed(1) + ',' + Y(se.y[i]).toFixed(1) + ' ';
+    s += `<polyline points="${pts}" fill="none" stroke="${se.color}" stroke-width="${se.w || 2}" ${se.dash ? 'stroke-dasharray="' + se.dash + '"' : ''} stroke-linejoin="round"/>`;
+  });
+  el.innerHTML = s + '</svg>';
+}
+
+/* ---------------------------------------------------------------- RUN tab */
+const SAMPLES = D.samples;
+SAMPLES.forEach((s, i) => { const o = document.createElement('option'); o.value = i; o.textContent = s.name + ' (' + s.units + ')'; $('#sampleSel').appendChild(o); });
+let USERFILES = null, LAST = null;
+$('#fileIn').addEventListener('change', async (e) => {
+  const fl = Array.from(e.target.files || []); if (!fl.length) { USERFILES = null; return; }
+  const inp = fl.find(f => /\.inp$/i.test(f.name));
+  if (!inp) { toast('Choose at least one .inp file.'); return; }
+  const files = {};
+  for (const f of fl) files[f.name] = new Uint8Array(await f.arrayBuffer());
+  USERFILES = { name: inp.name, files };
+  runSelected();
+});
+$('#sampleSel').addEventListener('change', () => { USERFILES = null; $('#fileIn').value = ''; runSelected(); });
+$('#runBtn').addEventListener('click', runSelected);
+async function sha256(bytes) {
+  if (!bytes || !bytes.length) return '(none)';
+  try { const h = await crypto.subtle.digest('SHA-256', bytes); return Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, '0')).join(''); }
+  catch (e) { return 'n/a'; }
+}
+const CLOCK = /Analysis begun on|Analysis ended on|Total elapsed time/;
+const dec = new TextDecoder('latin1');
+const normRpt = b => b ? dec.decode(b).split('\n').filter(l => !CLOCK.test(l)).join('\n') : '';
+async function runSelected() {
+  if (!READY) return;
+  await READY;
+  let name, files, label;
+  if (USERFILES) { name = USERFILES.name; files = USERFILES.files; label = name; }
+  else { const s = SAMPLES[+$('#sampleSel').value]; name = s.file; files = { [s.file]: s.text }; label = s.name; }
+  $('#runBtn').disabled = true; $('#runStatus').textContent = 'Running ' + label + '…';
+  try {
+    const d = await call({ type: 'run', inp: name, files });
+    const [ha, hb] = await Promise.all([sha256(d.epa.out), sha256(d.cpp.out)]);
+    const ra = normRpt(d.epa.rpt), rb = normRpt(d.cpp.rpt);
+    const outSame = ha === hb, rptSame = ra === rb;
+    LAST = { name: label, file: name, d, ha, hb, outSame, rptSame, pa: parseOut(d.epa.out), pb: parseOut(d.cpp.out) };
+    renderRun();
+    $('#runStatus').textContent = 'Done.';
+  } catch (e) { $('#runStatus').textContent = 'Run failed: ' + e.message; }
+  $('#runBtn').disabled = false;
+}
+function versionOf(rpt) { const m = rpt && dec.decode(rpt.subarray(0, 400)).match(/Build ([\d.]+)/); return m ? m[1] : '?'; }
+function renderRun() {
+  const L = LAST, d = L.d;
+  const hasOut = d.epa.out && d.epa.out.length;
+  const ok = L.outSame && L.rptSame;
+  const card = $('#verdictCard');
+  const errLine = (d.epa.rc && d.epa.rc !== 0) ? ` Both engines reported error ${esc(d.epa.rc)}; the error reports are compared like any other.` : '';
+  $('#verdictKicker').textContent = L.name;
+  $('#verdictBig').textContent = ok ? (hasOut ? 'Byte-identical' : 'Identical (no .out written)') : 'Outputs differ';
+  $('#verdictBig').style.color = ok ? 'var(--ok-ink)' : 'var(--warn-ink)';
+  $('#verdictLine').innerHTML = (hasOut ? `.out: ${fmt(d.epa.out.length)} bytes, SHA-256 ${L.ha.slice(0, 16)}&hellip; on both. ` : '') +
+    `.rpt: ${L.rptSame ? 'identical' : 'different'} after removing the wall-clock lines.` + errLine;
+  const kv = (eng, sha) => `<dt>engine build</dt><dd>${versionOf(eng.rpt)}</dd><dt>return code</dt><dd>${esc(eng.rc)}</dd><dt>run time</dt><dd>${fmt(eng.ms, 1)} ms</dd><dt>.out</dt><dd>${fmt((eng.out || []).length)} bytes</dd><dt>SHA-256</dt><dd>${sha.slice(0, 24)}&hellip;</dd><dt>.rpt</dt><dd>${fmt(normRpt(eng.rpt).split('\n').length)} lines</dd>`;
+  $('#engEpa').innerHTML = kv(d.epa, L.ha);
+  $('#engCpp').innerHTML = kv(d.cpp, L.hb);
+  fillSeriesIds(); drawRunChart();
+}
+function fillSeriesIds() {
+  const p = LAST && LAST.pa; const sel = $('#seriesId'); sel.innerHTML = '';
+  if (!p) { $('#runChart').innerHTML = '<p class="muted" style="padding:16px">No binary output to plot.</p>'; return; }
+  const [kind, v] = $('#seriesKind').value.split(':');
+  const list = kind === 'node' ? p.ids.node : p.ids.link;
+  let best = 0, bestv = -1;
+  list.forEach((id, i) => {
+    const o = document.createElement('option'); o.value = i; o.textContent = id; sel.appendChild(o);
+  });
+  if (kind === 'link') list.forEach((id, i) => { const a = p.series('link', i, 0); let m = 0; for (const x of a) m = Math.max(m, Math.abs(x)); if (m > bestv) { bestv = m; best = i; } });
+  sel.value = best;
+}
+function drawRunChart() {
+  const L = LAST; if (!L || !L.pa || !L.pb) return;
+  const [kind, v] = $('#seriesKind').value.split(':');
+  const idx = +$('#seriesId').value || 0;
+  const ya = L.pa.series(kind, idx, +v), yb = L.pb.series(kind, idx, +v);
+  const x = Array.from(ya, (_, k) => (k + 1) * L.pa.step / 3600);
+  let maxd = 0; for (let k = 0; k < ya.length; k++) maxd = Math.max(maxd, Math.abs(ya[k] - yb[k]));
+  const unit = kind === 'link' ? (v === '0' ? FLOW_UNITS[L.pa.flowUnits] : v === '1' ? 'ft' : 'ft/s') : (v === '0' ? 'ft' : FLOW_UNITS[L.pa.flowUnits]);
+  lineChart($('#runChart'), { x, xlabel: 'hours from start', ylabel: unit, series: [{ y: ya, color: 'var(--epa)', w: 3 }, { y: yb, color: 'var(--cpp)', w: 1.6, dash: '6 4' }] });
+  $('#diffNote').textContent = `largest difference at any reporting step: ${maxd === 0 ? '0 (exactly)' : maxd.toPrecision(3) + ' ' + unit}`;
+  L.series = { kind, v, idx, id: (kind === 'node' ? L.pa.ids.node : L.pa.ids.link)[idx], x, ya, yb, unit };
+}
+$('#seriesKind').addEventListener('change', () => { fillSeriesIds(); drawRunChart(); });
+$('#seriesId').addEventListener('change', drawRunChart);
+$('#saveSeries').addEventListener('click', () => {
+  const s = LAST && LAST.series; if (!s) return;
+  let csv = `hours,${s.id} EPA 5.2.4 (${s.unit}),${s.id} swmm5-cplus (${s.unit}),difference\n`;
+  for (let k = 0; k < s.x.length; k++) csv += `${s.x[k].toFixed(4)},${s.ya[k]},${s.yb[k]},${s.ya[k] - s.yb[k]}\n`;
+  save(LAST.file.replace(/\.inp$/i, '') + '_' + s.id + '.csv', csv);
+});
+$('#saveZip').addEventListener('click', () => {
+  if (!LAST) return; const b = LAST.file.replace(/\.inp$/i, '');
+  const files = [[b + '_epa524.out', LAST.d.epa.out], [b + '_epa524.rpt', LAST.d.epa.rpt], [b + '_swmm5cplus.out', LAST.d.cpp.out], [b + '_swmm5cplus.rpt', LAST.d.cpp.rpt]].filter(f => f[1] && f[1].length);
+  save(b + '_both_engines.zip', makeZip(files));
+});
+
+/* ---------------------------------------------------------------- tiny ZIP writer (stored) */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(u) { let c = 0xFFFFFFFF; for (let i = 0; i < u.length; i++) c = CRC[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function makeZip(files) {
+  const enc = new TextEncoder(), parts = [], central = []; let off = 0;
+  for (const [name, data] of files) {
+    const nm = enc.encode(name), crc = crc32(data), h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint32(14, crc, true); h.setUint32(18, data.length, true); h.setUint32(22, data.length, true); h.setUint16(26, nm.length, true);
+    parts.push(new Uint8Array(h.buffer), nm, data);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint32(16, crc, true); c.setUint32(20, data.length, true); c.setUint32(24, data.length, true); c.setUint16(28, nm.length, true); c.setUint32(42, off, true);
+    central.push(new Uint8Array(c.buffer), nm);
+    off += 30 + nm.length + data.length;
+  }
+  const csize = central.reduce((a, b) => a + b.length, 0), e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, csize, true); e.setUint32(16, off, true);
+  return new Blob([...parts, ...central, new Uint8Array(e.buffer)]);
+}
+
+/* ---------------------------------------------------------------- MANY tab */
+SAMPLES.forEach((s, i) => {
+  const id = 'mk' + i;
+  $('#manyList').insertAdjacentHTML('beforeend', `<label style="display:flex;gap:8px;align-items:center;padding:3px 0"><input type="checkbox" id="${id}" checked> <span>${esc(s.name)}</span> <span class="faint">${esc(s.units)}</span></label>`);
+});
+let MANY = null;
+$('#manyBtn').addEventListener('click', async () => {
+  await READY;
+  const pick = SAMPLES.map((s, i) => [s, i]).filter(([s, i]) => $('#mk' + i).checked);
+  if (!pick.length) { toast('Tick at least one model.'); return; }
+  const tb = $('#manyTable tbody'); tb.innerHTML = '';
+  pick.forEach(([s], j) => tb.insertAdjacentHTML('beforeend', `<tr><td>${esc(s.name)}</td><td><div class="prog"><span id="pg${j}"></span></div></td><td class="num" id="st${j}">0</td><td id="sh${j}" style="font-family:var(--font-mono)"></td><td id="vs${j}"></td></tr>`));
+  $('#manyBtn').disabled = true; $('#manyStatus').textContent = 'Solo EPA runs first, then all together…';
+  const dur = pick.map(([s]) => s.days || 1);
+  let solo = null;
+  try {
+    const d = await call({ type: 'multi', models: pick.map(([s]) => ({ inp: s.text })) }, (p) => {
+      if (p.type === 'solo') { solo = p.solo; $('#manyStatus').textContent = 'Stepping ' + pick.length + ' models in one instance…'; }
+      if (p.type === 'progress') {
+        const frac = p.done ? 1 : Math.min(1, p.t / dur[p.i]);
+        $('#pg' + p.i).style.width = (100 * frac).toFixed(1) + '%'; $('#st' + p.i).textContent = fmt(p.steps);
+      }
+    });
+    const r = d.r; let same = 0;
+    for (let j = 0; j < r.res.length; j++) {
+      const x = r.res[j], hc = await sha256(x.out), he = await sha256(solo[j].out);
+      $('#pg' + j).style.width = '100%'; $('#st' + j).textContent = fmt(x.steps);
+      $('#sh' + j).textContent = hc.slice(0, 12);
+      const eq = hc === he; if (eq) same++;
+      $('#vs' + j).innerHTML = eq ? '<span class="tag ok">identical</span>' : '<span class="tag warn">differs</span>';
+    }
+    MANY = { pick, r, same };
+    $('#manyFoot').textContent = `${r.live} handles were open at once in one WebAssembly instance; ${fmt(r.rounds)} rounds of stepping; ${same} of ${r.res.length} outputs byte-identical to solo EPA runs; ${r.after} handles left after cleanup.`;
+    $('#manyStatus').textContent = 'Done.';
+  } catch (e) { $('#manyStatus').textContent = 'Failed: ' + e.message; }
+  $('#manyBtn').disabled = false;
+});
+$('#twoBtn').addEventListener('click', async () => {
+  await READY;
+  const a = SAMPLES.find(s => s.key === 'extran1_egg'), b = SAMPLES.find(s => s.key === 'exam79');
+  $('#twoBtn').disabled = true;
+  try {
+    const d = await call({ type: 'two', a: a.text, b: b.text });
+    const e = d.epa, c = d.cpp;
+    $('#twoOut').innerHTML = `
+      <div class="box warn"><b>EPA 5.2.4:</b> open egg returned ${e.openA} (${e.nodesA} nodes); open exam79 returned <b>${e.openB}</b>, "success", and the node count became ${e.nodesAfter}. The run then took ${fmt(e.steps)} steps: exam79's. The egg model's report is <b>${fmt(e.aRpt)} bytes</b> and its .out <b>${fmt(e.aOut)} bytes</b>. Natively, AddressSanitizer counts ${fmt(D.leak.bytes)} bytes in ${D.leak.allocs} allocations leaked by the abandoned model; a one-model control leaks none.</div>
+      <div class="box ok" style="margin-top:10px"><b>swmm5-cplus:</b> ${c.live} handles open at once. egg: ${fmt(c.res[0].steps)} steps, .out ${fmt(c.res[0].out)} bytes, report ${fmt(c.res[0].rpt)} bytes. exam79: ${fmt(c.res[1].steps)} steps, .out ${fmt(c.res[1].out)} bytes, report ${fmt(c.res[1].rpt)} bytes.</div>`;
+  } catch (er) { $('#twoOut').textContent = 'Failed: ' + er.message; }
+  $('#twoBtn').disabled = false;
+});
+
+/* ---------------------------------------------------------------- COUPLED tab */
+$('#coupleSchematic').innerHTML = D.schematic;
+let COUPLED = null;
+$('#coupleBtn').addEventListener('click', async () => {
+  await READY;
+  $('#coupleBtn').disabled = true; $('#coupleStatus').textContent = 'Stepping two models in lock step, then the merged one…';
+  const t0 = performance.now();
+  try {
+    const d = await call({ type: 'coupled', up: D.coupling.up, dn: D.coupling.dn, merged: D.coupling.merged });
+    COUPLED = d.r; COUPLED.ms = performance.now() - t0; drawCoupled();
+    $('#coupleStatus').textContent = 'Done in ' + fmt(COUPLED.ms) + ' ms.';
+  } catch (e) { $('#coupleStatus').textContent = 'Failed: ' + e.message; }
+  $('#coupleBtn').disabled = false;
+});
+function drawCoupled() {
+  const c = COUPLED; if (!c) return;
+  const x = c.coupled.map((_, k) => (k + 1) * 5 / 60);
+  lineChart($('#coupleChart'), { x, xlabel: 'hours', ylabel: 'cfs', series: [{ y: c.merged, color: 'var(--f-ink)', w: 2.4 }, { y: c.coupled, color: 'var(--cpp)', w: 2, dash: '6 4' }, { y: c.upstream, color: 'var(--epa)', w: 1.5 }] });
+  const pk = a => Math.max(...a), sm = a => a.reduce((p, q) => p + q, 0);
+  const md = Math.max(...c.coupled.map((v, k) => Math.abs(v - c.merged[k])));
+  $('#coupleTiles').innerHTML = [
+    [fmt(pk(c.coupled), 1) + ' / ' + fmt(pk(c.merged), 1), 'peak cfs, coupled / merged (' + ((pk(c.coupled) - pk(c.merged)) / pk(c.merged) * 100).toFixed(1) + '%)'],
+    [((sm(c.coupled) - sm(c.merged)) / sm(c.merged) * 100).toFixed(2) + '%', 'volume difference (sum of 5-min values)'],
+    [fmt(c.steps), 'lock-step routing steps; clock skew ' + c.maxSkew],
+    [String(c.live), 'models open in one instance at the end']
+  ].map(([n, l]) => `<div class="tile"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+}
+
+/* ---------------------------------------------------------------- INSIDE tab */
+function tiles(el, arr) { $(el).innerHTML = arr.map(([n, l]) => `<div class="tile"><div class="n">${n}</div><div class="l">${l}</div></div>`).join(''); }
+tiles('#insideTiles', D.insideTiles);
+$('#figStateIn').innerHTML = D.figs.state;
+$('#figHeatIn').innerHTML = D.figs.heat;
+$('#ladderTable').innerHTML = '<thead><tr>' + D.ladder.head.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>' + D.ladder.rows.map(r => '<tr>' + r.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody>';
+const Q = ['S of A (section factor)', 'Y of A (depth)', 'A of Y (area)', 'W of Y (top width)', 'R of Y (hyd. radius)', 'R of A (hyd. radius)', 'A of S (area)', 'dS/dA'];
+D.matrix.forEach(([n]) => { const o = document.createElement('option'); o.value = n; o.textContent = n; $('#shapeSel').appendChild(o); });
+function shapeDetail() {
+  const row = D.matrix.find(r => r[0] === $('#shapeSel').value), bits = row[1];
+  const own = Q.filter((q, i) => bits[i] === 'x'), inh = Q.filter((q, i) => bits[i] !== 'x');
+  const models = (D.shapeCensus.find(s => s[0] === row[0]) || [0, 0])[1];
+  $('#shapeDetail').innerHTML = `<div class="box panel"><b>Shape_${esc(row[0])}</b> overrides ${own.length} of 8 methods: ${own.map(esc).join(', ') || 'none'}.<br>Inherits from the base class: ${inh.map(esc).join(', ') || 'none'}.<br><span class="faint">Used in ${fmt(models)} corpus models.</span></div>`;
+}
+$('#shapeSel').value = 'EGGSHAPED'; $('#shapeSel').addEventListener('change', shapeDetail); shapeDetail();
+$('#defects').innerHTML = D.defects.map(d => `<div class="defect"><div class="h"><span class="id">${d.id}</span><span>${d.title}</span><span class="tag ${d.statusKind}">${d.status}</span></div><p style="margin:6px 0">${d.body}</p>${d.code ? '<pre class="code">' + esc(d.code) + '</pre>' : ''}</div>`).join('');
+
+/* ---------------------------------------------------------------- VERIFY tab */
+$('#parityBox').innerHTML = D.verify.parity;
+tiles('#verifyTiles', D.verify.tiles);
+$('#figGateV').innerHTML = D.figs.gate;
+$('#figTimingV').innerHTML = D.figs.timing;
+$('#shapeCensus').innerHTML = '<thead><tr><th>Shape</th><th class="num">Corpus models</th><th class="num">In coverage set</th></tr></thead><tbody>' + D.shapeCensus.map(r => `<tr><td><code>${r[0]}</code></td><td class="num">${fmt(r[1])}</td><td class="num">${r[2]}</td></tr>`).join('') + '</tbody>';
+$('#controls').innerHTML = '<ul style="margin:0;padding-left:18px">' + D.verify.controls.map(c => `<li style="margin-bottom:6px">${c}</li>`).join('') + '</ul>';
+$('#limitsBox').innerHTML = D.verify.limits;
+
+/* ---------------------------------------------------------------- ABOUT + DOC */
+$('#provTable').innerHTML = '<tbody>' + D.prov.map(([k, v]) => `<tr><td class="muted" style="white-space:nowrap">${k}</td><td style="font-family:var(--font-mono);overflow-wrap:anywhere">${v}</td></tr>`).join('') + '</tbody>';
+$('#provCommit').textContent = D.commit.slice(0, 7);
+$('#essay').innerHTML = D.essayHtml;
+$('#toc').innerHTML = '<p class="kicker">Contents</p>' + D.toc.map(([a, t]) => `<a href="#${a}" data-a="${a}">${esc(t)}</a>`).join('') + '<p class="faint" style="margin-top:12px">The same essay, with the same figures, as a Word document.</p><button class="btn" id="saveDocx" type="button" style="margin-top:6px">Download the .docx</button>';
+$('#saveDocx').addEventListener('click', () => save('swmm5-cplus-doc.docx', b64bytes('#docx-b64')));
+$$('#toc a').forEach(a => a.addEventListener('click', (e) => { e.preventDefault(); const t = document.getElementById(a.dataset.a); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+$$('.essay .fig svg, .card svg').forEach(s => s.setAttribute('preserveAspectRatio', 'xMinYMin meet'));
+
+function redrawCharts() { if (LAST) drawRunChart(); if (COUPLED) drawCoupled(); }
+
+/* ---------------------------------------------------------------- export (CSV of the current view) */
+$('#exportBtn').addEventListener('click', () => {
+  if (CURRENT === 'run' && LAST && LAST.series) return $('#saveSeries').click();
+  if (CURRENT === 'many' && MANY) {
+    let csv = 'model,steps,identical_to_solo_epa\n';
+    MANY.pick.forEach(([s], j) => { csv += `"${s.name}",${MANY.r.res[j].steps},${$('#vs' + j).textContent.trim() === 'identical'}\n`; });
+    return save('swmm5cplus_many_at_once.csv', csv);
+  }
+  if (CURRENT === 'coupled' && COUPLED) {
+    let csv = 'hours,OB_inflow_coupled_cfs,OB_inflow_merged_cfs,OA_inflow_upstream_cfs\n';
+    COUPLED.coupled.forEach((v, k) => { csv += `${((k + 1) * 5 / 60).toFixed(4)},${v},${COUPLED.merged[k]},${COUPLED.upstream[k]}\n`; });
+    return save('swmm5cplus_coupled.csv', csv);
+  }
+  if (CURRENT === 'verify') return save('swmm5cplus_gate_by_folder.csv', D.verify.csv);
+  toast('Run something on this tab first, or open Verify for the gate table.');
+});
+
+/* ---------------------------------------------------------------- welcome + tour */
+const TOUR = [
+  ['#tablist', 'Move between the seven tabs', 'Run compares one model on both engines. Many at once and Coupled show what a reentrant engine can do. Inside, Verify and Doc show how it was built and proven.'],
+  ['#sampleSel', 'Choose a model', 'Eight EPA example models are built in. You can also open your own .inp, plus any data files it names.'],
+  ['#runBtn', 'Run both engines', 'EPA 5.2.4 and swmm5-cplus each run the model in a background worker, both compiled to WebAssembly.'],
+  ['#verdictCard', 'Read the verdict', 'The .out files are compared byte for byte by SHA-256, the reports line for line minus the wall-clock lines.'],
+  ['#runChart', 'Check the series', 'The two engines’ time series are drawn on top of each other; the largest difference is printed under the chart.'],
+  ['[data-view="many"]', 'Open many models at once', 'This is what EPA’s engine cannot do. The tab also repeats EPA’s two-open experiment.'],
+  ['#helpBtn', 'Come back any time', 'The ? button reopens this guide.']
+];
+let tourI = -1;
+function endTour() { tourI = -1; $$('.tour,.spot').forEach(n => n.remove()); }
+function tourStep(i) {
+  $$('.tour,.spot').forEach(n => n.remove());
+  if (i < 0 || i >= TOUR.length) return endTour();
+  tourI = i; if (i <= 4) showView('run');
+  const [sel, title, body] = TOUR[i], el = $(sel); if (!el) return tourStep(i + 1);
+  el.scrollIntoView({ block: 'center' });
+  const r = el.getBoundingClientRect();
+  const spot = document.createElement('div'); spot.className = 'spot';
+  Object.assign(spot.style, { left: (r.left - 4) + 'px', top: (r.top - 4) + 'px', width: (r.width + 8) + 'px', height: (r.height + 8) + 'px' });
+  const tip = document.createElement('div'); tip.className = 'tour';
+  tip.innerHTML = `<h4>${i + 1}. ${title}</h4><div class="muted">${body}</div><div class="row"><button class="btn ghost" type="button" data-k="end">Close</button><span><button class="btn ghost" type="button" data-k="prev" ${i === 0 ? 'disabled' : ''}>Back</button> <button class="btn" type="button" data-k="next">${i === TOUR.length - 1 ? 'Done' : 'Next'}</button></span></div>`;
+  document.body.append(spot, tip);
+  const top = r.bottom + 12 + 180 < innerHeight ? r.bottom + 12 : Math.max(12, r.top - 12 - tip.offsetHeight);
+  Object.assign(tip.style, { left: Math.max(12, Math.min(innerWidth - tip.offsetWidth - 12, r.left)) + 'px', top: top + 'px' });
+  tip.addEventListener('click', (e) => { const k = e.target.dataset.k; if (k === 'end') endTour(); if (k === 'prev') tourStep(i - 1); if (k === 'next') tourStep(i + 1); });
+}
+function openWelcome() { $('#welcome').hidden = false; $('#welcomeClose').focus(); }
+$('#helpBtn').addEventListener('click', openWelcome);
+$('#welcomeClose').addEventListener('click', () => { $('#welcome').hidden = true; try { localStorage.setItem('swmm5cplus_seen', '1'); } catch (e) {} });
+$('#tourBtn').addEventListener('click', () => { $('#welcome').hidden = true; tourStep(0); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('#welcome').hidden = true; endTour(); } });
+
+/* ---------------------------------------------------------------- Make a GIF (html2canvas frames -> GIF, WebM fallback) */
+let REC = null;
+function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+$('#gifBtn').addEventListener('click', async () => {
+  if (REC) { REC.stop = true; return; }
+  if (!DL) { toast('Saving a GIF needs the claude.ai viewer.'); }
+  try { if (!window.html2canvas) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
+  catch (e) { toast('The capture library could not load.'); return; }
+  REC = { frames: [], stop: false }; $('#gifBtn').textContent = 'Recording… click to stop';
+  const steps = [['run', 'Run: one model, two engines, byte-identical'], ['many', 'Many at once: one instance, many models'], ['coupled', 'Coupled: two models in lock step'], ['inside', 'Inside: the switch, transposed'], ['verify', 'Verify: the corpus gate']];
+  const bg = getComputedStyle(document.body).backgroundColor;
+  for (const [v, cap] of steps) {
+    if (REC.stop) break;
+    showView(v); await new Promise(r => setTimeout(r, 400));
+    if (v === 'coupled' && !COUPLED) $('#coupleBtn').click();
+    for (let k = 0; k < 4 && !REC.stop; k++) {
+      const c = await html2canvas($('#app'), { backgroundColor: bg, scale: 0.6, logging: false, height: Math.min($('#app').scrollHeight, 900), windowHeight: 900 });
+      const ctx = c.getContext('2d'); ctx.fillStyle = 'rgba(3,7,18,.8)'; ctx.fillRect(0, c.height - 30, c.width, 30);
+      ctx.fillStyle = '#fff'; ctx.font = '15px sans-serif'; ctx.fillText(cap, 12, c.height - 10);
+      REC.frames.push(c); await new Promise(r => setTimeout(r, 350));
+    }
+  }
+  const frames = REC.frames; REC = null; $('#gifBtn').textContent = 'Make a GIF';
+  if (!frames.length) return;
+  let blob = null, ext = 'gif';
+  try {
+    if (!window.GIF) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js');
+    const wurl = URL.createObjectURL(new Blob(["importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');"], { type: 'text/javascript' }));
+    blob = await new Promise((res, rej) => {
+      const g = new GIF({ workers: 2, quality: 12, workerScript: wurl, width: frames[0].width, height: frames[0].height });
+      frames.forEach(f => g.addFrame(f, { delay: 700 })); g.on('finished', res); g.on('abort', () => rej(new Error('aborted')));
+      setTimeout(() => rej(new Error('timeout')), 60000); g.render();
+    });
+  } catch (e) {
+    try {
+      ext = 'webm';
+      const cv = document.createElement('canvas'); cv.width = frames[0].width; cv.height = frames[0].height;
+      const cx = cv.getContext('2d'), st = cv.captureStream(4), mr = new MediaRecorder(st, { mimeType: 'video/webm' }), ch = [];
+      mr.ondataavailable = ev => ch.push(ev.data);
+      blob = await new Promise(res => { mr.onstop = () => res(new Blob(ch, { type: 'video/webm' })); mr.start(); let i = 0; const nx = () => { if (i >= frames.length) return mr.stop(); cx.drawImage(frames[i++], 0, 0); setTimeout(nx, 700); }; nx(); });
+    } catch (e2) { toast('This browser cannot encode the recording.'); return; }
+  }
+  save('swmm5-cplus-walkthrough.' + ext, blob);
+});
+
+/* ---------------------------------------------------------------- boot */
+(function init() {
+  let pref = 'dark'; try { const v = localStorage.getItem('swmm5cplus_theme'); if (v === 'light' || v === 'auto' || v === 'dark') pref = v; } catch (e) {}
+  applyTheme(pref);
+  const h = location.hash.slice(1); if (h && $('#view-' + h)) showView(h);
+  let seen = false; try { seen = localStorage.getItem('swmm5cplus_seen') === '1'; } catch (e) {}
+  if (!seen) openWelcome();
+  boot();
+})();
+</script>

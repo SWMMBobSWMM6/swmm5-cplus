@@ -1,2 +1,6 @@
 build/
 *.o
+app/doc/out/
+app/shots/
+app/node_modules/
+__pycache__/
