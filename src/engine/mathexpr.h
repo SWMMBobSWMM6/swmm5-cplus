@@ -24,13 +24,13 @@ struct ExprNode
 typedef struct ExprNode MathExpr;
 
 //  Creates a tokenized math expression from a string
-MathExpr* mathexpr_create(char* s, int (*getVar) (char *));
+
 
 //  Evaluates a tokenized math expression
-double mathexpr_eval(MathExpr* expr, double (*getVal) (int));
+
 
 //  Deletes a tokenized math expression
-void  mathexpr_delete(MathExpr* expr);
+
 
 
 #endif //MATHEXPR_H

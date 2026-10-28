@@ -201,36 +201,33 @@ typedef struct
 //-----------------------------------------------------------------------------
 //   LID Methods
 //-----------------------------------------------------------------------------
-void     lid_create(int lidCount, int subcatchCount);
-void     lid_delete(void);
 
-int      lid_readProcParams(char* tok[], int ntoks);
-int      lid_readGroupParams(char* tok[], int ntoks);
 
-void     lid_validate(void);
-void     lid_initState(void);
-void     lid_setOldGroupState(int subcatch);
 
-double   lid_getPervArea(int subcatch);
-double   lid_getFlowToPerv(int subcatch);
-double   lid_getDrainFlow(int subcatch, int timePeriod);
-double   lid_getStoredVolume(int subcatch);
-void     lid_addDrainLoads(int subcatch, double c[], double tStep);
-void     lid_addDrainRunon(int subcatch);
-void     lid_addDrainInflow(int subcatch, double f);
-void     lid_getRunoff(int subcatch, double tStep);
-void     lid_writeSummary(void);
-void     lid_writeWaterBalance(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //-----------------------------------------------------------------------------
 
-void     lidproc_initWaterBalance(TLidUnit *lidUnit, double initVol);
 
-double   lidproc_getOutflow(TLidUnit* lidUnit, TLidProc* lidProc,
-         double inflow, double evap, double infil, double maxInfil,
-         double tStep, double* lidEvap, double* lidInfil, double* lidDrain);
 
-void     lidproc_saveResults(TLidUnit* lidUnit, double ucfRainfall,
-         double ucfRainDepth);
+
+
+
 
 #endif

@@ -28,8 +28,8 @@ typedef struct
 //-----------------------------------------------------------------------------
 //   Exfiltration Methods
 //-----------------------------------------------------------------------------
-int    exfil_readStorageParams(int k, char* tok[], int ntoks, int n);
-void   exfil_initState(int k);
-double exfil_getLoss(TExfil* exfil, double tStep, double depth, double area);
+
+
+
 
 #endif

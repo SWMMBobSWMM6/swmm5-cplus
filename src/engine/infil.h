@@ -93,20 +93,18 @@ extern TCurveNum* CNInfil;
 //-----------------------------------------------------------------------------
 //   Infiltration Methods
 //-----------------------------------------------------------------------------
-void    infil_create(int n);
-void    infil_delete(void);
-int     infil_readParams(int m, char* tok[], int ntoks);
-void    infil_initState(int j);
-void    infil_getState(int j, double x[]);
-void    infil_setState(int j, double x[]);
-void    infil_setInfilFactor(int j);
-double  infil_getInfil(int area, double tstep, double rainfall, double runon,
-        double depth);
 
-void    grnampt_getParams(int j, double p[]);
-int     grnampt_setParams(TGrnAmpt *infil, double p[]);
-void    grnampt_initState(TGrnAmpt *infil);
-double  grnampt_getInfil(TGrnAmpt *infil, double tstep, double irate,
-        double depth, int modelType);
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif

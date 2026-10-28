@@ -34,39 +34,38 @@ typedef double DateTime;
 #define TIME_STAMP_SIZE 21
 
 // Functions for encoding a date or time value to a DateTime value
-DateTime datetime_encodeDate(int year, int month, int day);
-DateTime datetime_encodeTime(int hour, int minute, int second);
+
+
 
 // Functions for decoding a DateTime value to a date and time
-void datetime_decodeDate(DateTime date, int* y, int* m, int* d);
-void datetime_decodeTime(DateTime time, int* h, int* m, int* s);
+
+
 
 // Function for finding day of week for a date (1 = Sunday)
 // month of year, days per month, and hour of day
-int  datetime_monthOfYear(DateTime date);
-int  datetime_dayOfYear(DateTime date);
-int  datetime_dayOfWeek(DateTime date);
-int  datetime_hourOfDay(DateTime date);
-int  datetime_daysPerMonth(int year, int month);
+
+
+
+
+
 
 // Functions for converting a DateTime value to a string
-void datetime_dateToStr(DateTime date, char* s);
-void datetime_timeToStr(DateTime time, char* s);
-void datetime_getTimeStamp(int fmt, DateTime aDate, int stampSize,
-                           char* timeStamp);
+
+
+
 
 // Functions for converting a string date or time to a DateTime value
-int  datetime_findMonth(char* s);
-int  datetime_strToDate(char* s, DateTime* d);
-int  datetime_strToTime(char* s, DateTime* t);
+
+
+
 
 // Function for setting date format
-void datetime_setDateFormat(int fmt);
+
 
 // Functions for adding and subtracting dates
-DateTime datetime_addSeconds(DateTime date1, double seconds);
-DateTime datetime_addDays(DateTime date1, DateTime date2);
-long     datetime_timeDiff(DateTime date1, DateTime date2);
+
+
+
 
 
 #endif //DATETIME_H

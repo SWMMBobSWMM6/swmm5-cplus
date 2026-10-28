@@ -1,0 +1,74 @@
+// project_lifecycle.cpp -- generated: create and destroy per-module state
+#include "headers.h"
+
+Project::Project()
+{
+    climate_createState();
+    controls_createState();
+    datetime_createState();
+    dynwave_createState();
+    gwater_createState();
+    hotstart_createState();
+    iface_createState();
+    infil_createState();
+    inlet_createState();
+    input_createState();
+    kinwave_createState();
+    lid_createState();
+    lidproc_createState();
+    massbal_createState();
+    mathexpr_createState();
+    mempool_createState();
+    odesolve_createState();
+    output_createState();
+    project_createState();
+    rain_createState();
+    rdii_createState();
+    report_createState();
+    routing_createState();
+    runoff_createState();
+    shape_createState();
+    stats_createState();
+    statsrpt_createState();
+    subcatch_createState();
+    swmm5_createState();
+    toposort_createState();
+    transect_createState();
+    treatmnt_createState();
+}
+
+Project::~Project()
+{
+    climate_destroyState();
+    controls_destroyState();
+    datetime_destroyState();
+    dynwave_destroyState();
+    gwater_destroyState();
+    hotstart_destroyState();
+    iface_destroyState();
+    infil_destroyState();
+    inlet_destroyState();
+    input_destroyState();
+    kinwave_destroyState();
+    lid_destroyState();
+    lidproc_destroyState();
+    massbal_destroyState();
+    mathexpr_destroyState();
+    mempool_destroyState();
+    odesolve_destroyState();
+    output_destroyState();
+    project_destroyState();
+    rain_destroyState();
+    rdii_destroyState();
+    report_destroyState();
+    routing_destroyState();
+    runoff_destroyState();
+    shape_destroyState();
+    stats_destroyState();
+    statsrpt_destroyState();
+    subcatch_destroyState();
+    swmm5_destroyState();
+    toposort_destroyState();
+    transect_destroyState();
+    treatmnt_destroyState();
+}

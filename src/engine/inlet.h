@@ -14,17 +14,17 @@
 
 typedef struct TInlet TInlet;
 
-int    inlet_create(int nInlets);
-void   inlet_delete();
-int    inlet_readDesignParams(char* tok[], int ntoks);
-int    inlet_readUsageParams(char* tok[], int ntoks);
-void   inlet_validate();
 
-void   inlet_findCapturedFlows(double tStep);
-void   inlet_adjustQualInflows();
-void   inlet_adjustQualOutflows();
 
-void   inlet_writeStatsReport();
-double inlet_capturedFlow(int link);
+
+
+
+
+
+
+
+
+
+
 
 #endif
