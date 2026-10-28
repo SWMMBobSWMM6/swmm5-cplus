@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Assemble swmm5-cplus.html (single file) and doc/essay.json from measured results."""
-import os, re, json, base64, hashlib, collections, datetime, html, subprocess, sys
+import os, re, json, math, base64, hashlib, collections, datetime, html, subprocess, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'doc'))
 import figures as F
 import essay as E
@@ -132,7 +132,74 @@ gate_note = ((f'All {corpus_n:,} corpus models run; ' if GATE_DONE else
               f'{FULL_DONE:,} of {corpus_n:,} models: all under {CUT_TXT}, plus a sample of {N_SAMPLE} larger; ' if GATE_STOPPED else
               f'{FULL_DONE:,} of {corpus_n:,} corpus models run so far; ') +
              f'{FULL_SAME:,} identical, {FULL_CRASH} crash both engines alike, {FULL_DIFF} different, {FULL_INC} inconclusive. Log scale.')
+# ------------------------------------------------------------------ speed study (results/perf in the repo)
+PERF = f'{REPO}/results/perf'
+def ratios(bench, b, key='cpu'):
+    R = bench['results']; per = []
+    for m in R:
+        pr = [y[key] / x[key] for x, y in zip(R[m]['ref'], R[m][b])]
+        per.append(sorted(pr)[len(pr) // 2])
+    geo = math.exp(sum(math.log(v) for v in per) / len(per))
+    return geo, per
+bf, br4, bomp, bompb = J(f'{PERF}/bench_flags.json'), J(f'{PERF}/bench_r4.json'), J(f'{PERF}/bench_omp2.json'), J(f'{PERF}/bench_omp_big.json')
+be1, be2 = J(f'{PERF}/bench_e1.json'), J(f'{PERF}/bench_e2.json')
+mvf, mve2, optx = J(f'{PERF}/movement_flags.json'), J(f'{PERF}/movement_e2.json'), J(f'{PERF}/options_exp.json')
+cats = J(f'{PERF}/profile_categories.json')
+SP = {}
+for lab, bench, b in [('o3', bf, 'o3'), ('lto', bf, 'lto'), ('pgo', bf, 'pgo'), ('pgolto', bf, 'pgolto'), ('fma', bf, 'fma'), ('fastmath', bf, 'fastmath'),
+                      ('omp1', bf, 'omp1'), ('cplus', bf, 'cplus'), ('r4', br4, 'cplus_memo_pgo'), ('r4lto', br4, 'cplus_memo_lto'),
+                      ('memo', be1, 'memo'), ('warm', be2, 'warm')]:
+    SP[lab] = ratios(bench, b)
+noise_per = ratios(bf, 'ref2')[1] + ratios(br4, 'ref2')[1]
+NOISE = (min(noise_per), max(noise_per))
+omp_rows = [(m, ratios({'results': {m: bomp['results'][m]}}, 'omp2', 'wall')[0]) for m in bomp['results']] + \
+           [(m, ratios({'results': {m: bompb['results'][m]}}, 'omp2', 'wall')[0]) for m in bompb['results']]
+LINKS = {'Semi_Real_Models/375_H&H_Elements (1).inp': 197, 'XPSWMM/MAYBR.inp': 122, 'Hydrology/46_Subs.inp': 69, 'Hydrology/10_Subs_Continuous.inp': 9,
+         'SWMM5_NCIMM/lid1d.inp': 333, 'Training/Exercise5_transect.inp': 46, 'WQ/Peter Klaver_WQ_Tracer.inp': 2, 'Hydraulics/short_trap_SW5.inp': 1}
+for m in bompb['results']:   # link counts of the two big models from their .out headers
+    import struct, subprocess as _sp, tempfile as _tf
+    with _tf.TemporaryDirectory(dir='/tmp/claude-0') as _d:
+        _sp.run([f'{GATE}/final/runswmm_cp', f'{CORPUS}/{m}', _d + '/m.rpt', _d + '/m.out'], cwd=os.path.dirname(f'{CORPUS}/{m}'), capture_output=True)
+        LINKS[m] = struct.unpack('<i', open(_d + '/m.out', 'rb').read(24)[20:24])[0]
+omp_rows = [(m, r, LINKS.get(m, 0)) for m, r in sorted(omp_rows, key=lambda x: LINKS.get(x[0], 0))]
+# speed against movement points
+mv_pts = []
+bm = {m: i for i, m in enumerate(bf['results'])}
+def per_model(bench, b):
+    R = bench['results']; return {m: 1 / sorted([y['cpu'] / x['cpu'] for x, y in zip(R[m]['ref'], R[m][b])])[1] for m in R}
+for lab, col, mv, sp in [('FMA', 'var(--f-a)', {m: v['fma'] for m, v in mvf.items()}, per_model(bf, 'fma')),
+                         ('fast-math', 'var(--f-e)', {m: v['fastmath'] for m, v in mvf.items()}, per_model(bf, 'fastmath')),
+                         ('warm start', 'var(--f-b)', {m: v['warm'] for m, v in mve2.items()}, per_model(be2, 'warm'))]:
+    for m, x in mv.items():
+        lf = x.get('linkFlow') or {}
+        mv_pts.append((sp[m], lf.get('peakMax') or 0, lab, col))
+for m, v in optx.items():
+    base = v['variants'][0]['cpu']
+    for r in v['variants'][1:]:
+        lf = (r.get('diff') or {}).get('linkFlow') or {}
+        lab = 'step x2' if r['name'] == 'ROUTING_STEP x2' else 'step x10' if r['name'] == 'ROUTING_STEP x10' else 'other routing options'
+        col = 'var(--f-c)' if lab == 'step x2' else 'var(--f-d)' if lab == 'step x10' else 'var(--f-dim)'
+        mv_pts.append((base / r['cpu'], lf.get('peakMax') or 0, lab, col))
+NUM.update(dict(
+    SP_LTO=f"{SP['lto'][0]:.2f}", SP_PGOLTO=f"{SP['pgolto'][0]:.2f}", SP_R4=f"{SP['r4'][0]:.2f}", SP_R4_WQ=f"{SP['r4'][1][6]:.2f}",
+    SP_MEMO_WQ=f"{SP['memo'][1][6]:.2f}", SP_FMA=f"{SP['fma'][0]:.2f}", SP_FAST=f"{SP['fastmath'][0]:.2f}", SP_WARM=f"{SP['warm'][0]:.2f}",
+    SP_WARM_SHORT=f"{SP['warm'][1][7]:.2f}", SP_OMP1=f"{SP['omp1'][0]:.2f}", SP_OMP1_MAX=f"{max(SP['omp1'][1]):.2f}",
+    SP_NOISE=f"{NOISE[0]:.2f}-{NOISE[1]:.2f}",
+    OMP_SLOWER=sum(1 for _, r, _n in omp_rows if r > 1.05), OMP_N=len(omp_rows), OMP_MAX=f"{max(r for _, r, _n in omp_rows):.2f}",
+    OMP_BEST=f"{min(r for _, r, _n in omp_rows):.2f}", OMP_GAIN=f"{100 * (1 - min(r for _, r, _n in omp_rows)):.0f}"))
+
 FIGS = dict(
+    speed_profile=F.fig_speed_profile(cats),
+    speed_identical=F.fig_speed_identical([
+        ('EPA C, -O3, hardening off', SP['o3'][0], SP['o3'][1], 'epa'),
+        ('EPA C, link-time optimization', SP['lto'][0], SP['lto'][1], 'epa'),
+        ('EPA C, profile-guided', SP['pgo'][0], SP['pgo'][1], 'epa'),
+        ('EPA C, -O3 + LTO + profile-guided', SP['pgolto'][0], SP['pgolto'][1], 'epa'),
+        ('swmm5-cplus be57fec, -O2 -flto', SP['cplus'][0], SP['cplus'][1], 'cplus'),
+        ('swmm5-cplus R4, -O2 -flto', SP['r4lto'][0], SP['r4lto'][1], 'cplus'),
+        ('swmm5-cplus R4, -O3 LTO + PGO', SP['r4'][0], SP['r4'][1], 'cplus')], NOISE),
+    speed_threads=F.fig_speed_threads(omp_rows),
+    speed_movement=F.fig_speed_movement(mv_pts),
     state=F.fig_state(lift), lookup=F.fig_lookup(), pipeline=F.fig_pipeline(lift),
     shapes=F.fig_shapes(matrix_txt), multi=F.fig_multi(multi6), coupled=F.fig_coupled(coupled),
     timing=F.fig_timing(b_o2, b_lto), heat=F.fig_heat(cm), gate=F.fig_gate(list(fold.values()), gate_note))
@@ -236,6 +303,7 @@ ladder = dict(head=['Commit', 'Step', 'Source lines (+/−)', 'Gate'], rows=[
     ['<code>adbddee</code>', '<b>R2.</b> findroot templates, OdeSolver object, MathExprParser per formula', '+459 / −548', '187/187 coverage'],
     ['<code>c97a83a</code>', '<b>R3.</b> Cross-section geometry as 26 shape classes, pure functions of the section', '+2,937 / −2,004', '187/187 coverage (all 26 shapes)'],
     [f'<code>{commit[:7]}</code>', '<b>R3b.</b> Shape table at namespace scope; swmm::Simulation; coupling example', '+157 / −57', f'{FULL_SAME:,}/{FULL_COMPARED:,} corpus (so far)'],
+    ['<code>aa0ae2b</code>', '<b>R4.</b> Outfall normal and critical depth reused when the flow repeats; profile-guided build (native only; the engines in this app are be57fec)', '+23 / −2', '217/221 smoke and coverage; 4 crash decks crash both alike'],
 ])
 defects = [
     dict(id='S5CP-1', title='swmm_close() leaves its FILE pointers dangling', status='fixed in R1', statusKind='ok',
@@ -261,6 +329,9 @@ defects = [
          body='odesolve.c defines nmax, y, yscal, yerr, ytemp, dydx and ak with external linkage. They now live in an OdeSolver object.', code=None),
     dict(id='S5CP-9', title='Twelve files wire into other modules with local extern declarations', status='open (made explicit)', statusKind='panel',
          body='The mass-balance totals, statistics arrays and output vectors are reached around the headers. The 28 such variables are now named Project members, so the wiring is visible, but it is still there.', code=None),
+    dict(id='S5CP-10', title='report.c and error.c disagree on the size of ErrString', status='gone in C++', statusKind='ok',
+         body='Found by link-time optimization, which checks every declaration against its definition. Harmless today because the array is only passed on as a pointer, but undefined behavior in C. In swmm5-cplus it is one Project member with one type.',
+         code='// report.c, line 72\nextern char   ErrString[81];           // defined in ERROR.C\n\n// error.c, line 28\nchar  ErrString[256];'),
 ]
 parity = (f'<b>Parity contract.</b> swmm5-cplus matches EPA SWMM 5.2.4 built from the official v5.2.4 tag on the same compiler family: '
           f'the <code>.out</code> file byte for byte, and the <code>.rpt</code> byte for byte after removing the three wall-clock lines '

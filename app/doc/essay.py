@@ -107,7 +107,7 @@ BLOCKS = [
       "twice, so nobody noticed in twenty years. A host program that manages many models does close twice, and "
       "it noticed immediately. More on that below."),
 
-('h2', 'Five steps, each paid for in bytes', 'ladder'),
+('h2', 'Six steps, each paid for in bytes', 'ladder'),
 ('p', "The engine was rebuilt one gated step at a time, each a separate commit on top of EPA's pristine source, "
       "so the history itself is the record of what changed:"),
 ('table', ['Step', 'What it did', 'Source lines (+/-)', 'Gate'], [
@@ -116,6 +116,7 @@ BLOCKS = [
     ['R2', 'Root finder, ODE solver and expression parser as standalone components', '+459 / -548', '187/187 coverage'],
     ['R3', 'Cross-section geometry as shape objects, pure functions of the section', '+2,937 / -2,004', '187/187 coverage'],
     ['R3b', 'Shape table at namespace scope; C++ facade; coupling example', '+157 / -57', '{FULL_SAME}/{FULL_DONE} corpus'],
+    ['R4', 'Outfall normal and critical depth reused when the flow repeats; profile-guided build', '+23 / -2', '217/221 smoke and coverage; 4 crash decks crash both alike'],
 ]),
 ('p', "The coverage set is 187 models chosen from Bob's corpus so that every feature the census could find "
       "is in at least one of them: all 26 cross-section shapes, every storage curve type, groundwater, "
@@ -232,7 +233,7 @@ BLOCKS = [
 
 ('h2', 'What turned up along the way', 'defects'),
 ('p', "Rebuilding an engine to hold many models is a stress test of every place that assumed there would only "
-      "be one. Nine findings went into the register. None of them changes a number SWMM computes, which is why "
+      "be one. Ten findings went into the register. None of them changes a number SWMM computes, which is why "
       "they hid for so long. Here is each one as the code actually read in 5.2.4."),
 ('p', "<b>S5CP-1. <code>swmm_close()</code> leaves its file pointers dangling.</b> Close twice and the second "
       "close writes the run times into a freed <code>FILE</code> and frees it again. Fixed in R1: each pointer is "
@@ -295,6 +296,112 @@ BLOCKS = [
       "definition but left its linkage alone, and the dead declarations and the private wiring of the "
       "statistics module remain."),
 
+('p', "<b>S5CP-10</b> turned up later, during the speed work, when link-time optimization compared every "
+      "declaration with its definition. <code>report.c</code> and <code>error.c</code> disagree about the size "
+      "of the same array:"),
+('code', 'c', """// report.c, line 72
+extern char   ErrString[81];           // defined in ERROR.C
+
+// error.c, line 28
+char  ErrString[256];"""),
+('p', "It does no harm today, because the array is only ever handed on as a pointer, but C calls it undefined "
+      "behavior, and the next compiler is free to agree. In swmm5-cplus the string is one member of "
+      "<code>Project</code> with one type, so the question cannot arise."),
+
+('h2', 'How fast can it go', 'speed'),
+('p', "Once an engine can hold many models, the next question asks itself: how fast can one of them run? Bob "
+      "asked it straight out. The answer starts with arithmetic every SWMM modeler already knows. Run time is the "
+      "number of routing steps, times the iterations in each step, times the work done per element in each "
+      "iteration. Code that must give EPA's answers bit for bit can only touch the last of those three. The "
+      "first two belong to the model, its options and the numerical scheme."),
+('p', "So the first job was to find out where the work goes. A sampling profiler ran eight corpus models picked "
+      "to cover the ground: a large dynamic-wave network, a network converted from XP-SWMM, subcatchment "
+      "runoff, a continuous simulation, an LID network, natural channels, a water-quality tracer, and a single "
+      "short trapezoidal pipe."),
+('fig', 'speed_profile', "Where EPA 5.2.4 spends its time, by function family. Cross-section geometry and the math "
+                         "library take 25 to 72 percent of each run; the momentum and continuity equations "
+                         "themselves are the smaller share."),
+('p', "The physics is not where the time goes. Cross-section geometry and the math library take between a quarter "
+      "and three quarters of every run. <code>pow()</code> alone takes 10 to 39 percent and is the busiest "
+      "single function in four of the eight. That is not because <code>pow()</code> is slow. On this machine it "
+      "costs about 14 nanoseconds, and <code>cbrt()</code> or <code>exp(log())</code> are no faster. It is "
+      "because <code>pow()</code> sits inside Newton iterations that run millions of times. The worst offender "
+      "is the outfall. On every iteration of every time step, SWMM recomputes the outfall conduit's normal "
+      "depth, by Newton iteration, and its critical depth, whether or not the flow has changed. In the two-hour "
+      "short-pipe model that comes to 4.8 million Newton solves."),
+('p', "That pointed to the one change made to the engine in this round. Normal and critical depth depend on "
+      "nothing but the conduit and its flow. If the flow is the same number as last time, the answer is the same "
+      "number too, so the code keeps the last answer and hands it back:"),
+('code', 'c', """q = fabs(Link[j].newFlow / Conduit[k].barrels);
+if ( q == Link[j].memoQ )
+{
+    yNorm = Link[j].memoYnorm;     // same flow, same answer, same bits
+    yCrit = Link[j].memoYcrit;
+}
+else
+{
+    yNorm = link_getYnorm(j, q);   // Newton: about 7 steps, each a pow()
+    yCrit = link_getYcrit(j, q);
+    Link[j].memoQ = q;
+    Link[j].memoYnorm = yNorm;
+    Link[j].memoYcrit = yCrit;
+}"""),
+('p', "In the water-quality model, 70 percent of those calls repeat a flow exactly. "
+      "It runs a month in two-second steps, and for most of that month the flow at its two outfalls holds "
+      "still. With the same patch in EPA's C, that model runs in {SP_MEMO_WQ} of its unpatched time; "
+      "swmm5-cplus R4 runs it in {SP_R4_WQ} of the time EPA's default build takes. In the short-pipe model the flow changes on every call, nothing repeats, and "
+      "nothing is saved. That is how an honest optimization behaves: it pays where the profile points and "
+      "nowhere else."),
+('fig', 'speed_identical', "CPU time against EPA 5.2.4 built with Ubuntu's default gcc -O2, for builds whose output "
+                           "is byte-identical; the EPA C variants also have Ubuntu's hardening flags off. The grey band "
+                           "is the noise, the reference build timed against itself. swmm5-cplus R4 with a profile-guided "
+                           "build averages {SP_R4}."),
+('p', "The compiler supplies the rest. Link-time optimization alone gives {SP_LTO}. Adding -O3 and "
+      "profile-guided optimization gives {SP_PGOLTO}. On their own, -O3, turning off Ubuntu's hardening flags and "
+      "-fno-math-errno are lost in the noise. Put the memo and the best build together and swmm5-cplus R4 takes "
+      "{SP_R4} of EPA's time on the eight models, every output byte-identical. In the gate it matched on 217 of "
+      "221 smoke and coverage models; the other four are crash decks that crash both engines alike. That is "
+      "the ceiling for keeping EPA's numbers exactly: about a fifth."),
+('p', "Threads look like the obvious next move, and EPA already has them: OpenMP loops over links and nodes in "
+      "dynamic wave, switched on by the THREADS option. They give identical output. They are also slower. With "
+      "two threads, {OMP_SLOWER} of {OMP_N} models took longer in wall time, up to {OMP_MAX} times as long, and "
+      "the best case was {OMP_BEST}. Even with one thread, a build compiled with OpenMP runs {SP_OMP1} times as "
+      "long as the reference build on average, and up to {SP_OMP1_MAX} times as long on the smallest models. The reason is plain once "
+      "you look. The threads are gathered and released around each loop, on every iteration of every step, "
+      "millions of times, for loops of a few hundred links. A thread pool that lives for the whole run, on "
+      "networks of thousands of links, would change the arithmetic. This machine has two cores, and none of "
+      "that was tested."),
+('fig', 'speed_threads', "EPA's OpenMP with two threads against the same build run serially. Output is "
+                         "identical; most models run slower, and where there is a gain it is {OMP_GAIN} percent or less."),
+('p', "Everything past this point changes the answers, and the size of the change is the lesson. Fused "
+      "multiply-add instructions give {SP_FMA} of the reference time and -ffast-math {SP_FAST}, both built with "
+      "-O3, which alone is worth about three percent. Starting the outfall's Newton solve "
+      "from its last answer, instead of from the middle of the section, takes {SP_WARM} of the memo build's time "
+      "on average and {SP_WARM_SHORT} on the short-pipe model, and the new answer always lands inside the tolerance the old one "
+      "was computed to. Even so, it moved the peak flow in one link of the LID network by 28 percent, and that "
+      "model's continuity error from 0.24 to 0.38 percent. Fast-math moved a natural-channel link's peak by 11 "
+      "percent. Dynamic wave in SWMM5 carries a small difference forward and sometimes grows it. A change in the "
+      "last bit is a change to the model, and it has to be gated like one."),
+('fig', 'speed_movement', "Speed bought against the largest change in any link's peak flow, one point per model "
+                          "and change. Doubling the routing step buys nearly twice the speed, sometimes for almost "
+                          "nothing and sometimes for 10 percent or more."),
+('p', "The big lever is the number of steps. Doubling the maximum routing step ran 1.8 to 1.9 times faster on "
+      "the three models where it set the step, which is the arithmetic above doing what it says. On the XP "
+      "network and the natural channels the link peaks moved by 3.5 percent or less. On the 375-element network "
+      "the outflow peak moved 12 percent, and that network was not converging to begin with: it averages 7.97 "
+      "iterations of the 8 allowed. Skipping steady state ran a steady-flow model 7.75 times faster and lost 5 "
+      "percent of its volume. Switching the 375-element network to the SLOT surcharge method drove its "
+      "continuity error to -16,886 percent."),
+('p', "So the fastest SWMM5 code, built the way this one was, comes in four pieces. First, an exact mode: "
+      "swmm5-cplus R4 with a profile-guided build, which exists now. Second, geometry precomputed for every "
+      "conduit, so that normal depth, critical depth and the friction term become table lookups instead of "
+      "<code>pow()</code>, <code>sin()</code> and Newton. That goes after the quarter to three quarters of run "
+      "time the profile found, and it changes the last bits, so it goes through the gate. Third, fewer steps: an "
+      "implicit Newton scheme with a sparse solver, or local time steps, so that one short pipe stops setting "
+      "the step for the whole network. Fourth, threads only for big networks, with a pool that outlives the "
+      "iteration. The second, third and fourth were not built or timed here. The first was, and the "
+      "measurements above say where the other three would pay."),
+
 ('h2', 'What this does not show', 'limits'),
 ('ul', [
     "It is not a new engine and it is not more accurate. Every number is EPA 5.2.4's, including EPA's own "
@@ -302,8 +409,11 @@ BLOCKS = [
     "(S5-RS1 to S5-RS3) are all still in it, by design.",
     "It fixes none of EPA's crashes. The {FULL_CRASH} crash decks in the corpus crash swmm5-cplus exactly as they "
     "crash EPA 5.2.4; only the resource defects in the register were fixed.",
-    "It is not faster. With link-time optimization it costs nothing measurable; without it, it is about six "
-    "percent slower on the eight models timed. One machine, two cores, 8 GB.",
+    "It is only modestly faster. Keeping EPA's numbers exactly, the best build takes {SP_R4} of EPA's CPU time "
+    "on eight models; every larger gain in the speed section changes the results. All timing is native, on one "
+    "machine with two cores and 8 GB, on eight timing models plus two large ones; the profile is a sampling "
+    "profile, accurate to a few percent. The engines inside this app are the earlier be57fec build, without "
+    "the R4 memo.",
     "Parity is per platform. The contract is C against C++ on the same compiler family; it does not promise that "
     "a native run and a browser run give identical bits, and on {PLAT_DIFF} of {WASM_N} models they do not, for "
     "EPA's C code as much as for this one.",
@@ -311,8 +421,8 @@ BLOCKS = [
     "touched every shape and every feature the census could find, but a feature that appears in no corpus model "
     "has not been exercised. The models are Bob's corpus, not a random sample of the world's models.",
     "Thread safety was tested by running six models on six threads with identical results, not by an audit. The "
-    "engine itself is still single-threaded per model; the OpenMP loops in dynamic wave are compiled out in "
-    "every build tested here.",
+    "engine itself is still single-threaded per model; the OpenMP loops in dynamic wave are compiled out of "
+    "every swmm5-cplus build. EPA's own OpenMP build was timed in the speed section, not audited.",
     "The design is a first floor, not the building. <code>Project</code> is still one large class, the modules "
     "still share the big arrays freely, link types are still a switch, and the LID solver still passes a pointer "
     "to a member function. The next section says what the rest would take.",
@@ -352,7 +462,8 @@ BLOCKS = [
     "the result against the merged network, with the same statistics table, the merged network as the "
     "reference.",
     "<b>Build it.</b> Native: compile <code>src/engine/*.cpp</code> and <code>src/api/api.cpp</code> with "
-    "<code>g++ -std=c++17 -O2 -flto</code> and link EPA's own <code>main.c</code> for the <code>runswmm</code> command "
+    "<code>g++ -std=c++17 -O2 -flto</code>, or run <code>tools/build_pgo.sh</code> for the fastest exact "
+    "build, and link EPA's own <code>main.c</code> for the <code>runswmm</code> command "
     "line. WebAssembly: <code>build_wasm.sh</code> with Clang 18 and wasi-libc.",
     "<b>Call it.</b> From C, <code>swmm5cp_create()</code> gives a handle and every <code>swmm_</code> function "
     "has a <code>swmm5cp_</code> twin that takes it. From C++, <code>swmm::Simulation</code>. Existing programs "
@@ -369,7 +480,9 @@ BLOCKS = [
 ('p', "<b>What Claude did.</b> It ran the libclang census, wrote the two generators (<code>make_cplus.py</code> "
       "and <code>transpose_xsect.py</code>) and every hand-written change after them, found and fixed the "
       "resource defects, wrote the C and C++ APIs, the coupling example, the WebAssembly builds and their "
-      "in-memory file system, the test and timing harnesses, this app, the figures and this text."),
+      "in-memory file system, the test and timing harnesses, this app, the figures and this text. In a later "
+      "round on 28 October it profiled the engine, ran the compiler, threading, option and arithmetic "
+      "experiments, wrote the outfall memo that became R4 and the speed section above."),
 ('p', "<b>How it was checked.</b> The checks are mechanical, not the AI's judgment: byte comparison of "
       "<code>.out</code> and <code>.rpt</code> files against EPA SWMM 5.2.4 built from the official tag, "
       "AddressSanitizer runs, and interleaved timing with a noise floor. <b>What no person has checked yet:</b> "

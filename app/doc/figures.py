@@ -304,3 +304,131 @@ def fig_gate(folders, title_note):
     b.append(f'<rect x="660" y="{yb - 9}" width="11" height="11" fill="var(--f-d)"/>')
     b.append(text(676, yb, 'different', 11))
     return svg(W, H, ''.join(b), 'Corpus gate results by folder')
+
+# ----------------------------------------------------------------- speed study figures
+SHORT = {'Semi_Real_Models/375_H&H_Elements (1).inp': '375 H&H elements', 'XPSWMM/MAYBR.inp': 'MAYBR (XP network)',
+         'Hydrology/46_Subs.inp': '46 subcatchments', 'Hydrology/10_Subs_Continuous.inp': '10 subs, continuous',
+         'SWMM5_NCIMM/lid1d.inp': 'LID network', 'Training/Exercise5_transect.inp': 'Natural channels',
+         'WQ/Peter Klaver_WQ_Tracer.inp': 'Water-quality tracer', 'Hydraulics/short_trap_SW5.inp': 'Short trapezoid pipe',
+         'SWMM5_NCIMM/2015_H&H_Elements.inp': '2,015 H&H elements', 'SWMM5_NCIMM/969_Nodes.inp': '969 nodes'}
+
+def fig_speed_profile(cats):
+    order = [('cross-section geometry', 'var(--f-a)', 'cross-section geometry'),
+             ('math library (pow, sin, cos, exp)', 'var(--f-d)', 'math library: pow, sin, cos'),
+             ('conduit momentum (dwflow)', 'var(--f-c)', 'conduit momentum'),
+             ('node continuity, links and outfalls', 'var(--f-b)', 'node continuity, links, outfalls'),
+             ('runoff, infiltration, LID', 'var(--f-e)', 'runoff, LID, quality'),
+             ('bookkeeping (stats, mass balance, output, inflows, time)', 'var(--f-dim)', 'bookkeeping and output')]
+    W, x0, x1, rh = 760, 200, 730, 24
+    models = list(cats)
+    H = 74 + rh * len(models) + 70
+    b = [text(24, 28, 'Where EPA SWMM 5.2.4 spends its time: geometry and the math library, not the physics', 14, weight=600),
+         text(24, 46, 'Share of run time by function family, gprof sampling profile, one run per model. Blue + red = 25-72 %.', 11, 'var(--f-dim)')]
+    for i, m in enumerate(models):
+        y = 66 + i * rh
+        b.append(text(24, y + 14, SHORT.get(m, m)[:26], 11))
+        c = dict(cats[m]); c['runoff, infiltration, LID'] = c.get('runoff, infiltration, LID', 0) + c.get('water quality', 0)
+        x = x0; tot = sum(c.get(k, 0) for k, _, _ in order) + c.get('other', 0)
+        for k, col, _ in order:
+            w = (x1 - x0) * c.get(k, 0) / tot
+            if w > 0:
+                b.append(f'<rect x="{x:.1f}" y="{y + 2}" width="{w:.1f}" height="17" fill="{col}"/>')
+                if w > 26: b.append(text(x + w / 2, y + 15, f'{c.get(k, 0):.0f}', 10, '#ffffff', 'middle', 600))
+            x += w
+        b.append(f'<rect x="{x:.1f}" y="{y + 2}" width="{max(0, x1 - x):.1f}" height="17" fill="var(--f-soft)"/>')
+    yl = 66 + rh * len(models) + 18
+    lx = 24
+    for k, col, name in order:
+        if lx + 17 + len(name) * 6.2 > 740: yl += 18; lx = 24
+        b.append(f'<rect x="{lx}" y="{yl - 10}" width="12" height="12" fill="{col}"/>')
+        b.append(text(lx + 17, yl, name, 11, 'var(--f-dim)'))
+        lx += 17 + len(name) * 6.2 + 16
+    return svg(W, H, ''.join(b), 'Run time by function family')
+
+def fig_speed_identical(rows, noise):
+    """rows: [(label, geo, [per-model ratios], kind)]; noise: (lo, hi) of the repeat-of-reference ratios."""
+    W, L, R = 760, 300, 730
+    lo, hi = 0.40, 1.20
+    X = lambda v: L + (R - L) * (v - lo) / (hi - lo)
+    rh = 30; T = 70; H = T + rh * len(rows) + 56
+    b = [text(24, 28, 'Same bytes out, less time in: what a build and one memo buy', 14, weight=600),
+         text(24, 46, 'CPU time / EPA 5.2.4 built with Ubuntu\'s default gcc -O2, 8 models, 3 interleaved runs. Bar: geometric mean; dots: models.', 11, 'var(--f-dim)')]
+    B = T + rh * len(rows)
+    b.append(f'<rect x="{X(noise[0]):.1f}" y="{T - 6}" width="{X(noise[1]) - X(noise[0]):.1f}" height="{B - T + 6}" fill="var(--f-soft)"/>')
+    for v in [0.4, 0.6, 0.8, 1.0, 1.2]:
+        b.append(f'<line x1="{X(v):.1f}" y1="{T - 6}" x2="{X(v):.1f}" y2="{B + 4}" stroke="var(--f-line)" stroke-width="{1.6 if v == 1 else 0.8}"/>')
+        b.append(text(X(v), B + 18, f'{v:.1f}', 10, 'var(--f-dim)', 'middle'))
+    for i, (label, geo, per, kind) in enumerate(rows):
+        y = T + i * rh
+        col = 'var(--f-c)' if kind == 'cplus' else 'var(--f-a)'
+        b.append(text(24, y + 15, label, 11, weight=600 if kind == 'cplus' else 400))
+        b.append(f'<rect x="{X(lo):.1f}" y="{y + 4}" width="{X(geo) - X(lo):.1f}" height="14" fill="{col}" opacity="0.85"/>')
+        b.append(text(L - 8, y + 15, f'{geo:.2f}', 11, 'var(--f-ink)', 'end', 700))
+        for p in per:
+            b.append(f'<circle cx="{X(min(max(p, lo), hi)):.1f}" cy="{y + 11}" r="3" fill="none" stroke="var(--f-ink)" stroke-width="1.2"/>')
+    b.append(f'<rect x="24" y="{H - 24}" width="12" height="12" fill="var(--f-soft)" stroke="var(--f-line)"/>')
+    b.append(text(42, H - 14, f'noise: the reference build timed against itself, {noise[0]:.2f}-{noise[1]:.2f} per model', 11, 'var(--f-dim)'))
+    return svg(W, H, ''.join(b), 'Bit-identical build speed')
+
+def fig_speed_threads(rows):
+    """rows: [(model, wall ratio with 2 threads, links)]"""
+    W, L, R = 760, 250, 730
+    lo, hi = 0.6, 1.8
+    X = lambda v: L + (R - L) * (v - lo) / (hi - lo)
+    rh = 22; T = 70; H = T + rh * len(rows) + 40
+    b = [text(24, 28, "EPA's OpenMP with two threads: slower on most models", 14, weight=600),
+         text(24, 46, 'Wall time with THREADS 2 / the same model serial; identical .out files. Left of 1.0 is faster.', 11, 'var(--f-dim)')]
+    B = T + rh * len(rows)
+    for v in [0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8]:
+        b.append(f'<line x1="{X(v):.1f}" y1="{T - 6}" x2="{X(v):.1f}" y2="{B + 4}" stroke="var(--f-line)" stroke-width="{1.6 if v == 1 else 0.8}"/>')
+        b.append(text(X(v), B + 18, f'{v:.1f}', 10, 'var(--f-dim)', 'middle'))
+    for i, (m, r, n) in enumerate(rows):
+        y = T + i * rh
+        b.append(text(24, y + 14, f'{SHORT.get(m, m)[:24]} ({n:,} link{"" if n == 1 else "s"})', 11))
+        x0, x1 = sorted([X(1.0), X(r)])
+        b.append(f'<rect x="{x0:.1f}" y="{y + 4}" width="{max(2, x1 - x0):.1f}" height="13" fill="{"var(--f-d)" if r > 1 else "var(--f-c)"}"/>')
+        b.append(text(x1 + 5 if r > 1 else x0 - 5, y + 14, f'{r:.2f}', 10, 'var(--f-ink)', 'start' if r > 1 else 'end'))
+    return svg(W, H, ''.join(b), 'OpenMP two-thread wall time')
+
+def fig_speed_movement(points):
+    """points: [(speedup, largest link peak change %, label, colour)]; 0 change drawn on the floor row."""
+    W, H = 760, 400
+    L, R, T, B = 90, 730, 70, 330
+    xlo, xhi = 0.8, 12.0
+    ylo, yhi = 1e-3, 1e3
+    X = lambda v: L + (R - L) * (math.log10(v) - math.log10(xlo)) / (math.log10(xhi) - math.log10(xlo))
+    Y = lambda v: B - (B - T) * (math.log10(v) - math.log10(ylo)) / (math.log10(yhi) - math.log10(ylo))
+    b = [text(24, 28, 'Faster, but the numbers move: speed bought against the largest change in any link peak', 14, weight=600),
+         text(24, 46, 'One point per model and change. Bottom row: no change at all. Top row: more than 1,000 % (the run fell apart).', 11, 'var(--f-dim)')]
+    for v in [1, 2, 5, 10]:
+        b.append(f'<line x1="{X(v):.1f}" y1="{T}" x2="{X(v):.1f}" y2="{B + 26}" stroke="var(--f-line)" stroke-width="{1.4 if v == 1 else 0.8}"/>')
+        b.append(text(X(v), B + 42, f'{v}x', 10, 'var(--f-dim)', 'middle'))
+    for v in [1e-3, 1e-2, 1e-1, 1, 10, 100, 1000]:
+        b.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{R}" y2="{Y(v):.1f}" stroke="var(--f-line)" stroke-width="0.8"/>')
+        b.append(text(L - 8, Y(v) + 4, ('%g' % v) + ' %', 10, 'var(--f-dim)', 'end'))
+    b.append(f'<line x1="{L}" y1="{B + 20}" x2="{R}" y2="{B + 20}" stroke="var(--f-line)" stroke-dasharray="3 3"/>')
+    b.append(text(L - 8, B + 24, 'none', 10, 'var(--f-dim)', 'end'))
+    b.append(text((L + R) / 2, H - 6, 'speed-up (log scale)', 11, 'var(--f-dim)', 'middle'))
+    for sp, ch, lab, col in points:
+        x = X(min(max(sp, xlo), xhi))
+        y = B + 20 if ch == 0 else Y(min(max(ch, ylo), yhi))
+        b.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{col}" fill-opacity="0.85" stroke="var(--f-face)" stroke-width="1"/>')
+    seen = []
+    lx = 24; ly = 60
+    for _, _, lab, col in points:
+        if lab in seen: continue
+        seen.append(lab)
+    # legend across the top right
+    lx, ly = 24, 58
+    legend = []
+    for lab in seen:
+        col = next(c for _, _, l, c in points if l == lab)
+        legend.append((lab, col))
+    x = L; y = T - 8
+    for lab, col in legend:
+        wlab = 17 + len(lab) * 6.0 + 14
+        if x + wlab > 740: x = L; y += 0
+        b.append(f'<circle cx="{x + 5}" cy="{y - 4}" r="5" fill="{col}"/>')
+        b.append(text(x + 14, y, lab, 10, 'var(--f-dim)'))
+        x += wlab
+    return svg(W, H, ''.join(b), 'Speed against result movement')
