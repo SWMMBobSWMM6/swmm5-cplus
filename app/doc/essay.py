@@ -402,6 +402,95 @@ else
       "iteration. The second, third and fourth were not built or timed here. The first was, and the "
       "measurements above say where the other three would pay."),
 
+('h2', 'The other C++ SWMM', 'swmm6'),
+('p', "swmm5-cplus is not the only SWMM written in C++. SWMM6, the OpenSWMM engine from HydroCouple with Caleb "
+      "Buahin as lead developer, is C++20, and it took the opposite road. swmm5-cplus moved EPA's code into "
+      "objects and left every line of arithmetic alone. SWMM6 was written fresh, with new data structures, new "
+      "solvers, threads and a large public API. Where its answers must match the old engine, the new code is "
+      "bent back until they do, and 110 of those places carry a comment that starts <code>PARITY</code>. Its "
+      "yardstick is not 5.2.4 but its own carried copy of the 5.3.0-beta.3 legacy engine. The regression suite "
+      "holds the new engine to that copy within 0.001 absolute or 0.1 percent on EPA's Example1, Example2 and "
+      "Example3, and within 0.05 absolute or 1 percent on one slot-surcharge deck."),
+('p', "The first thing anyone notices is the size. One short script, <code>tools/loc_buckets.py</code>, counts "
+      "every C and C++ line in the three engines by the same rule, on SWMM6's <code>swmm6_rel</code> branch at "
+      "commit <code>c40580c</code>. EPA SWMM 5.2.4's engine is 50,454 lines. swmm5-cplus is 53,167, five "
+      "percent more. SWMM6's engine, leaving out its 2D code, is 233,434: four point six times EPA's."),
+('fig', 'swmm6_size', "Lines of C and C++ in EPA 5.2.4, swmm5-cplus and SWMM6's engine (src/engine without 2D, "
+                      "swmm6_rel at c40580c), with SWMM6 split by what its files do. The jobs that all of 5.2.4 "
+                      "does take SWMM6 about twice as many lines; the other 58 percent is work 5.2.4 does not do."),
+('p', "Comments explain some of it. SWMM6 is written in the documented style a modern library is expected to "
+      "have: a license block at the top of every file and a Doxygen paragraph over every function, with 15,205 "
+      "lines that are Doxygen tags alone. Comments are 35 percent of its engine lines against 27 percent of "
+      "EPA's. Strip out every comment and blank line and the ratio hardly moves: 134,798 lines of code against "
+      "30,561, four point four times as much. The size is in the code."),
+('p', "So what is the code for? Sorting SWMM6's 468 engine files into five piles by file name and folder gives "
+      "this:"),
+('table', ['Share', 'What the files do', 'Lines', 'Code lines only'], [
+    ['42%', 'The same jobs 5.2.4 does, rewritten', '98,745', '51,054'],
+    ['26%', 'New physics that 5.2.4 does not have', '61,083', '35,258'],
+    ['16%', 'Save/restore, live editing, file interchange', '38,090', '25,333'],
+    ['11%', 'Public API implementation', '24,557', '17,902'],
+    ['5%', 'Plugins, thread bookkeeping, timers, errors, paths', '10,959', '5,251'],
+]),
+('p', "SWMM6 has 104,237 more lines of code than 5.2.4. About four fifths of that extra code does things 5.2.4 "
+      "does not do at all. The other fifth is 5.2.4's own work, done in a bulkier way. Take the piles one at a "
+      "time."),
+('ul', [
+    "<b>New physics, 61,083 lines.</b> This one pile is bigger than all of EPA 5.2.4. It holds finite-volume "
+    "routing, with an implicit network solver that brings its own GMRES and ILU; heat transport; an Eulerian "
+    "transport engine and MSX-style reactions; water age; Lagrangian quality; Richards-equation LID columns; "
+    "and the Utah Energy Balance snow model, translated from Fortran, whose one reference file is 3,247 lines.",
+    "<b>Save/restore, live editing and file interchange, 38,090 lines.</b> Every subsystem can write its state "
+    "to a checkpoint and read it back, and the checkpoint and hot-start files come to 19,851 lines across the "
+    "engine, 2D included. 5.2.4's hot-start file does part of that job in the 544 lines of "
+    "<code>hotstart.c</code>. The rest 5.2.4 does not do at all: SWMM6 writes a model back out as an "
+    "<code>.inp</code> (<code>InpWriter.cpp</code>, 5,043 lines), deletes objects from a loaded model, and reads "
+    "and writes GeoPackage, whose reader, writer and schema alone are 8,172 lines.",
+    "<b>The public API, 24,557 lines.</b> SWMM6's headers declare 1,419 distinct <code>swmm_</code> functions. "
+    "Each one checks its handle, its index and the state of the run before it touches anything, and returns an "
+    "error code. EPA 5.2.4 exports 20, from a <code>swmm5.c</code> of 1,721 lines.",
+    "<b>Plugins, thread bookkeeping, timers, errors and paths, 10,959 lines.</b> The machinery any library needs "
+    "and a command-line program can do without.",
+    "<b>The same jobs, rewritten, 98,745 lines.</b> Here SWMM6 spends 51,054 lines of code where 5.2.4 spends "
+    "30,561 on everything, 1.7 times as much. Three examples show where it goes. The file that drives a run, "
+    "<code>SWMMEngine.cpp</code>, is 11,731 lines by itself. Keeping each quantity in its own array, the "
+    "structure-of-arrays layout built for vector units and threads, means state headers of 1,265 to 1,449 lines "
+    "each for links, nodes and subcatchments. And cross-section geometry, 2,618 lines in EPA's "
+    "<code>xsect.c</code>, now spreads over six files and 7,280 lines, because the same formulas must run in "
+    "three places. Its header says so: one implementation, three consumers, host dynamic wave, host finite "
+    "volume and device finite volume. A GPU kernel cannot reach the host's global tables, so the formulas had "
+    "to move where it can.",
+]),
+('p', "Outside the engine count there is as much again."),
+('fig', 'swmm6_repo', "The rest of the SWMM6 repository by folder. The unit tests alone are 199,608 lines, nearly "
+                      "the size of the engine; EPA 5.2.4's test folder is 364. The 33,790-line file is C that "
+                      "Cython generated for the legacy engine's Python binding, not code anyone wrote by hand."),
+('p', "The tests are the telling number. Two hundred thousand lines of tests for 233 thousand lines of engine "
+      "describe a project that expects to change often and wants to know at once when a change breaks "
+      "something. The rest is the 79,357 lines of 2D, the 58,853-line legacy engine carried as a yardstick, and "
+      "33,176 lines of public headers, more than three quarters of them documentation."),
+('p', "Where should a reviewer look? Not at the new physics, which has no older answer to match, but at the "
+      "98,745 lines that redo 5.2.4's jobs. That is where 109 of the 110 <code>PARITY</code> comments sit, 27 of "
+      "them in <code>DynamicWave.cpp</code>. Each marks a place where the new code had to be bent back to give a "
+      "legacy result exactly. Here is one:"),
+('code', 'cpp', """// PARITY: legacy link_getFroude computes sqrt(GRAVITY * y) directly
+// (link.c). Using the precomputed SQRT_GRAVITY constant (a truncated
+// sqrt(32.2)) times sqrt(dh) differs by ~3e-9 and reorders the FP
+// ops; that shifts Froude across the sigma (0.5/1.0) and SUB/SUPER
+// critical knife-edges, amplifying into macroscopic transients.
+fr = (dh > 0.0) ? absv / std::sqrt(constants::GRAVITY * dh) : 0.0;"""),
+('p', "A square root taken a different way moved the Froude number by three parts in a billion. That was enough "
+      "to push links across the Froude thresholds where inertial damping switches on and off, and where flow is "
+      "classed sub- or supercritical, and the difference grew into transients anyone could see. swmm5-cplus has "
+      "no comments like that, because it never changed the arithmetic; its proof is the byte comparison in the "
+      "Verify tab. The price runs the other way. swmm5-cplus still has EPA's memory layout, and SWMM6 has one "
+      "built for speed and threads. Which of the two is faster, and how close SWMM6 comes to 5.2.4 across the "
+      "corpus, wait on building and running SWMM6, which was not done here."),
+('p', "SWMM6 is OpenSWMM 6.0.0-alpha from HydroCouple, under the Apache License 2.0, at "
+      "github.com/HydroCouple/openswmm.engine. Caleb Buahin is lead developer, with Corinne Wiesner-Friedman on "
+      "development and documentation. The excerpt above is from its <code>DynamicWave.cpp</code> at commit "
+      "<code>c40580c</code>."),
+
 ('h2', 'What this does not show', 'limits'),
 ('ul', [
     "It is not a new engine and it is not more accurate. Every number is EPA 5.2.4's, including EPA's own "
@@ -428,6 +517,10 @@ else
     "to a member function. The next section says what the rest would take.",
     "The two-model coupling is one-way and lagged by nothing more than the order of the two step calls; it is a "
     "demonstration of what the architecture allows, not a validated coupling method.",
+    "The SWMM6 comparison is a reading of its source at one commit and a line count, not a run; SWMM6 was not "
+    "built or run here. Lines were counted by one simple rule for all three engines, a code line with a trailing "
+    "comment counts as code, and SWMM6's files were sorted into piles by file name, so each share is good to a "
+    "few percent. SWMM6 is an alpha and changes daily.",
 ]),
 
 ('h2', 'Where it goes from here', 'next'),
@@ -482,7 +575,9 @@ else
       "resource defects, wrote the C and C++ APIs, the coupling example, the WebAssembly builds and their "
       "in-memory file system, the test and timing harnesses, this app, the figures and this text. In a later "
       "round on 28 October it profiled the engine, ran the compiler, threading, option and arithmetic "
-      "experiments, wrote the outfall memo that became R4 and the speed section above."),
+      "experiments, wrote the outfall memo that became R4 and the speed section above. Later the same day it "
+      "read SWMM6's source, wrote <code>tools/loc_buckets.py</code> to count the three engines, and wrote the "
+      "section on the other C++ SWMM."),
 ('p', "<b>How it was checked.</b> The checks are mechanical, not the AI's judgment: byte comparison of "
       "<code>.out</code> and <code>.rpt</code> files against EPA SWMM 5.2.4 built from the official tag, "
       "AddressSanitizer runs, and interleaved timing with a noise floor. <b>What no person has checked yet:</b> "
