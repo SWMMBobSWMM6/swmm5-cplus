@@ -432,3 +432,85 @@ def fig_speed_movement(points):
         b.append(text(x + 14, y, lab, 10, 'var(--f-dim)'))
         x += wlab
     return svg(W, H, ''.join(b), 'Speed against result movement')
+
+# ----------------------------------------------------------------- SWMM6 size (docs/swmm6_loc.json)
+SWMM6_COLS = {'same': 'var(--f-dim)', 'newphysics': 'var(--f-c)', 'saverestore': 'var(--f-e)',
+              'api': 'var(--f-d)', 'infra': 'var(--f-soft)'}
+SWMM6_ORDER = ['same', 'newphysics', 'saverestore', 'api', 'infra']   # the 5.2.4 jobs first, under EPA's bar
+
+def fig_swmm6_size(d):
+    """Three engines on one scale; SWMM6's engine split into the five purpose buckets."""
+    W, L, R = 760, 190, 610
+    top = d['swmm6_engine']['lines']
+    buckets = sorted(d['swmm6_buckets'], key=lambda g: SWMM6_ORDER.index(g['key']))
+    X = lambda v: L + (R - L) * v / top
+    b = [text(24, 28, f"{d['swmm6_engine']['lines'] / d['epa524']['lines']:.1f} times the lines: where SWMM6's engine code goes", 14, weight=600),
+         text(24, 46, f"Lines of C and C++, counted the same way for all three. SWMM6 is src/engine without 2D, "
+                      f"swmm6_rel @ {d['swmm6_commit']}.", 11, 'var(--f-dim)')]
+    rows = [('EPA SWMM 5.2.4', f"C, {d['epa524']['files']} files", d['epa524'], [(d['epa524']['lines'], 'var(--f-b)', None)]),
+            ('swmm5-cplus', f"C++17, {d['swmm5cplus']['files']} files", d['swmm5cplus'],
+             [(d['swmm5cplus']['lines'], 'var(--f-a)', None)]),
+            ('SWMM6 engine', f"C++20, {d['swmm6_engine']['files']} files", d['swmm6_engine'],
+             [(g['lines'], SWMM6_COLS[g['key']], g['key']) for g in buckets])]
+    b.append(text(R + 12, 66, 'code lines only', 10, 'var(--f-dim)'))
+    for i, (name, sub, tot, parts) in enumerate(rows):
+        y = 74 + i * 50
+        b.append(text(24, y + 13, name, 12, weight=600))
+        b.append(text(24, y + 28, sub, 11, 'var(--f-dim)'))
+        x = L
+        for n, col, key in parts:
+            w = X(n) - L
+            edge = ' stroke="var(--f-line)"' if key == 'infra' else ''
+            b.append(f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="28" fill="{col}"{edge}/>')
+            lab = f'{n / 1000:.1f}k'
+            if w > 36:
+                b.append(text(x + w / 2, y + 18, lab, 11, 'var(--f-face)' if key != 'infra' else 'var(--f-ink)', 'middle', 600))
+            x += w
+        if len(parts) == 1:
+            b.append(text(x + 6, y + 18, f"{tot['lines']:,}", 11, 'var(--f-ink)', 'start', 600))
+        b.append(text(R + 12, y + 18, f"{tot['code']:,}", 12, 'var(--f-ink)', 'start', 600))
+    ly = 236
+    b.append(f'<line x1="24" y1="{ly - 18}" x2="{W - 24}" y2="{ly - 18}" stroke="var(--f-line)"/>')
+    for j, g in enumerate(buckets):
+        yy = ly + j * 19
+        edge = ' stroke="var(--f-line)"' if g['key'] == 'infra' else ''
+        b.append(f'<rect x="24" y="{yy - 10}" width="12" height="12" fill="{SWMM6_COLS[g["key"]]}" rx="2"{edge}/>')
+        b.append(text(42, yy, g['label'], 11))
+        b.append(text(R - 70, yy, f"{g['lines']:,} lines", 11, 'var(--f-dim)', 'end'))
+        b.append(text(R + 12, yy, f"{g['code']:,}", 11, 'var(--f-dim)'))
+    e, s = d['epa524'], d['swmm6_engine']
+    yb = ly + 5 * 19 + 14
+    b.append(text(24, yb, f"Comments are {100 * s['comment'] / s['lines']:.0f}% of SWMM6's engine lines and "
+                          f"{100 * e['comment'] / e['lines']:.0f}% of EPA's. Code alone is still "
+                          f"{s['code'] / e['code']:.1f} times as much.", 12))
+    return svg(W, yb + 18, ''.join(b), "Lines of code in EPA 5.2.4, swmm5-cplus and SWMM6's engine, by purpose")
+
+def fig_swmm6_repo(d):
+    """The rest of the SWMM6 repository, outside the engine count, with EPA 5.2.4 rows for scale."""
+    W, L, R = 760, 330, 650
+    o = d['swmm6_outside_engine']
+    rows = [('SWMM6 engine, the 233k above', d['swmm6_engine']['lines'], 'var(--f-dim)')]
+    names = {'2D surface and subsurface (src/engine/2d)': '2D surface and subsurface',
+             'Carried 5.3.0-beta.3 legacy engine (src/legacy/engine)': 'Carried legacy engine, 5.3.0-beta.3',
+             'Public headers (include)': 'Public headers',
+             'Cython-generated C for the legacy Python binding (python/openswmm)': 'Cython-generated C, Python binding',
+             'Unit tests (tests/unit)': 'Unit tests'}
+    for k in ['Unit tests (tests/unit)', '2D surface and subsurface (src/engine/2d)',
+              'Carried 5.3.0-beta.3 legacy engine (src/legacy/engine)', 'Cython-generated C for the legacy Python binding (python/openswmm)',
+              'Public headers (include)']:
+        rows.append((names[k], o[k]['lines'], 'var(--f-a)'))
+    rows += [("EPA 5.2.4's whole engine, for scale", d['epa524']['lines'], 'var(--f-b)'),
+             ("EPA 5.2.4's tests", d['epa524_tests']['lines'], 'var(--f-b)')]
+    top = max(r[1] for r in rows)
+    X = lambda v: L + (R - L) * v / top
+    rh = 26; T = 68
+    b = [text(24, 28, 'What else is in the SWMM6 repository', 14, weight=600),
+         text(24, 46, f"Lines of C and C++ by folder, swmm6_rel @ {d['swmm6_commit']}. "
+                      "Every row but the first is outside the engine count.", 11, 'var(--f-dim)')]
+    for i, (name, n, col) in enumerate(rows):
+        y = T + i * rh
+        b.append(text(24, y + 14, name, 11, weight=600 if i == 0 else 400))
+        b.append(f'<rect x="{L}" y="{y + 3}" width="{max(1.5, X(n) - L):.1f}" height="15" fill="{col}"/>')
+        b.append(text(X(n) + 6, y + 14, f'{n:,}', 11, 'var(--f-ink)'))
+    H = T + rh * len(rows) + 12
+    return svg(W, H, ''.join(b), 'Lines of code in the rest of the SWMM6 repository')

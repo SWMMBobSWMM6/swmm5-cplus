@@ -188,8 +188,10 @@ NUM.update(dict(
     OMP_SLOWER=sum(1 for _, r, _n in omp_rows if r > 1.05), OMP_N=len(omp_rows), OMP_MAX=f"{max(r for _, r, _n in omp_rows):.2f}",
     OMP_BEST=f"{min(r for _, r, _n in omp_rows):.2f}", OMP_GAIN=f"{100 * (1 - min(r for _, r, _n in omp_rows)):.0f}"))
 
+swmm6_loc = J(f'{REPO}/docs/swmm6_loc.json')   # tools/loc_buckets.py
 FIGS = dict(
     speed_profile=F.fig_speed_profile(cats),
+    swmm6_size=F.fig_swmm6_size(swmm6_loc), swmm6_repo=F.fig_swmm6_repo(swmm6_loc),
     speed_identical=F.fig_speed_identical([
         ('EPA C, -O3, hardening off', SP['o3'][0], SP['o3'][1], 'epa'),
         ('EPA C, link-time optimization', SP['lto'][0], SP['lto'][1], 'epa'),
