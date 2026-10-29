@@ -1,0 +1,28 @@
+--- /home/claude/epa524/src/solver/node.c	2026-10-27 23:47:13.570444720 -0400
++++ node.c	2026-10-28 20:58:34.395818426 -0400
+@@ -552,8 +552,7 @@
+ 
+       // --- for all other nodes, use min. of critical & normal depths
+       default:
+-        if ( z > 0.0 ) Node[j].newDepth = 0.0;
+-        else Node[j].newDepth = MIN(yNorm, yCrit);
++        Node[j].newDepth = z + MIN(yNorm, yCrit);
+     }
+ }
+ 
+@@ -1430,13 +1429,11 @@
+     switch ( Outfall[i].type )
+     {
+       case FREE_OUTFALL:
+-        if ( z > 0.0 ) Node[j].newDepth = 0.0;
+-        else Node[j].newDepth = MIN(yNorm, yCrit);
++        Node[j].newDepth = z + MIN(yNorm, yCrit);
+         return;
+ 
+       case NORMAL_OUTFALL:
+-        if ( z > 0.0 ) Node[j].newDepth = 0.0;
+-        else Node[j].newDepth = yNorm;
++        Node[j].newDepth = z + yNorm;
+         return;
+ 
+       case FIXED_OUTFALL:

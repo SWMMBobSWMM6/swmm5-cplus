@@ -1,0 +1,53 @@
+{
+ "model": "Training/Exercise0_5_H&H_Elements.inp",
+ "steps_legacy": 40310,
+ "steps_new": 40311,
+ "first_step": 3,
+ "first_step_time_s": 49.87,
+ "sums_equal": true,
+ "hashes": [
+  "214dc942ee7bee20",
+  "f1d2cc0b5cf16322",
+  "fe2f731ffd54874f",
+  "db450d051819cf78"
+ ],
+ "link_index": 4,
+ "link_id": "C012",
+ "link_terms_first_row": {
+  "aWtd": [
+   "0x1.ee41535ee0adcp-14",
+   "0x1.ee41535ee0adep-14"
+  ],
+  "dq2": [
+   "-0x1.bc5e0fd894c8ap-11",
+   "-0x1.bc5e0fd894c8cp-11"
+  ],
+  "q": [
+   "0x1.ebc00bf44bec6p-14",
+   "0x1.ebc00bf44bec8p-14"
+  ],
+  "sa2": [
+   "0x1.eac6b1282187bp+1",
+   "0x1.eac6b1282187cp+1"
+  ],
+  "a1": [
+   "0x1.d06e3c152bdfdp-15",
+   "0x1.d06e3c152bdfbp-15"
+  ],
+  "dqdh": [
+   "0x1.087f801697531p-15",
+   "0x1.087f801697533p-15"
+  ]
+ },
+ "y1": [
+  "0x1.0ac9195dp-11",
+  "0x1.0ac9195dp-11"
+ ],
+ "first_report_period_differing_min": 40,
+ "max_dflow_cfs": 55.7275390625,
+ "max_ddepth_ft": 1.5393257141113281,
+ "peak_flow_cfs": 2406.343994140625,
+ "peak_depth_ft": 6.792243957519531,
+ "periods_identical": 50,
+ "periods": 288
+}

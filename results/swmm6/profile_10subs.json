@@ -1,0 +1,320 @@
+{
+ "new": {
+  "total": 11537490573,
+  "by": {
+   "output": 2710421457,
+   "math library": 773221815,
+   "runoff": 1639731625,
+   "memory": 1025891417,
+   "geometry": 1563267813,
+   "other": 1979653040,
+   "routing": 1596335682,
+   "threads": 248967724
+  },
+  "top": {
+   "output": [
+    [
+     784155233,
+     "fwrite"
+    ],
+    [
+     614255535,
+     "_IO_file_xsputn@@GLIBC_2.2.5"
+    ],
+    [
+     292707862,
+     "openswmm::SWMMEngine::postOutputSnapshot"
+    ],
+    [
+     258725376,
+     "openswmm::SimulationSnapshot::SimulationSnapshot"
+    ]
+   ],
+   "math library": [
+    [
+     602244982,
+     "__ieee754_pow_fma"
+    ],
+    [
+     131182386,
+     "pow@@GLIBC_2.29"
+    ],
+    [
+     29814116,
+     "__ieee754_pow_fma"
+    ],
+    [
+     5002569,
+     "GOMP_single_start"
+    ]
+   ],
+   "runoff": [
+    [
+     353109198,
+     "openswmm::runoff::RunoffSolver::execute"
+    ],
+    [
+     297303552,
+     "openswmm::runoff::RunoffSolver::execute"
+    ],
+    [
+     230093722,
+     "openswmm::ode::integrate"
+    ],
+    [
+     204957117,
+     "openswmm::SWMMEngine::stepRunoff"
+    ]
+   ],
+   "memory": [
+    [
+     222917129,
+     "_int_malloc"
+    ],
+    [
+     221828082,
+     "__mempcpy_avx_unaligned_erms"
+    ],
+    [
+     183215627,
+     "_int_free"
+    ],
+    [
+     124376546,
+     "malloc"
+    ]
+   ],
+   "geometry": [
+    [
+     218732400,
+     "openswmm::dynwave::DWSolver::computeLinkGeometry"
+    ],
+    [
+     212510333,
+     "openswmm::xsect_batch::perlink_tabulated"
+    ],
+    [
+     180841435,
+     "openswmm::xsect::XsectEval::invLookup"
+    ],
+    [
+     164567834,
+     "openswmm::xsect::XsectEval::lookup"
+    ]
+   ],
+   "other": [
+    [
+     182831404,
+     "openswmm::SWMMEngine::updateStatistics"
+    ],
+    [
+     143345426,
+     "std::vector<double, std::allocator<double> >::~vector"
+    ],
+    [
+     117489702,
+     "openswmm::SWMMEngine::step"
+    ],
+    [
+     114561300,
+     "__tls_get_addr"
+    ]
+   ],
+   "routing": [
+    [
+     179736845,
+     "openswmm::dynwave::DWSolver::setNodeDepth"
+    ],
+    [
+     140118249,
+     "openswmm::dynwave::DWSolver::processManningLink"
+    ],
+    [
+     138139070,
+     "openswmm::dynwave::DWSolver::gatherConduitNodeFlows"
+    ],
+    [
+     124447694,
+     "openswmm::dynwave::DWSolver::momentumKernels"
+    ]
+   ],
+   "threads": [
+    [
+     95557477,
+     "openswmm::IOThread::run"
+    ],
+    [
+     79345914,
+     "GOMP_barrier"
+    ],
+    [
+     8518776,
+     "omp_get_num_threads"
+    ],
+    [
+     8515648,
+     "openswmm::IOThread::post"
+    ]
+   ]
+  }
+ },
+ "epa": {
+  "total": 5448352740,
+  "by": {
+   "geometry": 1166372167,
+   "math library": 692414854,
+   "routing": 1475969071,
+   "runoff": 869037237,
+   "output": 369653176,
+   "other": 841434684,
+   "memory": 33471369,
+   "threads": 182
+  },
+  "top": {
+   "geometry": [
+    [
+     548255090,
+     "lookup"
+    ],
+    [
+     167775132,
+     "xsect_getAofY"
+    ],
+    [
+     132891196,
+     "invLookup"
+    ],
+    [
+     97332540,
+     "xsect_getRofY"
+    ]
+   ],
+   "math library": [
+    [
+     545924636,
+     "__ieee754_pow_fma"
+    ],
+    [
+     118937246,
+     "pow@@GLIBC_2.29"
+    ],
+    [
+     27026562,
+     "__ieee754_pow_fma"
+    ],
+    [
+     464876,
+     "__ieee754_log_fma"
+    ]
+   ],
+   "routing": [
+    [
+     405393509,
+     "dwflow_findConduitFlow"
+    ],
+    [
+     297437869,
+     "dynwave_execute"
+    ],
+    [
+     163165516,
+     "routing_execute"
+    ],
+    [
+     82534098,
+     "updateNodeFlows"
+    ]
+   ],
+   "runoff": [
+    [
+     374165986,
+     "subcatch_getRunoff"
+    ],
+    [
+     109819020,
+     "rkck"
+    ],
+    [
+     69165565,
+     "subcatch_getResults"
+    ],
+    [
+     64747799,
+     "runoff_execute"
+    ]
+   ],
+   "output": [
+    [
+     123837343,
+     "fwrite"
+    ],
+    [
+     102720502,
+     "_IO_file_xsputn@@GLIBC_2.2.5"
+    ],
+    [
+     97563648,
+     "output_saveResults"
+    ],
+    [
+     32588775,
+     "fwrite"
+    ]
+   ],
+   "other": [
+    [
+     108475119,
+     "UCF"
+    ],
+    [
+     95970810,
+     "stats_updateFlowStats"
+    ],
+    [
+     60155916,
+     "getDdDt"
+    ],
+    [
+     50996803,
+     "datetime_decodeDate"
+    ]
+   ],
+   "memory": [
+    [
+     29286731,
+     "__mempcpy_avx_unaligned_erms"
+    ],
+    [
+     974269,
+     "_int_malloc"
+    ],
+    [
+     833721,
+     "__memcpy_avx_unaligned_erms"
+    ],
+    [
+     523226,
+     "_int_free"
+    ]
+   ],
+   "threads": [
+    [
+     47,
+     "__rtld_mutex_init"
+    ],
+    [
+     44,
+     "pthread_mutex_lock@@GLIBC_2.2.5"
+    ],
+    [
+     34,
+     "pthread_mutex_unlock@@GLIBC_2.2.5"
+    ],
+    [
+     30,
+     "rtld_mutex_dummy"
+    ]
+   ]
+  }
+ }
+}

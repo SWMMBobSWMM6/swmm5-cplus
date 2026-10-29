@@ -1,0 +1,2515 @@
+{
+ "models": 3562,
+ "errors": [],
+ "status": {
+  "E|C": {
+   "identical values": 3133,
+   "missing": 429
+  },
+  "L|L2": {
+   "identical values": 3316,
+   "missing": 246
+  },
+  "N|N2": {
+   "identical values": 3228,
+   "missing": 333,
+   "none": 1
+  },
+  "E|L": {
+   "identical values": 1497,
+   "missing": 431,
+   "differs": 1592,
+   "no periods": 39,
+   "none": 3
+  },
+  "L|N": {
+   "identical values": 2377,
+   "missing": 402,
+   "differs": 769,
+   "no periods": 4,
+   "not comparable": 7,
+   "none": 3
+  },
+  "E|N": {
+   "identical values": 1095,
+   "missing": 577,
+   "differs": 1882,
+   "no periods": 4,
+   "not comparable": 1,
+   "none": 3
+  },
+  "C|N": {
+   "identical values": 1095,
+   "missing": 577,
+   "differs": 1882,
+   "no periods": 4,
+   "not comparable": 1,
+   "none": 3
+  }
+ },
+ "classes": {
+  "E|L": {
+   "identical": 1497,
+   "last digits": 12,
+   "under 1 %": 164,
+   "1 to 10 %": 91,
+   "over 10 %": 1065,
+   "off-network": 263,
+   "not comparable": 39,
+   "missing": 431
+  },
+  "L|N": {
+   "identical": 2377,
+   "last digits": 209,
+   "under 1 %": 99,
+   "1 to 10 %": 58,
+   "over 10 %": 268,
+   "off-network": 138,
+   "not comparable": 11,
+   "missing": 402
+  },
+  "E|N": {
+   "identical": 1095,
+   "last digits": 117,
+   "under 1 %": 183,
+   "1 to 10 %": 116,
+   "over 10 %": 1160,
+   "off-network": 309,
+   "not comparable": 5,
+   "missing": 577
+  }
+ },
+ "worst": {
+  "E|L": [
+   [
+    187.635,
+    "XPSWMM/SM.inp"
+   ],
+   [
+    177.042,
+    "XPSWMM/KA1022A2.inp"
+   ],
+   [
+    170.179,
+    "EPA/17100_H&H_Dummy_Link_Elements (2).inp"
+   ],
+   [
+    170.179,
+    "EPA/17100_H&H_Dummy_Link_Elements (1).inp"
+   ],
+   [
+    161.67,
+    "XPSWMM/HH-Exist-1_5rainWQ.inp"
+   ],
+   [
+    161.63,
+    "SWMM5_NCIMM/washington.inp"
+   ],
+   [
+    159.22,
+    "XPSWMM/TGAB88.inp"
+   ],
+   [
+    152.859,
+    "XPSWMM/TG91N20.inp"
+   ],
+   [
+    152.859,
+    "XPSWMM/TG88N10.inp"
+   ],
+   [
+    152.859,
+    "XPSWMM/TG4-51_N.inp"
+   ],
+   [
+    151.45,
+    "XPSWMM/YOUNG.inp"
+   ],
+   [
+    133.185,
+    "SWMM5_NCIMM/1658_H&H_Elements.inp"
+   ]
+  ],
+  "L|N": [
+   [
+    196.167,
+    "XPSWMM/Ps110297 mfc9.inp"
+   ],
+   [
+    191.138,
+    "XPSWMM/IH11.inp"
+   ],
+   [
+    188.826,
+    "XPSWMM/SM.inp"
+   ],
+   [
+    181.007,
+    "SWMM5_NCIMM/timeoff.inp"
+   ],
+   [
+    179.446,
+    "XPSWMM/ORLOFF1.inp"
+   ],
+   [
+    179.277,
+    "XPSWMM/BASEALL2.inp"
+   ],
+   [
+    178.749,
+    "XPSWMM/TGAB88.inp"
+   ],
+   [
+    174.175,
+    "XPSWMM/TG91N10.inp"
+   ],
+   [
+    174.175,
+    "XPSWMM/TG1N2.inp"
+   ],
+   [
+    174.142,
+    "SWMM5_NCIMM/1658_H&H_Elements.inp"
+   ],
+   [
+    172.883,
+    "XPSWMM/Cso37cal.inp"
+   ],
+   [
+    171.51,
+    "EPA/17100_H&H_Dummy_Link_Elements (2).inp"
+   ]
+  ],
+  "E|N": [
+   [
+    196.167,
+    "XPSWMM/Ps110297 mfc9.inp"
+   ],
+   [
+    191.138,
+    "XPSWMM/IH11.inp"
+   ],
+   [
+    186.589,
+    "XPSWMM/TGAB88.inp"
+   ],
+   [
+    181.007,
+    "SWMM5_NCIMM/timeoff.inp"
+   ],
+   [
+    179.446,
+    "XPSWMM/ORLOFF1.inp"
+   ],
+   [
+    179.277,
+    "XPSWMM/BASEALL2.inp"
+   ],
+   [
+    176.416,
+    "XPSWMM/KA1022A2.inp"
+   ],
+   [
+    172.883,
+    "XPSWMM/Cso37cal.inp"
+   ],
+   [
+    168.94,
+    "XPSWMM/HPEVNT01.inp"
+   ],
+   [
+    165.478,
+    "XPSWMM/KICK1003.inp"
+   ],
+   [
+    163.845,
+    "XPSWMM/TGAB863.inp"
+   ],
+   [
+    160.988,
+    "XPSWMM/TYLER1_v2.23.inp"
+   ]
+  ]
+ },
+ "system": {
+  "E|L": {
+   "n_volume": 1086,
+   "volume_median": 0.01840771112648408,
+   "volume_p90": 5.873170887471713,
+   "volume_under_0.1": 731,
+   "volume_under_1": 885,
+   "n_peak": 1086,
+   "peak_median": 0.022913642795099054,
+   "peak_p90": 18.97266447570429,
+   "peak_under_1": 891,
+   "link_peak_median_of_medians": 0
+  },
+  "L|N": {
+   "n_volume": 591,
+   "volume_median": 6.354951925077413e-05,
+   "volume_p90": 10.089435889208206,
+   "volume_under_0.1": 465,
+   "volume_under_1": 503,
+   "n_peak": 591,
+   "peak_median": 0,
+   "peak_p90": 2.1031313138067333,
+   "peak_under_1": 523,
+   "link_peak_median_of_medians": 0
+  },
+  "E|N": {
+   "n_volume": 1340,
+   "volume_median": 0.015933977878352133,
+   "volume_p90": 8.521255974047959,
+   "volume_under_0.1": 924,
+   "volume_under_1": 1084,
+   "n_peak": 1340,
+   "peak_median": 0.00457976161100323,
+   "peak_p90": 24.479979771831147,
+   "peak_under_1": 1095,
+   "link_peak_median_of_medians": 0
+  }
+ },
+ "strata": {
+  "DYNWAVE": {
+   "E|L identical": 1370,
+   "L|N identical": 2166,
+   "E|N identical": 1021,
+   "models": 3132,
+   "E|L missing": 345,
+   "L|N missing": 316,
+   "E|N missing": 484,
+   "E|L over 10 %": 1036,
+   "L|N under 1 %": 61,
+   "E|N over 10 %": 1124,
+   "L|N off-network": 77,
+   "E|N off-network": 161,
+   "L|N over 10 %": 260,
+   "E|L 1 to 10 %": 74,
+   "L|N last digits": 198,
+   "E|N 1 to 10 %": 99,
+   "E|N last digits": 110,
+   "E|L under 1 %": 129,
+   "E|N under 1 %": 129,
+   "L|N 1 to 10 %": 50,
+   "E|L not comparable": 34,
+   "E|L off-network": 133,
+   "L|N not comparable": 4,
+   "E|N not comparable": 4,
+   "E|L last digits": 11
+  },
+  "KINWAVE": {
+   "E|L missing": 60,
+   "L|N missing": 61,
+   "E|N missing": 68,
+   "models": 341,
+   "E|L off-network": 126,
+   "L|N off-network": 54,
+   "E|N off-network": 144,
+   "L|N identical": 158,
+   "E|L identical": 112,
+   "E|N identical": 58,
+   "L|N over 10 %": 7,
+   "E|N over 10 %": 11,
+   "E|L not comparable": 5,
+   "L|N not comparable": 6,
+   "E|N not comparable": 1,
+   "E|L under 1 %": 27,
+   "L|N under 1 %": 38,
+   "E|N under 1 %": 46,
+   "L|N last digits": 9,
+   "E|N last digits": 7,
+   "E|L 1 to 10 %": 6,
+   "E|L over 10 %": 4,
+   "L|N 1 to 10 %": 8,
+   "E|N 1 to 10 %": 6,
+   "E|L last digits": 1
+  },
+  "DYNWAVE + SLOT": {
+   "E|L over 10 %": 25,
+   "L|N identical": 36,
+   "E|N over 10 %": 25,
+   "models": 48,
+   "E|L 1 to 10 %": 11,
+   "E|N 1 to 10 %": 11,
+   "E|L under 1 %": 7,
+   "L|N off-network": 6,
+   "E|N under 1 %": 7,
+   "L|N last digits": 2,
+   "E|L identical": 1,
+   "E|N identical": 1,
+   "E|L off-network": 1,
+   "E|N off-network": 1,
+   "E|L missing": 3,
+   "L|N missing": 3,
+   "E|N missing": 3,
+   "L|N over 10 %": 1
+  },
+  "STEADY": {
+   "E|L identical": 14,
+   "L|N identical": 17,
+   "E|N identical": 15,
+   "models": 22,
+   "E|L missing": 4,
+   "L|N not comparable": 1,
+   "E|N missing": 3,
+   "E|L off-network": 3,
+   "E|N off-network": 3,
+   "L|N missing": 3,
+   "E|L under 1 %": 1,
+   "L|N off-network": 1,
+   "E|N under 1 %": 1
+  },
+  "FV": {
+   "E|L missing": 18,
+   "L|N missing": 18,
+   "E|N missing": 18,
+   "models": 18
+  },
+  "FV + SLOT": {
+   "E|L missing": 1,
+   "L|N missing": 1,
+   "E|N missing": 1,
+   "models": 1
+  }
+ },
+ "features": {
+  "all": {
+   "controls": 173,
+   "pumps": 524,
+   "pollutants": 209,
+   "subcatchments": 781,
+   "rdii": 61,
+   "treatment": 42,
+   "lid": 193,
+   "groundwater": 70,
+   "culverts": 40,
+   "inlets": 32,
+   "snow": 30
+  },
+  "L|N differs": {
+   "pumps": 187,
+   "subcatchments": 196,
+   "pollutants": 64,
+   "controls": 69,
+   "treatment": 16,
+   "lid": 33,
+   "groundwater": 19,
+   "snow": 6,
+   "rdii": 20,
+   "culverts": 12,
+   "inlets": 6
+  }
+ },
+ "variables": {
+  "E|L": {
+   "node:depth": 1326,
+   "node:head": 1325,
+   "sys:outflow": 1019,
+   "node:total inflow": 990,
+   "sys:storage volume": 825,
+   "link:flow": 816,
+   "link:velocity": 814,
+   "link:depth": 805,
+   "link:capacity": 802,
+   "link:volume": 800,
+   "sys:total lateral inflow": 557,
+   "sys:runoff": 542,
+   "node:lateral inflow": 489,
+   "sub:runoff": 484,
+   "sys:evaporation + infiltration": 340
+  },
+  "L|N": {
+   "link:flow": 633,
+   "node:total inflow": 609,
+   "link:velocity": 597,
+   "link:depth": 493,
+   "node:depth": 490,
+   "link:volume": 483,
+   "link:capacity": 479,
+   "sys:storage volume": 471,
+   "node:head": 453,
+   "sys:outflow": 366,
+   "node:flooding": 300,
+   "sys:flooding": 270,
+   "node:volume": 168,
+   "sys:total lateral inflow": 65,
+   "node:lateral inflow": 65
+  }
+ },
+ "outputs": {
+  "pattern": {
+   "ELN": 2984,
+   "---": 177,
+   "-LN": 178,
+   "EL-": 147,
+   "--N": 67,
+   "E-N": 2,
+   "-L-": 7
+  },
+  "cases": {
+   "-LN": [
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/force_ard.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 7 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/old_opt_out_ENSLAVED_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/constant_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/green_ampt_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_CLOSED_FORM_VAN_GENUCHTEN.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_constant_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/old_opt_out_SIGMA_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/et_CLOSED_FORM_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_CLOSED_FORM_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/explicit_legacy_link.inp",
+     "ERROR 205: invalid keyword  at line 41 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/twod_mixed_quality.inp",
+     "ERROR 205: invalid keyword  at line 49 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_SIGMA_RUSSO.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_green_ampt_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_horton_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_CLOSED_FORM_GARDNER.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/steady_quality.inp",
+     "ERROR 205: invalid keyword WATER_AGE at line 11 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_curve_number_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_curve_number_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_horton_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_curve_number_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_ENSLAVED_VAN_GENUCHTEN.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_ENSLAVED_RUSSO.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/curve_number_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_SIGMA_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/old_opt_out_ENSLAVED_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_CLOSED_FORM_VAN_GENUCHTEN.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/restart_resumed.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_CLOSED_FORM_GARDNER.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/hotstart_legacy_parity.inp",
+     "ERROR 209: undefined object * at line 43 of [SUBCATCHMENT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/constant_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/transport/age_legacy.inp",
+     "ERROR 205: invalid keyword WATER_AGE at line 17 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/modified_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/green_ampt_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_SIGMA_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_SIGMA_VAN_GENUCHTEN.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/transport/age_ard.inp",
+     "ERROR 205: invalid keyword WATER_AGE at line 17 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_modified_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/constant_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/off_results.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_SIGMA_GARDNER.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_SIGMA_BROOKS_COREY.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/constant_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/external_only_results.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_modified_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/modified_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/curve_number_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/curve_number_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_modified_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_curve_number_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/green_ampt_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/warnerr_missing_mesh_file.inp",
+     "ERROR 205: invalid keyword  at line 37 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_signed_link.inp",
+     "ERROR 205: invalid keyword  at line 41 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_SIGMA_RUSSO.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/et_ENSLAVED_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/both_CLOSED_FORM_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/curve_number_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_green_ampt_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_horton_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_CLOSED_FORM_RUSSO.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/restart_original.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/et_SIGMA_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_CLOSED_FORM_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/modified_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_modified_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_modified_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/horton_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/constant_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_horton_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/modified_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_ENSLAVED_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/monthly_constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/component_metadata/reference.inp",
+     "ERROR 205: invalid keyword HEAT_TRANSPORT at line 12 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/horton_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "SWMM5_NCIMM/TunnelMH.inp",
+     "ERROR 205: invalid keyword MAX_PROCESSORS at line 32 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/curve_number_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/both_ENSLAVED_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_green_ampt_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/authored_rows.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/old_opt_out_CLOSED_FORM_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/hydrocouple/native-outfall/model.inp",
+     "ERROR 205: invalid keyword HEAT_TRANSPORT at line 12 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/mesh_hydrology/mesh_hydrology.inp",
+     "ERROR 205: invalid keyword  at line 80 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/horton_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_ENSLAVED_RUSSO.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_modified_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/horton_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_ENSLAVED_VAN_GENUCHTEN.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/restart_original.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_constant_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/old_opt_out_SIGMA_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_green_ampt_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "SWMM5_NCIMM/RTCExample.inp",
+     "ERROR 205: invalid keyword  at line 1 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_CLOSED_FORM_BROOKS_COREY.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_modified_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_modified_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/constant_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "SWMM5_NCIMM/Test7_continuous.inp",
+     "ERROR 205: invalid keyword MAX_PROCESSORS at line 31 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_ENSLAVED_GARDNER.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/twod_coupled_quality.inp",
+     "ERROR 205: invalid keyword  at line 51 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/green_ampt_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/snow/snow_parity.inp",
+     "ERROR 209: undefined object * at line 104 of [SUBCATCHMENT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/transport/age_lard.inp",
+     "ERROR 205: invalid keyword WATER_AGE at line 17 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/both_SIGMA_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/curve_number_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/modified_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_modified_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-39-input-warnings-not-counted/IO-39_typos.inp",
+     "ERROR 205: invalid keyword FLOW_ROUTNG at line 6 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/curve_number_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_SIGMA_BROOKS_COREY.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_ENSLAVED_GARDNER.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/constant_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_green_ampt_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/et_ENSLAVED_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_modified_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/modified_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_SIGMA_VAN_GENUCHTEN.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/both_ENSLAVED_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_curve_number_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/both_SIGMA_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/automatic_ENSLAVED_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_SIGMA_GARDNER.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/et_SIGMA_dry.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/precip_scaling/rain_scaled.inp",
+     "ERROR 209: undefined object * at line 30 of [SUBCATCHMENT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/constant_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/curve_number_si_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_ENSLAVED_BROOKS_COREY.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_modified_horton_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/warnerr_unknown_section.inp",
+     "ERROR 205: invalid keyword  at line 31 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/curve_number_us_off.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/recovery_modified_horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/restart_resumed.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "SWMM5_NCIMM/FALSEPUMPS.inp",
+     "ERROR 205: invalid keyword MAX_PROCESSORS at line 34 of [OPTION] section:",
+     "timeout"
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/sdm_struct_dw_ard.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 11 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/models/et_CLOSED_FORM_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/api_census/green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "SWMM5_NCIMM/swmm5_pid_example.inp",
+     "ERROR 205: invalid keyword BYPASS at line 32 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/conductivity_curve_number_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_CLOSED_FORM_BROOKS_COREY.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_constant_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/both_CLOSED_FORM_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_si_ENSLAVED_BROOKS_COREY.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_CLOSED_FORM_RUSSO.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us.inp",
+     "ERROR 205: invalid keyword  at line 18 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/api_census/horton_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/api_census/curve_number_si.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_green_ampt_us.inp",
+     "ERROR 205: invalid keyword  at line 30 of input file:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r3_2026-10-05/aquifer_changes/old_opt_out_CLOSED_FORM_ponded.inp",
+     "ERROR 205: invalid keyword  at line 20 of input file:",
+     0
+    ]
+   ],
+   "EL-": [
+    [
+     "Training/Exercise9_sea_level_pump_model_290_H_Elements.inp",
+     "ERROR 333: incompatible data found in hot start interface file.",
+     12
+    ],
+    [
+     "XPSWMM/RAFTEST2.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/TRLOSS.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/RUN11.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/PBSF.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/datax.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/longFM.inp",
+     "ERROR 351: cannot open routing interface file C:/Users/Robert E Dickinson/Desktop/fileOne.TXT.",
+     11
+    ],
+    [
+     "XPSWMM/TPA.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/FORBOB.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/1D-2D_LeveeBreak_Flood_Initial_m.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/force_main_gravity_example.inp",
+     "ERROR 331: cannot open hot start interface file C:\\Documents and Settings\\Dickinsonre\\Desktop\\hrd.HSF.",
+     12
+    ],
+    [
+     "XPSWMM/rnlms.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF26_SW5.inp",
+     "ERROR 141: Outfall 7 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/11411-2.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/EX-98058.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/EXIST.inp",
+     "ERROR 209: undefined object 29.",
+     5
+    ],
+    [
+     "XPSWMM/EXIST-10.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "WQ/wq_extran1.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/WQ/testwq.hsf.",
+     12
+    ],
+    [
+     "XPSWMM/STB3.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF42_SW5.inp",
+     "ERROR 323: cannot open runoff interface file D:/SWMMandSoftware/swmm_crada_files/Other SWMM5 Files/runoff42.INT.",
+     11
+    ],
+    [
+     "XPSWMM/WOOLLY.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/BASIC.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/EXAM70_SW5.INP",
+     "ERROR 141: Outfall 301 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/EX-hec1.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/v14force_main_example.inp",
+     "ERROR 331: cannot open hot start interface file C:\\Documents and Settings\\Dickinsonre\\Desktop\\hrd.HSF.",
+     12
+    ],
+    [
+     "SWMM5_NCIMM/advancedFlowSplit.inp",
+     "ERROR 141: Outfall 14 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/SYSTEM_v5.1.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/PJSJ11.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/100yr24hr_prop.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF45_SW5.inp",
+     "ERROR 323: cannot open runoff interface file D:/SWMMandSoftware/swmm_crada_files/Other SWMM5 Files/RUNOFF45.INT.",
+     11
+    ],
+    [
+     "XPSWMM/SCS Storms.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/KELLEY.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "Test_Interface_Files/Using_Runoff_File.inp",
+     "ERROR 323: cannot open runoff interface file /home/claude/corpus1729/Test_Interface_Files/Runoff.rof.",
+     11
+    ],
+    [
+     "XPSWMM/RNDATA.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/mydata.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-42-hotstart-short-read/IO-42_use_storage.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/OpenSWMM_Code_Review_2026/4-io/IO-42-hotstart-sh",
+     12
+    ],
+    [
+     "XPSWMM/STATS2.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/bsteele.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/geopak_master.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "15100/15100_ALL_Outfall_Types_Model.inp",
+     "ERROR 141: Outfall Free_Outfall has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/two_outfalls.inp",
+     "ERROR 351: cannot open routing interface file C:/Documents and Settings/Robert E Dickinson/Desktop/Inflow.txt.",
+     11
+    ],
+    [
+     "XPSWMM/ICLOSS.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/DEMOFILE.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/datHHa.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/11411-1.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/1D-2D_River_Flood_m.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/Rational_method.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-41-expression-malformed-exponent/IO-41_point.inp",
+     null,
+     -6
+    ],
+    [
+     "NCIMM_ROUTING/water.inp",
+     "ERROR 133: Node 11 has more than one outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/SNOWJ1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/ROUTE.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/cityofsurrey_master.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/B20ARI.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/MAIRUN.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/legacy/engine/data/hotstart/site_drainage_model_use_hotstart_v1.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/OpenSWMM_Engine_Test_Decks/tests/unit/legacy/eng",
+     12
+    ],
+    [
+     "XPSWMM/ALT1ROD.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/HPG1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/TRY.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/11411-1A.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "Viewer-Demo-Results/extran8b.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/Viewer-Demo-Results/extran8b.hsf.",
+     12
+    ],
+    [
+     "XPSWMM/TST25.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/ERICMW.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF30_SW5_KW.inp",
+     "ERROR 141: Outfall Node7 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/M18-1D2D Culvert_complete_final.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/TANNER2.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/usgs_5_pollutants.inp",
+     "ERROR 323: cannot open runoff interface file C:/ProgramData/Innovyze/Temp/HM1Vdb/HMVDB55/RUNOFF47.INT.",
+     11
+    ],
+    [
+     "XPSWMM/MMASTER.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/WARDROP1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/NEW1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OWA_EXTRAN/EXAM70_SW5.INP",
+     "ERROR 141: Outfall 301 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/data.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/CHAR.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/warnerr_bad_iface.inp",
+     "ERROR 351: cannot open routing interface file /home/claude/corpus1729/OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/",
+     11
+    ],
+    [
+     "XPSWMM/T1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OWA_USER/user1_dummy.inp",
+     "ERROR 134: Node 05yD77 has illegal DUMMY link connections.",
+     5
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-47-runoff-file-groundwater-elevation-sign/IO-47_use.inp",
+     "ERROR 323: cannot open runoff interface file /home/claude/corpus1729/OpenSWMM_Code_Review_2026/4-io/IO-47-runoff-file-gr",
+     11
+    ],
+    [
+     "XPSWMM/PROSEX1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/NEWFILE.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/RNTALL.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/NEWERASC.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "NCIMM_Training/Session_4_50_Examples/Session10_OutfallBC_65_H_Element.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/NCIMM_Training/Session_4_50_Examples/PUMPVenant.",
+     12
+    ],
+    [
+     "XPSWMM/ursrain.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/DATA10.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/EXTUT19.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/warnerr_bad_hotstart.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/OpenSWMM_Engine_Test_Decks/tests/unit/engine/dat",
+     12
+    ],
+    [
+     "Hydrology/RUNOFF8_SW5.inp",
+     "ERROR 141: Outfall 7 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF37_SW5.inp",
+     "ERROR 141: Outfall Node7 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "XPSWMM/Saskatoon_Master.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/MOD5.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/EMASTER.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-46-runoff-file-groundwater-flow/IO-46_use.inp",
+     "ERROR 323: cannot open runoff interface file /home/claude/corpus1729/OpenSWMM_Code_Review_2026/4-io/IO-46-runoff-file-gr",
+     11
+    ],
+    [
+     "XPSWMM/CHARL.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/1D-2D_LeveeBreak_Flood_m.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "Pumps/extran6_too_many_Ideal_pumps.inp",
+     "ERROR 134: Node 82310 has illegal DUMMY link connections.",
+     5
+    ],
+    [
+     "XPSWMM/SWRUN1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/MASTER.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/temp.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/legacy/engine/data/hotstart/site_drainage_model_use_hotstart_v2.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/OpenSWMM_Engine_Test_Decks/tests/unit/legacy/eng",
+     12
+    ],
+    [
+     "SWMM5_NCIMM/72_H_Elements.inp",
+     "ERROR 331: cannot open hot start interface file D:\\2016PC\\Desktop_July2012\\OldHS.hsf.",
+     12
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-02-time-options-accept-nan-inf-huge/IO-02_report-step-huge.inp",
+     "ERROR 213: invalid date/time -1e10.",
+     5
+    ],
+    [
+     "XPSWMM/M18-1D2D Culvert_Start_final.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "SWMM5_1_014_Bug_Examples/bug11.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/409_Nodes_180_Subs.inp",
+     "ERROR 141: Outfall J-102 has more than 1 inlet link or an outlet link.",
+     5
+    ],
+    [
+     "Simon_EPA/Session49_sea_level_pump_model_290_H_Elements.inp",
+     "ERROR 333: incompatible data found in hot start interface file.",
+     12
+    ],
+    [
+     "XPSWMM/SWFWMD.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/MOD5_v1.52.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/mchenrn.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/HOOD2.inp",
+     "ERROR 209: undefined object 5x6_box.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF43_SW5.inp",
+     "ERROR 323: cannot open runoff interface file D:/SWMMandSoftware/swmm_crada_files/Other SWMM5 Files/RUNOFF43.INT.",
+     11
+    ],
+    [
+     "XPSWMM/RNW20.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/FLSRN1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "SWMM5_NCIMM/133_Weirs.inp",
+     "ERROR 323: cannot open runoff interface file D:/2018/danWeirdWeirProblem.inp.aux.ROF.",
+     11
+    ],
+    [
+     "Hydrology/EjemploEPA.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF31_SW5.inp",
+     "ERROR 323: cannot open runoff interface file D:/SWMMandSoftware/swmm_crada_files/Other SWMM5 Files/RUNOFF3.INT.",
+     11
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/2-conceptual/CON-12-cyclic-treatment-error-unreachable/CON-12_mutual.inp",
+     "ERROR 161: cyclic dependency in treatment functions at node J1.",
+     5
+    ],
+    [
+     "XPSWMM/ELMCREEK.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/1-numerical/NUM-35-gw-upper-et-fraction-above-one/NUM-35_etu-1.5.inp",
+     "ERROR 109: invalid parameter values for Aquifer AQ.",
+     5
+    ],
+    [
+     "Weirs/2_Weirs_4Subs.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/FRESH.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/EX25MRTZ.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/NORTH25.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/FONTS.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/WESTLAK1.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/HEL2.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/STEELE2.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "Hydrology/3examples.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-42-hotstart-short-read/IO-42_use.inp",
+     "ERROR 331: cannot open hot start interface file /home/claude/corpus1729/OpenSWMM_Code_Review_2026/4-io/IO-42-hotstart-sh",
+     12
+    ],
+    [
+     "Hydraulics/force_main_gravity_example.inp",
+     "ERROR 331: cannot open hot start interface file C:\\Documents and Settings\\Dickinsonre\\Desktop\\hrd.HSF.",
+     12
+    ],
+    [
+     "XPSWMM/ponds.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/ERPONDS.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/SCSSF.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "NCIMM_Training/Session_4_50_Examples/Session49_sea_level_pump_model_290_H_Elements.inp",
+     "ERROR 333: incompatible data found in hot start interface file.",
+     12
+    ],
+    [
+     "Hydraulics/EXAM2_WITH_DUMMY_LINK_SW5.inp",
+     "ERROR 134: Node 16009 has illegal DUMMY link connections.",
+     5
+    ],
+    [
+     "XPSWMM/cypresscrk.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/roralsun.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/TGAB913.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/WARDROP0.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF40_SW5.inp",
+     "ERROR 323: cannot open runoff interface file D:/SWMMandSoftware/swmm_crada_files/Other SWMM5 Files/RUNOFF40.INT.",
+     11
+    ],
+    [
+     "XPSWMM/NATURE1_v2.2.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/Edmonton_Master.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/FINAL30.inp",
+     "ERROR 209: undefined object MAGC1.",
+     5
+    ],
+    [
+     "Hydrology/RUNOFF46_SW5.inp",
+     "ERROR 323: cannot open runoff interface file D:/SWMMandSoftware/swmm_crada_files/Other SWMM5 Files/RUNOFF46.INT.",
+     11
+    ],
+    [
+     "XPSWMM/CHUTE2.inp",
+     "ERROR 145: Drainage system has no acceptable outlet nodes.",
+     5
+    ],
+    [
+     "XPSWMM/MISDRAIN.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/Casey10yr.inp",
+     "ERROR 203: too few items.",
+     5
+    ],
+    [
+     "XPSWMM/100y8h.inp",
+     "ERROR 209: undefined object 2-3ftRCP.",
+     5
+    ],
+    [
+     "XPSWMM/SWANWET2.inp",
+     "ERROR 203: too few items.",
+     5
+    ]
+   ],
+   "--N": [
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/self_outlet.inp",
+     "ERROR 209: undefined object NO at line 85 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/section_order.inp",
+     "ERROR 209: undefined object NO at line 72 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-28-transect-not-finalized/IO-28_unknown-section.inp",
+     "ERROR 113: invalid roughness for Conduit C2.",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/slot_program/decks/fill_drain_cycle.inp",
+     "ERROR 205: invalid keyword FV at line 11 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/slot_capped.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/slot_program/decks/transmission_main.inp",
+     "ERROR 205: invalid keyword FV at line 11 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/sdm_fv_o1.inp",
+     "ERROR 205: invalid keyword FV at line 10 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/slot_program/decks/surcharged_tee.inp",
+     "ERROR 205: invalid keyword FV at line 8 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/vj_fv_steep_datum.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/sdm_fv_o2_superbee.inp",
+     "ERROR 205: invalid keyword FV at line 10 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/slot_uncapped.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/steep_pass.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/storage_bucket_fv.inp",
+     "ERROR 205: invalid keyword FV at line 9 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/vj_fv_invert_collision.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/rapid_fill/rapid_fill.inp",
+     "ERROR 205: invalid keyword FV at line 13 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-20-subareas-bad-number-error-209/IO-20_sperv-negative.inp",
+     "ERROR 209: undefined object -0.5 at line 34 of [SUBAREA] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/cedar_glen/cedar_glen_fv.inp",
+     "ERROR 205: invalid keyword FV at line 9 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/lid_chain_mass_balance.inp",
+     "ERROR 205: invalid keyword NODE at line 47 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "LID/lid2_bc_stress_test.inp",
+     "ERROR 205: invalid keyword 250 at line 101 of [BUILDUP] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/street_inlets/street_inlet_junction.inp",
+     "ERROR 205: invalid keyword 98.0000 at line 91 of [INLET] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/sdm_fv_o2.inp",
+     "ERROR 205: invalid keyword FV at line 10 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-33-keyword-index-in-plain-char/IO-33_files-typo.inp",
+     "ERROR 205: invalid keyword SVAE at line 37 of [FILE] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/hydrology.inp",
+     "ERROR 209: undefined object NO at line 86 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/namecase_multiline_exempt.inp",
+     "ERROR 211: invalid number HOURLY at line 57 of [PATTERN] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-05-long-lines-split-silently/IO-05_long-comment.inp",
+     "ERROR 209: undefined object at at line 28 of [CONDUIT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/slot_program/decks/valve_closure.inp",
+     "ERROR 205: invalid keyword FV at line 9 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/inlet_usage.inp",
+     "ERROR 209: undefined object NO at line 62 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/1-numerical/NUM-05-weir-divider-scaled-by-flow-units/NUM-05_gpm_qmin.inp",
+     "ERROR 137: Weir Divider D1 has invalid parameters.",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/inlets/street_inlet_junction.inp",
+     "ERROR 205: invalid keyword 98.0000 at line 91 of [INLET] section:",
+     0
+    ],
+    [
+     "LID/lid_bc_cms_si_units.inp",
+     "ERROR 211: invalid number 6.35 at line 77 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "LID/lid_pp_clog_regen.inp",
+     "ERROR 211: invalid number 28 at line 78 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/agree_vj.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-31-nodestats-matched-as-nodes/IO-31_nodestats.inp",
+     "ERROR 209: undefined object YES at line 37 of [REPORT] section:",
+     0
+    ],
+    [
+     "LID/lid_bc_evap_temperature.inp",
+     "ERROR 337: cannot open climate file /home/claude/corpus1729/LID/../DataFiles/climate.dat.",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-40-expression-paren-minus-number/IO-40_paren-minus.inp",
+     "ERROR 233: invalid math expression at line 51 of [TREATMENT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/6-api/API-18-cli-exit-code-zero-on-error/API-18_bad-number.inp",
+     "ERROR 211: invalid number 1O0 at line 32 of [JUNC] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-08-utf8-bom-hides-first-section/IO-08_bom-options-first.inp",
+     "ERROR 191: simulation start date comes after ending date.",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-28-transect-not-finalized/IO-28_transects-last.inp",
+     "ERROR 113: invalid roughness for Conduit C2.",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/lid_partition_free.inp",
+     "ERROR 205: invalid keyword NODE at line 48 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/agree_pass.inp",
+     "ERROR 205: invalid keyword FV at line 3 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/slot_program/decks/headloss_fullbore.inp",
+     "ERROR 205: invalid keyword FV at line 10 of [OPTION] section:",
+     0
+    ],
+    [
+     "LEW_update_v5115/Horton.inp",
+     "ERROR 203: too few items at line 57 of [SUBCATCHMENT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/irregular_transect.inp",
+     "ERROR 209: undefined object NO at line 37 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/gage_nosource.inp",
+     "ERROR 209: undefined object TSX at line 34 of [RAINGAGE] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/hydrology_additions/rdii_decay.inp",
+     "ERROR 209: undefined object SanSewer at line 81 of [RDII] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/1-numerical/NUM-05-weir-divider-scaled-by-flow-units/NUM-05_invalid.inp",
+     "ERROR 137: Weir Divider D1 has invalid parameters.",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-20-subareas-bad-number-error-209/IO-20_nperv-abc.inp",
+     "ERROR 209: undefined object abc at line 34 of [SUBAREA] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/climate_config.inp",
+     "ERROR 205: invalid keyword HUMIDITY at line 32 of [TEMPERATURE] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/negative_pressure/negative_pressure.inp",
+     "ERROR 205: invalid keyword FV at line 24 of [OPTION] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-10-barrels-stored-as-char/IO-10_200-barrels.inp",
+     "ERROR 114: invalid number of barrels for Conduit C1.",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-05-long-lines-split-silently/IO-05_long-data-line.inp",
+     "ERROR 211: invalid number 05:45:00 at line 38 of [TIMESERIES] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-33-keyword-index-in-plain-char/IO-33_report-typo.inp",
+     "ERROR 205: invalid keyword CONTINUTY at line 37 of [REPORT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-28-transect-not-finalized/IO-28_one-nc.inp",
+     "ERROR 113: invalid roughness for Conduit C1.",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/inp_roundtrip/uf_options.inp",
+     "ERROR 209: undefined object NO at line 30 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "LID/lid_bc_removals_multi_wq.inp",
+     "ERROR 205: invalid keyword 250 at line 116 of [BUILDUP] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-34-rule-settings-unbounded/IO-34_outlet-three.inp",
+     "ERROR 211: invalid number 3 at line 54 of [CONTROL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/parity/corpus/decks/si_dw_quality.inp",
+     "ERROR 203: too few items at line 35 of [INFIL] section:",
+     0
+    ],
+    [
+     "LID/lid_combo_bc_gr_rb_rd_wq.inp",
+     "ERROR 205: invalid keyword 250 at line 124 of [BUILDUP] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/lid_partition_backwater.inp",
+     "ERROR 205: invalid keyword NODE at line 48 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/lid_node_resaturation.inp",
+     "ERROR 205: invalid keyword NODE at line 26 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/cedar_glen/cedar_glen_dw.inp",
+     "ERROR 209: undefined object TU0000124 at line 447 of [CONDUIT] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-07-semicolon-inside-quotes/IO-07_quoted-semicolon.inp",
+     "ERROR 361: could not open external file used for Time Series TS1.",
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/4-io/IO-33-keyword-index-in-plain-char/IO-33_files-type-typo.inp",
+     "ERROR 205: invalid keyword HOTSTRAT at line 37 of [FILE] section:",
+     0
+    ],
+    [
+     "LID/lid2_pp_dual_clog.inp",
+     "ERROR 211: invalid number 28 at line 78 of [LID_CONTROL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/2d_complete_example.inp",
+     "ERROR 209: undefined object NO at line 82 of [OUTFALL] section:",
+     0
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/docs/figures/decks/cedar_glen/cedar_glen_dw_extran.inp",
+     "ERROR 209: undefined object TU0000124 at line 447 of [CONDUIT] section:",
+     0
+    ],
+    [
+     "z1000Years/1000yearSimulation_Case2.inp",
+     "ERROR 315: cannot open rainfall interface file /home/claude/corpus1729/z1000Years/1001_Year_Rainfall.rff.",
+     0
+    ]
+   ],
+   "E-N": [
+    [
+     "OpenSWMM_Code_Review_2026/5-crashes/CRASH-11-averages-report-out-of-bounds/CRASH-11_si-subset.inp",
+     null,
+     0
+    ],
+    [
+     "OpenSWMM_Code_Review_2026/5-crashes/CRASH-12-steady-link-quality-node-index/CRASH-12_outfall-first.inp",
+     null,
+     0
+    ]
+   ],
+   "-L-": [
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/attached_wall.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/parent_product.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/lid_layers.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/setpoint.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/wall_geometry.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/wet_pool.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ],
+    [
+     "OpenSWMM_Engine_Test_Decks/examples/reactions/arrhenius.inp",
+     "ERROR 205: invalid keyword QUALITY_SOLVER at line 6 of [OPTION] section:",
+     5
+    ]
+   ]
+  }
+ },
+ "extra_period": 209,
+ "wall": {
+  "E": 1386.6,
+  "C": 1277.5,
+  "L": 1952.1,
+  "N": 3910.1
+ },
+ "timeouts": {
+  "E": [],
+  "C": [],
+  "L": [],
+  "L2": [],
+  "N": [
+   "OpenSWMM_Code_Review_2026/4-io/IO-02-time-options-accept-nan-inf-huge/IO-02_start-time-nan.inp",
+   "z1000Years/1000yearSimulation_Case6.inp",
+   "SWMM5_NCIMM/FALSEPUMPS.inp"
+  ],
+  "N2": [
+   "OpenSWMM_Code_Review_2026/4-io/IO-02-time-options-accept-nan-inf-huge/IO-02_start-time-nan.inp",
+   "z1000Years/1000yearSimulation_Case6.inp",
+   "SWMM5_NCIMM/FALSEPUMPS.inp"
+  ]
+ },
+ "timeouts_new": [
+  {
+   "inp": "OpenSWMM_Code_Review_2026/4-io/IO-02-time-options-accept-nan-inf-huge/IO-02_start-time-nan.inp",
+   "epa_output": true,
+   "epa_s": 0.0157,
+   "legacy_s": 0.0098,
+   "legacy_output": true
+  },
+  {
+   "inp": "z1000Years/1000yearSimulation_Case6.inp",
+   "epa_output": true,
+   "epa_s": 48.2242,
+   "legacy_s": 98.2757,
+   "legacy_output": true
+  },
+  {
+   "inp": "SWMM5_NCIMM/FALSEPUMPS.inp",
+   "epa_output": false,
+   "epa_s": 0.0083,
+   "legacy_s": 297.1746,
+   "legacy_output": true
+  }
+ ],
+ "models_A": 3522,
+ "models_B": 40
+}

@@ -1,0 +1,374 @@
+{
+ "swmm6_commit": "c40580c7b21555db3973503968d9b433b0aabd07",
+ "swmm6_date": "2026-10-28",
+ "cplus_commit": "4f8e1ae871323412808947f430708c6457ee7378",
+ "versions": "6.0.0-alpha.4 (refactored engine) / 5.3.0-beta.3 (legacy engine wrapper)",
+ "lines": {
+  "epa_solver": 50454,
+  "cplus_engine": 53167,
+  "cplus_api": 253,
+  "swmm6_engine": 233434,
+  "swmm6_2d": 79357,
+  "swmm6_headers": 33202,
+  "swmm6_legacy": 58853,
+  "swmm6_tests": 208358
+ },
+ "subsystems": {
+  "dynamic wave": [
+   1607,
+   1613,
+   5874
+  ],
+  "cross sections": [
+   3109,
+   4487,
+   7915
+  ],
+  "links, nodes, outfalls": [
+   4186,
+   4203,
+   4689
+  ],
+  "input parsing": [
+   2444,
+   2469,
+   30698
+  ]
+ },
+ "counts": {
+  "parity_notes": 110,
+  "getenv_calls": 34,
+  "getenv_names": [
+   "HYDROCOUPLE_COMPONENT_PATH",
+   "OPENSWMM_DT_TRACE",
+   "OPENSWMM_FV_CENSUS_PASS",
+   "OPENSWMM_FV_CFL",
+   "OPENSWMM_FV_DEG1",
+   "OPENSWMM_FV_DT_TRACE",
+   "OPENSWMM_FV_LTS_FIT",
+   "OPENSWMM_FV_MIN_PARALLEL_CELLS",
+   "OPENSWMM_FV_MIXED_WAVE",
+   "OPENSWMM_FV_PRESS_SECANT_PASSES",
+   "OPENSWMM_FV_SLOT_TRACE",
+   "OPENSWMM_HOST_RESERVED_THREADS",
+   "OPENSWMM_PERF",
+   "SWMM_DISABLE_BYPASS_MASK",
+   "SWMM_DW_THREADS",
+   "SWMM_TRACE_DUMP_STEP",
+   "SWMM_TRACE_LINK",
+   "SWMM_TRACE_LSTEP",
+   "SWMM_TRACE_NODE",
+   "SWMM_TRACE_ORIF",
+   "SWMM_TRACE_RSTEP",
+   "SWMM_TRACE_SKIP",
+   "SWMM_TRACE_TRANSECT",
+   "SWMM_VJ_M3",
+   "SWMM_VJ_M4"
+  ],
+  "throw": 644,
+  "omp_pragmas": 34,
+  "thread_local_files": [
+   "core/HotStartManager.cpp",
+   "core/PerfTimers.hpp",
+   "core/openswmm_checkpoint_impl.cpp",
+   "core/openswmm_heat_impl.cpp",
+   "hydraulics/DynamicWave.cpp",
+   "hydraulics/DynamicWave.hpp",
+   "hydraulics/KinematicWave.cpp",
+   "hydraulics/Routing.cpp",
+   "hydraulics/fv/ExplicitFvSolver.cpp",
+   "hydrology/surface/UebReference.cpp",
+   "math/OdeSolver.cpp",
+   "output/openswmm_output2d_impl.cpp",
+   "output/openswmm_trace_impl.cpp",
+   "transport/fvkernels/SpeciesTransportKernels.cpp"
+  ],
+  "api_functions": 1410,
+  "epa_api_functions": 20,
+  "cplus_handle_functions": 11
+ },
+ "parity_corpus": {
+  "decks": 25,
+  "fv": 11,
+  "dynwave": 6
+ },
+ "regression_cases": [
+  [
+   "Example1",
+   "Example1.inp",
+   "0.001",
+   "0.001"
+  ],
+  [
+   "Example2",
+   "Example2.inp",
+   "0.001",
+   "0.001"
+  ],
+  [
+   "Example3",
+   "Example3.inp",
+   "0.001",
+   "0.001"
+  ],
+  [
+   "SlotSurcharge",
+   "slot_surcharge.inp",
+   "0.05",
+   "0.01"
+  ]
+ ],
+ "legacy_vs_524": {
+  "dwflow.c": {
+   "tokens_524": 3331,
+   "tokens_changed": 704
+  },
+  "dynwave.c": {
+   "tokens_524": 3681,
+   "tokens_changed": 319
+  },
+  "flowrout.c": {
+   "tokens_524": 3505,
+   "tokens_changed": 1
+  },
+  "link.c": {
+   "tokens_524": 13897,
+   "tokens_changed": 354
+  },
+  "node.c": {
+   "tokens_524": 6863,
+   "tokens_changed": 224
+  },
+  "routing.c": {
+   "tokens_524": 3684,
+   "tokens_changed": 771
+  },
+  "xsect.c": {
+   "tokens_524": 13597,
+   "tokens_changed": 0
+  }
+ },
+ "legacy_vs_524_all": {
+  "climate.c": {
+   "tokens_524": 7126,
+   "tokens_changed": 86
+  },
+  "controls.c": {
+   "tokens_524": 6685,
+   "tokens_changed": 236
+  },
+  "culvert.c": {
+   "tokens_524": 1657,
+   "tokens_changed": 0
+  },
+  "datetime.c": {
+   "tokens_524": 2294,
+   "tokens_changed": 0
+  },
+  "dwflow.c": {
+   "tokens_524": 3331,
+   "tokens_changed": 704
+  },
+  "dynwave.c": {
+   "tokens_524": 3681,
+   "tokens_changed": 319
+  },
+  "error.c": {
+   "tokens_524": 110,
+   "tokens_changed": 68
+  },
+  "exfil.c": {
+   "tokens_524": 966,
+   "tokens_changed": 0
+  },
+  "findroot.c": {
+   "tokens_524": 677,
+   "tokens_changed": 31
+  },
+  "flowrout.c": {
+   "tokens_524": 3505,
+   "tokens_changed": 1
+  },
+  "forcmain.c": {
+   "tokens_524": 470,
+   "tokens_changed": 0
+  },
+  "gage.c": {
+   "tokens_524": 3087,
+   "tokens_changed": 243
+  },
+  "gwater.c": {
+   "tokens_524": 3720,
+   "tokens_changed": 73
+  },
+  "hash.c": {
+   "tokens_524": 635,
+   "tokens_changed": 0
+  },
+  "hotstart.c": {
+   "tokens_524": 2722,
+   "tokens_changed": 678
+  },
+  "iface.c": {
+   "tokens_524": 2735,
+   "tokens_changed": 134
+  },
+  "infil.c": {
+   "tokens_524": 4140,
+   "tokens_changed": 94
+  },
+  "inflow.c": {
+   "tokens_524": 2025,
+   "tokens_changed": 13
+  },
+  "inlet.c": {
+   "tokens_524": 8450,
+   "tokens_changed": 27
+  },
+  "input.c": {
+   "tokens_524": 3761,
+   "tokens_changed": 104
+  },
+  "inputrpt.c": {
+   "tokens_524": 3702,
+   "tokens_changed": 0
+  },
+  "keywords.c": {
+   "tokens_524": 1083,
+   "tokens_changed": 16
+  },
+  "kinwave.c": {
+   "tokens_524": 954,
+   "tokens_changed": 10
+  },
+  "landuse.c": {
+   "tokens_524": 3551,
+   "tokens_changed": 45
+  },
+  "lid.c": {
+   "tokens_524": 9521,
+   "tokens_changed": 209
+  },
+  "lidproc.c": {
+   "tokens_524": 6038,
+   "tokens_changed": 4
+  },
+  "link.c": {
+   "tokens_524": 13897,
+   "tokens_changed": 354
+  },
+  "massbal.c": {
+   "tokens_524": 4670,
+   "tokens_changed": 20
+  },
+  "mathexpr.c": {
+   "tokens_524": 3212,
+   "tokens_changed": 0
+  },
+  "mempool.c": {
+   "tokens_524": 496,
+   "tokens_changed": 0
+  },
+  "node.c": {
+   "tokens_524": 6863,
+   "tokens_changed": 224
+  },
+  "odesolve.c": {
+   "tokens_524": 1632,
+   "tokens_changed": 0
+  },
+  "output.c": {
+   "tokens_524": 4862,
+   "tokens_changed": 37
+  },
+  "project.c": {
+   "tokens_524": 6211,
+   "tokens_changed": 331
+  },
+  "qualrout.c": {
+   "tokens_524": 1975,
+   "tokens_changed": 561
+  },
+  "rain.c": {
+   "tokens_524": 5050,
+   "tokens_changed": 0
+  },
+  "rdii.c": {
+   "tokens_524": 6084,
+   "tokens_changed": 226
+  },
+  "report.c": {
+   "tokens_524": 10915,
+   "tokens_changed": 110
+  },
+  "roadway.c": {
+   "tokens_524": 1019,
+   "tokens_changed": 0
+  },
+  "routing.c": {
+   "tokens_524": 3684,
+   "tokens_changed": 771
+  },
+  "runoff.c": {
+   "tokens_524": 1997,
+   "tokens_changed": 5
+  },
+  "shape.c": {
+   "tokens_524": 1227,
+   "tokens_changed": 0
+  },
+  "snow.c": {
+   "tokens_524": 3830,
+   "tokens_changed": 80
+  },
+  "stats.c": {
+   "tokens_524": 4260,
+   "tokens_changed": 27
+  },
+  "statsrpt.c": {
+   "tokens_524": 9085,
+   "tokens_changed": 0
+  },
+  "street.c": {
+   "tokens_524": 722,
+   "tokens_changed": 0
+  },
+  "subcatch.c": {
+   "tokens_524": 4934,
+   "tokens_changed": 458
+  },
+  "surfqual.c": {
+   "tokens_524": 1777,
+   "tokens_changed": 302
+  },
+  "swmm5.c": {
+   "tokens_524": 5501,
+   "tokens_changed": 8857
+  },
+  "table.c": {
+   "tokens_524": 3424,
+   "tokens_changed": 96
+  },
+  "toposort.c": {
+   "tokens_524": 2200,
+   "tokens_changed": 0
+  },
+  "transect.c": {
+   "tokens_524": 2700,
+   "tokens_changed": 192
+  },
+  "treatmnt.c": {
+   "tokens_524": 1723,
+   "tokens_changed": 5
+  },
+  "xsect.c": {
+   "tokens_524": 13597,
+   "tokens_changed": 0
+  }
+ },
+ "epa_sizeof": {
+  "TNode": 256,
+  "TLink": 368,
+  "measured_with": "sizeof() from EPA 5.2.4 objects.h, gcc 13.3 x86-64"
+ }
+}

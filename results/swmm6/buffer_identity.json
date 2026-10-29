@@ -1,0 +1,722 @@
+[
+ {
+  "inp": "Semi_Real_Models/375_H&H_Elements (1).inp",
+  "orig": [
+   0,
+   "2d970c0c589e2f35",
+   "eace215ddba47ab5"
+  ],
+  "buf": [
+   0,
+   "2d970c0c589e2f35",
+   "eace215ddba47ab5"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/MAYBR.inp",
+  "orig": [
+   0,
+   "bff8301136c2b964",
+   "e5775204be88e74a"
+  ],
+  "buf": [
+   0,
+   "bff8301136c2b964",
+   "e5775204be88e74a"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Hydrology/46_Subs.inp",
+  "orig": [
+   0,
+   "888fbfa72d6fa7f5",
+   "9f67b070d063ea92"
+  ],
+  "buf": [
+   0,
+   "888fbfa72d6fa7f5",
+   "9f67b070d063ea92"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Hydrology/10_Subs_Continuous.inp",
+  "orig": [
+   0,
+   "09e364eefa593599",
+   "6595f4fd0e4fc66f"
+  ],
+  "buf": [
+   0,
+   "09e364eefa593599",
+   "6595f4fd0e4fc66f"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "SWMM5_NCIMM/lid1d.inp",
+  "orig": [
+   0,
+   "9adc05841b3d69c2",
+   "c3735e4619e522f9"
+  ],
+  "buf": [
+   0,
+   "9adc05841b3d69c2",
+   "c3735e4619e522f9"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Training/Exercise5_transect.inp",
+  "orig": [
+   0,
+   "da28940a16acab76",
+   "6a8490670fec89a6"
+  ],
+  "buf": [
+   0,
+   "da28940a16acab76",
+   "6a8490670fec89a6"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "WQ/Peter Klaver_WQ_Tracer.inp",
+  "orig": [
+   0,
+   "2c895919534e1c48",
+   "d1742d648f68dc74"
+  ],
+  "buf": [
+   0,
+   "2c895919534e1c48",
+   "d1742d648f68dc74"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Hydraulics/short_trap_SW5.inp",
+  "orig": [
+   0,
+   "b1d3b2ad1d3d4ac5",
+   "4b8b3c4ff5de8ad1"
+  ],
+  "buf": [
+   0,
+   "b1d3b2ad1d3d4ac5",
+   "4b8b3c4ff5de8ad1"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/SIMPLE.inp",
+  "orig": [
+   0,
+   "ccd54ffa90587971",
+   "f2ee6e7ccfdfba9c"
+  ],
+  "buf": [
+   0,
+   "ccd54ffa90587971",
+   "f2ee6e7ccfdfba9c"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/mod161_v6.inp",
+  "orig": [
+   0,
+   "2d65be60195a6de7",
+   "65cbf900b1f87518"
+  ],
+  "buf": [
+   0,
+   "2d65be60195a6de7",
+   "65cbf900b1f87518"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/New_Hope_NW_Lake_N_Example.inp",
+  "orig": [
+   0,
+   "2c9be1eb257d871e",
+   "cfe1d2fe9d46ca26"
+  ],
+  "buf": [
+   0,
+   "2c9be1eb257d871e",
+   "cfe1d2fe9d46ca26"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "EPA/small_Orifice.inp",
+  "orig": [
+   0,
+   "907df48853e9545c",
+   "ac92ca5c9cf8c4bf"
+  ],
+  "buf": [
+   0,
+   "907df48853e9545c",
+   "ac92ca5c9cf8c4bf"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "OpenSWMM_Engine_Test_Decks/tests/unit/engine/data/pumps/ideal_pump.inp",
+  "orig": [
+   0,
+   "0071b0f82028ca18",
+   "80b3ab9df8ea79a1"
+  ],
+  "buf": [
+   0,
+   "0071b0f82028ca18",
+   "80b3ab9df8ea79a1"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/ALLTUT88.inp",
+  "orig": [
+   0,
+   "9933dc39008ddb2f",
+   "857666337731f20c"
+  ],
+  "buf": [
+   0,
+   "9933dc39008ddb2f",
+   "857666337731f20c"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r2_2026-10-05/models/units_us_ENSLAVED_VAN_GENUCHTEN.inp",
+  "orig": [
+   0,
+   "62536c15deb5e8b0",
+   "e9d390330deb2ccf"
+  ],
+  "buf": [
+   0,
+   "62536c15deb5e8b0",
+   "e9d390330deb2ccf"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "SWMM5_NCIMM/CRITICAL_UPSTREAM_DOWNSTREAM_EXAMPLE_SW5.INP",
+  "orig": [
+   0,
+   "cc3847dd4f764697",
+   "bc651140fae0125e"
+  ],
+  "buf": [
+   0,
+   "cc3847dd4f764697",
+   "bc651140fae0125e"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/STACK.inp",
+  "orig": [
+   0,
+   "d3d09c5c989bf570",
+   "b3ab47102f6eb075"
+  ],
+  "buf": [
+   0,
+   "d3d09c5c989bf570",
+   "b3ab47102f6eb075"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/SMTCA.inp",
+  "orig": [
+   0,
+   "f1f86a366370846a",
+   "6eb0fbd3f7b8a7aa"
+  ],
+  "buf": [
+   0,
+   "f1f86a366370846a",
+   "6eb0fbd3f7b8a7aa"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "EPA/HRSDtest_cim_7.inp",
+  "orig": [
+   0,
+   "cb5f2c37a701a809",
+   "5f42b33ba8562418"
+  ],
+  "buf": [
+   0,
+   "cb5f2c37a701a809",
+   "5f42b33ba8562418"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/DRY.inp",
+  "orig": [
+   0,
+   "917b2f8f94cc059e",
+   "f40969055c52d2b9"
+  ],
+  "buf": [
+   0,
+   "917b2f8f94cc059e",
+   "f40969055c52d2b9"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/My_San_Calibrated.inp",
+  "orig": [
+   0,
+   "bbe47f7089781b10",
+   "24c3b5e28aa6c068"
+  ],
+  "buf": [
+   0,
+   "bbe47f7089781b10",
+   "24c3b5e28aa6c068"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "SWMM5_NCIMM/1195_Nodes.inp",
+  "orig": [
+   5,
+   null,
+   "832cf6f4d7af99c2"
+  ],
+  "buf": [
+   5,
+   null,
+   "832cf6f4d7af99c2"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/orfsmall.inp",
+  "orig": [
+   0,
+   "d712d5b31f44d009",
+   "e048eb0cffc53132"
+  ],
+  "buf": [
+   0,
+   "d712d5b31f44d009",
+   "e048eb0cffc53132"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/PUSH.inp",
+  "orig": [
+   0,
+   "b04c0a211d231612",
+   "c63361fdfbd90afd"
+  ],
+  "buf": [
+   0,
+   "b04c0a211d231612",
+   "c63361fdfbd90afd"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/STRT7.inp",
+  "orig": [
+   0,
+   "829a6e123bca6ab9",
+   "b3ab47102f6eb075"
+  ],
+  "buf": [
+   0,
+   "829a6e123bca6ab9",
+   "b3ab47102f6eb075"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Hydrology/RUNOFF19__withCN_SW5.inp",
+  "orig": [
+   0,
+   "c633b49da0e8817e",
+   "4c8aba6f7c3ba3a4"
+  ],
+  "buf": [
+   0,
+   "c633b49da0e8817e",
+   "4c8aba6f7c3ba3a4"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/PORT02.inp",
+  "orig": [
+   0,
+   "8207f83d2d1f1637",
+   "da2d97b8d783d8e3"
+  ],
+  "buf": [
+   0,
+   "8207f83d2d1f1637",
+   "da2d97b8d783d8e3"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/JOHN1.inp",
+  "orig": [
+   0,
+   "e60c0a63d8bcf256",
+   "9a0db46ff4c77f6b"
+  ],
+  "buf": [
+   0,
+   "e60c0a63d8bcf256",
+   "9a0db46ff4c77f6b"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Hydraulics/Micro Tunnel Modeling.inp",
+  "orig": [
+   0,
+   "07d9d5e54277e0dd",
+   "3bfe5ae1b7ce9b1f"
+  ],
+  "buf": [
+   0,
+   "07d9d5e54277e0dd",
+   "3bfe5ae1b7ce9b1f"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/AB.inp",
+  "orig": [
+   0,
+   "20f703ae95fd99b3",
+   "1fd910d9704d37c3"
+  ],
+  "buf": [
+   0,
+   "20f703ae95fd99b3",
+   "1fd910d9704d37c3"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "LID/lid2_bc_stress_test.inp",
+  "orig": [
+   0,
+   "a88cd70b958afb91",
+   "03d0d56a5f2f8119"
+  ],
+  "buf": [
+   0,
+   "a88cd70b958afb91",
+   "03d0d56a5f2f8119"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/1D-2D_LeveeBreak_Flood_m.inp",
+  "orig": [
+   5,
+   null,
+   "a3e19d22609a8a87"
+  ],
+  "buf": [
+   5,
+   null,
+   "a3e19d22609a8a87"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "OWA_update_v5111/catchment_as_outfall.inp",
+  "orig": [
+   5,
+   null,
+   "0c766563765fc2ea"
+  ],
+  "buf": [
+   5,
+   null,
+   "0c766563765fc2ea"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "OpenSWMM_Engine_Test_Decks/tests/verification/surface_r1_2026-10-05/p0b/control_modified_green_ampt_us.inp",
+  "orig": [
+   0,
+   "42dfc5ab1522f4ef",
+   "2742bbe9ed11360d"
+  ],
+  "buf": [
+   0,
+   "42dfc5ab1522f4ef",
+   "2742bbe9ed11360d"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/EXWORK1D.inp",
+  "orig": [
+   0,
+   "b92381aad11fdc24",
+   "29527dda495c7705"
+  ],
+  "buf": [
+   0,
+   "b92381aad11fdc24",
+   "29527dda495c7705"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/TEMPE_v1.inp",
+  "orig": [
+   0,
+   "17cf248e423aec6d",
+   "a4ec197b8284ccdf"
+  ],
+  "buf": [
+   0,
+   "17cf248e423aec6d",
+   "a4ec197b8284ccdf"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/EXTUT2A.inp",
+  "orig": [
+   0,
+   "aba9892f80cb7fd2",
+   "21d9aa097b6fea8d"
+  ],
+  "buf": [
+   0,
+   "aba9892f80cb7fd2",
+   "21d9aa097b6fea8d"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/C240004Y.inp",
+  "orig": [
+   0,
+   "a684dc4a274c09b2",
+   "a4596a0ebfbff74f"
+  ],
+  "buf": [
+   0,
+   "a684dc4a274c09b2",
+   "a4596a0ebfbff74f"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/MPORF.inp",
+  "orig": [
+   0,
+   "86e76df1568ae0ca",
+   "088f7d475af2e1d0"
+  ],
+  "buf": [
+   0,
+   "86e76df1568ae0ca",
+   "088f7d475af2e1d0"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/FORCE2_v1.44.inp",
+  "orig": [
+   0,
+   "73b89b5bf3b8afbf",
+   "a1939b09051012ec"
+  ],
+  "buf": [
+   0,
+   "73b89b5bf3b8afbf",
+   "a1939b09051012ec"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "LEW_CHI_SWMM5.2/Tests_CHI/Storage_Shape_Test.inp",
+  "orig": [
+   0,
+   "64cecedb5abf02f3",
+   "477941a2e9020928"
+  ],
+  "buf": [
+   0,
+   "64cecedb5abf02f3",
+   "477941a2e9020928"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/DWOOD1.inp",
+  "orig": [
+   0,
+   "4a9965d6666c81bf",
+   "2d449621e880f8d3"
+  ],
+  "buf": [
+   0,
+   "4a9965d6666c81bf",
+   "2d449621e880f8d3"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "SWMM5_NCIMM/133_Weirs.inp",
+  "orig": [
+   11,
+   null,
+   "84f5de49e445db9c"
+  ],
+  "buf": [
+   11,
+   null,
+   "84f5de49e445db9c"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/EXAM2AA.inp",
+  "orig": [
+   0,
+   "6b2079c08fa8a894",
+   "cfdf30752c8ccd2a"
+  ],
+  "buf": [
+   0,
+   "6b2079c08fa8a894",
+   "cfdf30752c8ccd2a"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "OpenSWMM_Code_Review_2026/3-boundary/BND-19-report-start-mixes-whole-run-volumes/BND-19_rpt-start-2h.inp",
+  "orig": [
+   0,
+   "7024783c103f750a",
+   "cf29ede44e77d99f"
+  ],
+  "buf": [
+   0,
+   "7024783c103f750a",
+   "cf29ede44e77d99f"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "XPSWMM/remote_depth_controlled_pump_v14.1.inp",
+  "orig": [
+   0,
+   "c24de4099cf9288b",
+   "3520a78b915ed6b2"
+  ],
+  "buf": [
+   0,
+   "c24de4099cf9288b",
+   "3520a78b915ed6b2"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Orifices/extran3_side_rect_orifice _si_units.inp",
+  "orig": [
+   0,
+   "2d118a5577794016",
+   "5b7e5dc9e92b7a4d"
+  ],
+  "buf": [
+   0,
+   "2d118a5577794016",
+   "5b7e5dc9e92b7a4d"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ },
+ {
+  "inp": "Hydraulics/PUMP_STATION.inp",
+  "orig": [
+   0,
+   "183ae36ae16b8a08",
+   "ec6c46ab96984833"
+  ],
+  "buf": [
+   0,
+   "183ae36ae16b8a08",
+   "ec6c46ab96984833"
+  ],
+  "same_out": true,
+  "same_rpt": true
+ }
+]

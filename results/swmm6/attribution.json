@@ -1,0 +1,13 @@
+{
+ "n": 1558,
+ "run": 1558,
+ "outfall": 915,
+ "more": 41,
+ "rest_status": {
+  "differs": 602
+ },
+ "rest_kind": {
+  "runoff, inflow or quality values differ": 564,
+  "hydraulic values only": 38
+ }
+}

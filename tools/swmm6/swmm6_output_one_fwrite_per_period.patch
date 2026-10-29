@@ -1,0 +1,49 @@
+diff --git a/src/engine/plugins/DefaultOutputPlugin.cpp b/src/engine/plugins/DefaultOutputPlugin.cpp
+index 67fce80..e92a6dd 100644
+--- a/src/engine/plugins/DefaultOutputPlugin.cpp
++++ b/src/engine/plugins/DefaultOutputPlugin.cpp
+@@ -159,6 +159,8 @@ int DefaultOutputPlugin::update(const SimulationSnapshot& snapshot) {
+     if (!out_file_)
+         return -1;
+     state_ = PluginState::UPDATING;
++    period_buf_.clear();
++    buffering_ = true;
+ 
+     // The snapshot arrives already in project display units (the engine applies
+     // the single conversion boundary before posting), so values are written
+@@ -296,6 +298,8 @@ int DefaultOutputPlugin::update(const SimulationSnapshot& snapshot) {
+     sys[13] = static_cast<float>(snapshot.sys_evap);       // SYS_EVAP
+     sys[14] = static_cast<float>(snapshot.sys_pet);        // SYS_PET
+ 
++    buffering_ = false;
++    std::fwrite(period_buf_.data(), 1, period_buf_.size(), out_file_);
+     std::fwrite(sys, sizeof(float), MAX_SYS_RESULTS, out_file_);
+ 
+     // Push the completed period to disk so a live reader (OutputReader::
+@@ -542,10 +546,12 @@ void DefaultOutputPlugin::writeInt4(int value) {
+ }
+ 
+ void DefaultOutputPlugin::writeReal4(float value) {
++    if (buffering_) { const char* p = reinterpret_cast<const char*>(&value); period_buf_.insert(period_buf_.end(), p, p + sizeof(float)); return; }
+     std::fwrite(&value, sizeof(float), 1, out_file_);
+ }
+ 
+ void DefaultOutputPlugin::writeReal8(double value) {
++    if (buffering_) { const char* p = reinterpret_cast<const char*>(&value); period_buf_.insert(period_buf_.end(), p, p + sizeof(double)); return; }
+     std::fwrite(&value, sizeof(double), 1, out_file_);
+ }
+ 
+diff --git a/src/engine/plugins/DefaultOutputPlugin.hpp b/src/engine/plugins/DefaultOutputPlugin.hpp
+index 68e51fc..34960de 100644
+--- a/src/engine/plugins/DefaultOutputPlugin.hpp
++++ b/src/engine/plugins/DefaultOutputPlugin.hpp
+@@ -276,6 +276,9 @@ private:
+      * @param value Eight-byte IEEE-format value assumed by the file format. Requires
+      * open stream; fwrite status is discarded and no endian conversion occurs. */
+     void writeReal8(double value);
++    // test patch: gather one reporting period and write it with a single fwrite
++    std::vector<char> period_buf_;
++    bool buffering_ = false;
+ };
+ 
+ } /* namespace openswmm */

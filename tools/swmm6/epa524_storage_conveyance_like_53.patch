@@ -1,0 +1,58 @@
+--- /home/claude/epa524/src/solver/dynwave.c	2026-10-27 23:47:13.570444720 -0400
++++ solver/dynwave.c	2026-10-28 21:03:39.919965634 -0400
+@@ -691,7 +691,7 @@
+     }
+ 
+     // --- if node not surcharged, base depth change on surface area        
+-    if (!isSurcharged)
++    if (!isSurcharged || (Node[i].type == STORAGE && Xnode[i].sumdqdh == 0.0))
+     {
+         dy = dV / surfArea;
+         yNew = yOld + dy;
+--- /home/claude/epa524/src/solver/dwflow.c	2026-10-27 23:47:13.570444720 -0400
++++ solver/dwflow.c	2026-10-28 21:03:39.920210021 -0400
+@@ -47,6 +47,7 @@
+ static double getWidth(TXsect* xsect, double y);
+ static double getSlotWidth(TXsect* xsect, double y);
+ static double getArea(TXsect* xsect, double y, double wSlot);
++static double getConveyArea(TXsect* xsect, double a) { return (a > xsect->aFull) ? xsect->aFull : a; }
+ static double getHydRad(TXsect* xsect, double y);
+ 
+ static double checkNormalFlow(int j, double q, double y1, double y2,
+@@ -180,7 +181,7 @@
+     }
+ 
+     // --- compute velocity from last flow estimate
+-    v = qLast / aMid;
++    v = qLast / getConveyArea(xsect, aMid);
+     if ( fabs(v) > MAXVELOCITY )  v = MAXVELOCITY * SGN(qLast);
+ 
+     // --- compute Froude No.
+@@ -197,7 +198,7 @@
+     //     (modified version of R. Dickinson's slope weighting)
+     rho = 1.0;
+     if ( !isFull && qLast > 0.0 && h1 >= h2 ) rho = sigma;
+-    aWtd = a1 + (aMid - a1) * rho;
++    aWtd = getConveyArea(xsect, a1) + (getConveyArea(xsect, aMid) - getConveyArea(xsect, a1)) * rho;
+     rWtd = r1 + (rMid - r1) * rho;
+ 
+     // --- determine how much inertial damping to apply
+@@ -221,15 +222,15 @@
+     dq4 = 0.0;
+     if ( sigma > 0.0 )
+     {
+-        dq3 = 2.0 * v * (aMid - aOld) * sigma;
+-        dq4 = dt * v * v * (a2 - a1) / length * sigma;
++        dq3 = 2.0 * v * (getConveyArea(xsect, aMid) - getConveyArea(xsect, aOld)) * sigma;
++        dq4 = dt * v * v * (getConveyArea(xsect, a2) - getConveyArea(xsect, a1)) / length * sigma;
+     }
+ 
+     // --- 5. local losses term
+     dq5 = 0.0;
+     if ( Conduit[k].hasLosses )
+     {
+-        dq5 = findLocalLosses(j, a1, a2, aMid, qLast) / 2.0 / length * dt;
++        dq5 = findLocalLosses(j, getConveyArea(xsect, a1), getConveyArea(xsect, a2), getConveyArea(xsect, aMid), qLast) / 2.0 / length * dt;
+     }
+ 
+     // --- 6. term for evap and seepage losses per unit length
