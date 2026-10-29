@@ -485,11 +485,163 @@ fr = (dh > 0.0) ? absv / std::sqrt(constants::GRAVITY * dh) : 0.0;"""),
       "no comments like that, because it never changed the arithmetic; its proof is the byte comparison in the "
       "Verify tab. The price runs the other way. swmm5-cplus still has EPA's memory layout, and SWMM6 has one "
       "built for speed and threads. Which of the two is faster, and how close SWMM6 comes to 5.2.4 across the "
-      "corpus, wait on building and running SWMM6, which was not done here."),
+      "corpus, takes building and running SWMM6. The sections that follow do that."),
 ('p', "SWMM6 is OpenSWMM 6.0.0-alpha from HydroCouple, under the Apache License 2.0, at "
       "github.com/HydroCouple/openswmm.engine. Caleb Buahin is lead developer, with Corinne Wiesner-Friedman on "
       "development and documentation. The excerpt above is from its <code>DynamicWave.cpp</code> at commit "
       "<code>c40580c</code>."),
+
+('h2', 'Records against columns', 's6layout'),
+('p', "Size is the least of the differences. Set side by side, the three engines also keep their state, report their errors and check their answers in different ways:"),
+('table', ['', 'EPA 5.2.4', 'swmm5-cplus', 'SWMM6'], [
+    ['Engine source, lines', '{EPA_LINES}', '{CP_LINES}', '{S6_LINES} plus {S6_LINES_2D} for 2D'],
+    ['Where model state lives', 'global arrays: <code>Node[j].newDepth</code>', 'the same arrays, inside one <code>Project</code>', 'one array per quantity: <code>ctx.nodes.depth[j]</code>'],
+    ['Public C API', '{EPA_API} functions', 'the same {EPA_API}, plus {CP_HANDLE} <code>swmm5cp_</code> handle functions', '{S6_API} <code>swmm_</code> functions, plus Python'],
+    ['Errors', 'error codes', 'error codes', 'error codes at the API; {S6_THROW} <code>throw</code> statements inside'],
+    ['Threads', 'OpenMP loops, off by default', 'none', '{S6_OMP} OpenMP pragmas, a background output thread'],
+    ['New physics', 'none', 'none', 'finite-volume routing, virtual junctions, dynamic slot, 2D, new quality solvers, heat'],
+    ['Checked against', 'itself: it is the reference', 'EPA 5.2.4, byte for byte, {CORPUS_N_SHORT} corpus models', 'its own legacy engine, {S6_REG_N} decks, within {S6_REG_TOL}'],
+]),
+('p', "EPA SWMM keeps a node as a record: depth, head, volume, inflow and some thirty other fields, side by side in "
+      "one C struct of {EPA_NODE_BYTES} bytes, one struct per node. A link record is {EPA_LINK_BYTES} bytes. swmm5-cplus kept that layout on purpose, because moving a field changes "
+      "nothing the compiler computes but everything a reviewer has to check. SWMM6 turned it on its side. It keeps one "
+      "array for every quantity, all the depths together and all the heads together, which is what database people call a "
+      "column store and game programmers call a structure of arrays."),
+('fig', 's6_layout', "The same node data, two ways. A loop that reads every node's depth touches one double in "
+                     "each record of the first layout, and consecutive doubles in the second."),
+('code', 'cpp', """// EPA 5.2.4 and swmm5-cplus: one record per node
+Node[j].newDepth
+
+// SWMM6: one array per quantity, owned by the simulation context
+ctx.nodes.depth[j]"""),
+('p', "The point is speed. A dynamic-wave iteration reads a handful of fields from every node and link, again and "
+      "again, and a processor fetches memory in 64-byte lines. When the depths sit together, one fetch brings in eight of "
+      "them; when each depth sits inside a {EPA_NODE_BYTES}-byte record, one fetch brings in one depth and a lot of "
+      "fields nobody asked for. Columns also let the compiler run one instruction over several elements at once. SWMM6 "
+      "goes further: it copies each conduit's fixed data into a tile packed in conduit order, groups conduits by "
+      "shape so that each shape's geometry runs as one tight loop, and can split the iteration across threads with "
+      "OpenMP, though by default it uses one."),
+('h2', 'What SWMM6 checks itself against', 's6parity'),
+('p', "Before running anything, read the tests. SWMM6 carries a second engine, which it calls legacy: EPA's C code "
+      "at version 5.3.0-beta.3, built from the same tree. That engine is not 5.2.4. Compared token by token with "
+      "comments and layout removed, its <code>dwflow.c</code> differs from 5.2.4 in {S6_LEG_DWFLOW} of {S6_LEG_DWFLOW_N} tokens and "
+      "its <code>routing.c</code> in {S6_LEG_ROUTING} of {S6_LEG_ROUTING_N}; its <code>xsect.c</code> is untouched. Much of that is "
+      "diagnostic tracing, file writes switched on by environment variables. Three changes alter results. In the "
+      "momentum equation a conveyance area leaves out the Preissmann slot, which matters only under SURCHARGE_METHOD "
+      "SLOT with a pipe above its crown. A storage node whose links contribute no head derivative is no longer treated "
+      "as surcharged. And a free or normal outfall at the end of a pipe that sits above the outfall's invert gets a "
+      "different depth. Here is 5.2.4, <code>node.c</code>:"),
+('code', 'c', """case FREE_OUTFALL:
+    if ( z > 0.0 ) Node[j].newDepth = 0.0;
+    else Node[j].newDepth = MIN(yNorm, yCrit);
+    return;"""),
+('p', "Here <code>z</code> is the pipe's invert offset above the outfall. And here is the legacy engine SWMM6 tests against:"),
+('code', 'c', """case FREE_OUTFALL:
+    Node[j].newDepth = z + MIN(yNorm, yCrit);
+    return;"""),
+('p', "Both are defensible. 5.2.4 says that water falling freely out of a pipe leaves nothing standing at the "
+      "outfall; 5.3 reports the water surface where it leaves the pipe. They are different numbers for the outfall depth and head, and SWMM6's "
+      "new engine follows the legacy rule. {S6_OF_TXT}"),
+('p', "The new engine is held to that legacy engine, not to EPA, by the regression test described above. A second "
+      "check, the repository's bit-identity corpus, runs {S6_CORPUS_DECKS} decks through two builds of SWMM6 and demands "
+      "identical files, which answers whether a change moved anything it should not have. It compares SWMM6 with itself, "
+      "and {S6_CORPUS_FV} of its decks use the new finite-volume router. Its own README says plainly what that does and "
+      "does not prove, which is to its credit."),
+('fig', 's6_parity', "Who is compared with whom. swmm5-cplus is held to EPA 5.2.4 byte for byte. SWMM6's new engine is "
+                     "held to its legacy engine, a newer EPA version than 5.2.4. The counts on the solid arrows come from the "
+                     "four-engine gate below."),
+('h2', 'Four engines, one corpus', 's6gate'),
+('p', "So I built SWMM6 the way its repository builds it, Release with link-time optimization and "
+      "<code>-ffp-contract=off</code>, with the optional GeoPackage, HDF5, 2D and GPU modules turned off, and ran four "
+      "engines on the same models: EPA 5.2.4, swmm5-cplus, SWMM6's legacy engine and SWMM6's new engine. The model set "
+      "is every corpus model that took EPA under five seconds in the swmm5-cplus gate, {S6_MODELS} of them, plus a seeded "
+      "sample of {S6_B_MODELS} larger ones. Each SWMM6 engine ran every model twice, because an engine that does not reproduce itself cannot "
+      "be compared with anything. Then every reported value in every reporting period was compared, pair by pair."),
+('p', "The controls came out clean. swmm5-cplus matched EPA on {S6_EC} of {S6_EC_N} models that wrote results; SWMM6's "
+      "legacy engine matched its own rerun on {S6_LL} of {S6_LL_N}, and the new engine matched its own rerun on {S6_NN} of {S6_NN_N}. "
+      "One difference in format had to be handled before anything else: on {S6_EXTRA} models EPA 5.2.4 drops the "
+      "final reporting period, at the end time, and both SWMM6 engines write it. Periods are matched by their time "
+      "stamps, and only periods present in both files are compared."),
+('fig', 's6_classes', "Each model in one band, by the largest change in any link flow or node depth over the run as a "
+                      "share of that element's peak, above 1 mm and 1 L/s. Controls first, then the three comparisons that matter."),
+('p', "Then the comparisons that matter. SWMM6's legacy engine reproduced EPA 5.2.4 on {S6_EL} of {S6_EL_N} models that "
+      "both ran. Its new engine reproduced the legacy engine on {S6_LN} of {S6_LN_N}, and EPA 5.2.4 on {S6_EN} of {S6_EN_N}. "
+      "Where the new engine and its legacy engine differ, {S6_LN_LAST} models differ only in the last digits, "
+      "{S6_LN_SMALL} by less than one percent of some element's peak, {S6_LN_MID} by one to ten percent and {S6_LN_BIG} by more; "
+      "in {S6_LN_OFF} only system totals, subcatchments or elements below the floor differ."),
+('p', "That band is a strict test: one element out of hundreds is enough to put a model over ten percent. Seen from the "
+      "outlet the picture is calmer. Where the new engine differs from EPA 5.2.4, the total outflow volume agrees within "
+      "0.1 percent in {S6_EN_VOL01} of {S6_EN_VOLN} models and within 1 percent in {S6_EN_VOL1}; the peak outflow agrees within "
+      "1 percent in {S6_EN_PK1}. Where the new engine differs from its own legacy engine, the outflow volume agrees within "
+      "0.1 percent in {S6_LN_VOL01} of {S6_LN_VOLN}."),
+('p', "A difference in the last digits is how dynamic wave diverges, so it is worth watching one grow. Take a "
+      "27-junction training model, {S6_TR_MODEL}. SWMM6 ships trace switches in both of its engines, environment variables "
+      "that write a fingerprint of the whole hydraulic state after every routing step, and they put the first difference "
+      "at step {S6_TR_STEP} of about {S6_TR_STEPS}, {S6_TR_T} seconds into the run. The hash of every flow and depth "
+      "differs; their sums do not. Dumping that step element by element, the lowest-numbered link that differs is "
+      "conduit {S6_TR_LINK}, and in its first traced iteration the upstream flow area, the flow and the flow-head "
+      "derivative each differ by one or two units in the last place. The binary output stores 32-bit numbers, so "
+      "nothing shows there until {S6_TR_FIRST} minutes in, on the falling limb of the first storm, when junction depths "
+      "differ in the third decimal. At worst the two engines are {S6_TR_DQ} cfs apart on a peak of {S6_TR_Q} cfs and "
+      "{S6_TR_DY} ft apart in depth. Between storms the gap closes completely: in {S6_TR_SAME} of the {S6_TR_PER} "
+      "reporting periods every node depth and link flow is identical again, because the network drains and forgets."),
+('fig', 's6_growth', "The largest link-flow difference between SWMM6's two engines in each five-minute reporting period of "
+                     "{S6_TR_MODEL_TXT}, on a log scale, over the largest link flow. It appears at the storm peaks and vanishes between them."),
+('p', "I could not pin that first difference to a line of code. Both engines compute the area with the same formula, "
+      "and SWMM6's batch geometry kernel is written operation for operation like EPA's <code>lookup()</code>. But "
+      "neither traced area equals that formula applied to the traced depth, so the trace does not show the depth the "
+      "area was computed from. That is the honest state of it: located to a step, a link and a variable, not to a line."),
+('p', "Some models one engine runs and another refuses. {S6_N_REFUSE_TXT} {S6_SIX_TXT}"),
+('h2', 'Speed, and what each could borrow', 's6speed'),
+('p', "Speed is where the columns were supposed to pay, so I timed the four engines the same way the speed section "
+      "timed swmm5-cplus: the same eight models, CPU time, three interleaved runs, and EPA timed against itself for the "
+      "noise, which came out at {S6_SP_NOISE} per model. Each engine was built the way its own project builds it. The numbers do not "
+      "care what anybody expected. SWMM6's new engine took {S6_SP_SWMM6_NEW} times EPA's CPU time on average, from "
+      "{S6_SP_SWMM6_NEW_RANGE} across the models; CPU time counts its background output thread too, and by the clock "
+      "the average was {S6_SP_WALL}. Its legacy engine took {S6_SP_SWMM6_LEGACY}. swmm5-cplus R4 took "
+      "{S6_SP_CPLUS_LTO} built plainly and {S6_SP_CPLUS_PGO} with the profile-guided build, every byte the same as EPA's."),
+('fig', 's6_speed', "CPU time against EPA 5.2.4 on the eight timing models of the speed section, three interleaved runs, "
+                    "each engine built the way its own project builds it."),
+('p', "Those eight models are small, the largest a few hundred links, and columns are meant to pay on big networks. So "
+      "I timed {S6_LG_N} larger ones the same way, from {S6_LG_MIN} to {S6_LG_MAX} links, with the noise this time at "
+      "{S6_LG_NOISE}. The gap narrowed. On the four networks of {S6_LG_MIDLINKS} links SWMM6's new engine took {S6_LG_MID} "
+      "times EPA's CPU time, and on the {S6_LG_MAX}-link network it took {S6_LG_BIG}: faster than EPA, by more than the "
+      "noise, while taking slightly more routing steps. The legacy engine averaged {S6_LG_LEG} on these five and "
+      "swmm5-cplus {S6_LG_CP}."),
+('p', "To see where the time goes, I counted instructions with callgrind, which does not care what else the machine "
+      "is doing, on the model with the widest gap: {S6_PR_MODEL}, eight months of continuous simulation in five-minute steps. "
+      "EPA executed {S6_PR_EPA} billion instructions; SWMM6's new engine executed {S6_PR_NEW} billion. The hydraulics are "
+      "not where the difference lies. Routing and cross-section geometry took {S6_PR_HYD_EPA} billion in EPA and "
+      "{S6_PR_HYD_NEW} billion in SWMM6. Writing results took {S6_PR_OUT_EPA} billion in EPA and {S6_PR_OUT_NEW} billion in "
+      "SWMM6, and allocating and copying memory {S6_PR_MEM_EPA} against {S6_PR_MEM_NEW}. At every reporting period SWMM6 copies "
+      "its state into a snapshot and hands it to a background thread, and that thread writes every number with a call "
+      "of its own, then flushes the file so that a live reader can see the new period. Here is SWMM6's "
+      "<code>DefaultOutputPlugin.cpp</code>:"),
+('code', 'cpp', """void DefaultOutputPlugin::writeReal4(float value) {
+    std::fwrite(&value, sizeof(float), 1, out_file_);
+}"""),
+('p', "EPA's <code>output.c</code> writes each element's values with one call:"),
+('code', 'c', """fwrite(NodeResults, sizeof(REAL4), NumNodeVars, file);"""),
+('p', "{S6_BUF_TXT}"),
+('p', "There is one thing SWMM6 could take from swmm5-cplus today. SWMM6 sets its outfall depths inside the iteration "
+      "loop, as EPA does, and it solves normal and critical depth every time, as EPA does. From its "
+      "<code>Outfall.cpp</code>:"),
+('code', 'cpp', """double q = std::fabs(ctx.links.flow[uk]) / barrels;
+XSectParams xs = buildXSectParams(ctx, uk);
+yNorm = getYnorm(xs, beta_v, qmax_v, q);
+yCrit = xsect::getYcrit(xs, q);"""),
+('p', "That is the call the R4 memo removes when the flow repeats, without changing a bit. It carries straight over, "
+      "with one addition: SWMM6's dynamic slot can change a pipe's geometry during a run, so the remembered answer has "
+      "to remember the geometry too. What it would save in SWMM6 was not measured."),
+('p', "So the columns are aimed at the right place, and on a big network they already pay. The speed section found the "
+      "time going into cross sections and the math library inside the iteration, and that is what SWMM6's columns, "
+      "conduit tiles and shape-grouped geometry are built to make cheaper. On a network of eight thousand links that "
+      "shows. On a network of a few hundred, the cost of everything around the solver, which the profile above found in "
+      "snapshots, allocation and statistics, still outweighs it, and on the smallest models it swamps it. The honest summary is a split "
+      "decision. swmm5-cplus kept EPA's arithmetic and EPA's layout and runs at EPA's speed or a little better, with "
+      "byte-identical results, at every size tried. SWMM6 changed the layout, added a great deal, wins on the biggest network here and "
+      "loses on the small ones, and is still earning back the arithmetic. The engine that does both, columns with EPA's "
+      "arithmetic kept exactly and a byte gate behind every change, has not been built by anybody yet."),
 
 ('h2', 'What this does not show', 'limits'),
 ('ul', [
@@ -517,10 +669,20 @@ fr = (dh > 0.0) ? absv / std::sqrt(constants::GRAVITY * dh) : 0.0;"""),
     "to a member function. The next section says what the rest would take.",
     "The two-model coupling is one-way and lagged by nothing more than the order of the two step calls; it is a "
     "demonstration of what the architecture allows, not a validated coupling method.",
-    "The SWMM6 comparison is a reading of its source at one commit and a line count, not a run; SWMM6 was not "
-    "built or run here. Lines were counted by one simple rule for all three engines, a code line with a trailing "
-    "comment counts as code, and SWMM6's files were sorted into piles by file name, so each share is good to a "
-    "few percent. SWMM6 is an alpha and changes daily.",
+    "The SWMM6 line counts are a reading of its source at one commit. Lines were counted by one simple rule for all "
+    "three engines, a code line with a trailing comment counts as code, and SWMM6's files were sorted into piles by "
+    "file name, so each share is good to a few percent.",
+    "The SWMM6 comparison is of one commit, {S6_COMMIT}, read and run on {S6_DATE}; SWMM6 is in alpha and changes daily. "
+    "It was built without its optional GeoPackage, HDF5, 2D and GPU modules, so none of those were run, and the corpus "
+    "is SWMM5 models, which exercise SWMM6's legacy-compatible paths and almost none of its new physics. SWMM6 measures "
+    "itself against its own legacy engine, not against 5.2.4, so a difference from 5.2.4 is a difference, not a defect. Its speed was "
+    "timed on the eight models of the speed section and five larger ones on the same two-core machine, and the "
+    "instruction profile is of one model; nothing larger than 8,683 links was timed.",
+    "Agreement is measured on the binary output, which stores 32-bit numbers at each reporting step. Two engines that "
+    "agree there may still differ in the last bits of their 64-bit state, as the trace in that section shows. Agreement "
+    "says nothing about which engine is closer to the real system; no field data were used.",
+    "The attribution of the legacy engine's differences rests on patching EPA 5.2.4 with three of its changes and "
+    "rerunning; the rest of its changes, in {S6_LEG_FILES} of {S6_LEG_FILES_N} source files, were counted but not read line by line.",
 ]),
 
 ('h2', 'Where it goes from here', 'next'),
@@ -575,9 +737,11 @@ fr = (dh > 0.0) ? absv / std::sqrt(constants::GRAVITY * dh) : 0.0;"""),
       "resource defects, wrote the C and C++ APIs, the coupling example, the WebAssembly builds and their "
       "in-memory file system, the test and timing harnesses, this app, the figures and this text. In a later "
       "round on 28 October it profiled the engine, ran the compiler, threading, option and arithmetic "
-      "experiments, wrote the outfall memo that became R4 and the speed section above. Later the same day it "
-      "read SWMM6's source, wrote <code>tools/loc_buckets.py</code> to count the three engines, and wrote the "
-      "section on the other C++ SWMM."),
+      "experiments, wrote the outfall memo that became R4 and the speed section above. That evening two Claude sessions "
+      "worked on SWMM6 side by side. One read its source, wrote <code>tools/loc_buckets.py</code> to count the three "
+      "engines, and wrote the section on the other C++ SWMM. The other, with Bob's go-ahead to build and run SWMM6's "
+      "code, built its two engines, wrote the four-engine gate, the attribution patches, the trace and profile "
+      "analysis and the output-writer test, and wrote the sections from Records against columns onward."),
 ('p', "<b>How it was checked.</b> The checks are mechanical, not the AI's judgment: byte comparison of "
       "<code>.out</code> and <code>.rpt</code> files against EPA SWMM 5.2.4 built from the official tag, "
       "AddressSanitizer runs, and interleaved timing with a noise floor. <b>What no person has checked yet:</b> "

@@ -83,9 +83,10 @@
    "output/openswmm_trace_impl.cpp",
    "transport/fvkernels/SpeciesTransportKernels.cpp"
   ],
-  "api_functions": 1410,
+  "api_functions": 1419,
   "epa_api_functions": 20,
-  "cplus_handle_functions": 11
+  "cplus_handle_functions": 11,
+  "api_functions_scope": "distinct swmm_ names declared in all of include/"
  },
  "parity_corpus": {
   "decks": 25,

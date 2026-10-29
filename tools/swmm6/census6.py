@@ -54,7 +54,7 @@ res['counts'] = {
     'throw': grep(new, r'\bthrow\b'),
     'omp_pragmas': grep(new, r'#pragma omp'),
     'thread_local_files': sorted(os.path.relpath(p, eng) for p in new if 'thread_local' in open(p, encoding='latin-1').read()),
-    'api_functions': len(set(re.findall(r'\b(swmm_[a-z0-9_]+)\s*\(', ''.join(open(p, encoding='latin-1').read() for p in files(os.path.join(S6, 'include/openswmm/engine')))))),
+    'api_functions': len(set(re.findall(r'\b(swmm_[a-z0-9_]+)\s*\(', ''.join(open(p, encoding='latin-1').read() for p in files(os.path.join(S6, 'include')))))),
     'epa_api_functions': len(set(re.findall(r'\b(swmm_[A-Za-z]+)\s*\(', open(os.path.join(EPA, 'include/swmm5.h')).read()))),
     'cplus_handle_functions': len(set(re.findall(r'\b(swmm5cp_[a-z_]+)\s*\(', open(os.path.join(CP, 'src/api/swmm5cp.h')).read()))),
 }

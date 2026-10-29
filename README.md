@@ -128,6 +128,30 @@ dn.open("downstream.inp", "dn.rpt", "dn.out"); dn.start();
 outfall to the other's inlet node; `examples/models/merged.inp` is the same network as one
 model, for the check.
 
+## Compared with SWMM6
+
+OpenSWMM's SWMM6 (github.com/HydroCouple/openswmm.engine, branch `swmm6_rel`, commit `c40580c`,
+6.0.0-alpha.4) is the other C++ SWMM. It was read, built (Release, optional GeoPackage, HDF5, 2D
+and GPU modules off) and run beside EPA 5.2.4 and swmm5-cplus. The Doc essay has the full account;
+the raw rows are in `results/swmm6/`, the scripts in `tools/swmm6/`.
+
+| Measured | Result |
+|---|---|
+| Models run, six runs each | 3,522 small corpus models (EPA under 5 s) plus a seeded sample of 40 larger |
+| Controls | swmm5-cplus = EPA on 3,133 of 3,133 that wrote results; each SWMM6 engine = its own rerun (3,316 of 3,316; 3,228 of 3,228) |
+| SWMM6 legacy (5.3.0-beta.3) = EPA 5.2.4 | 1,497 of 3,089 |
+| SWMM6 new = SWMM6 legacy | 2,377 of 3,146 |
+| SWMM6 new = EPA 5.2.4 | 1,095 of 2,977; where they differ, outflow volume within 0.1 % in 924 of 1,340 |
+| Why the legacy engine differs from 5.2.4 | its free/normal outfall depth rule alone explains 915 of 1,558; with its storage and conveyance changes, 956 |
+| Models SWMM6 new refuses that EPA runs | 147 (72 ERROR 145, 25 ERROR 203, ...), 2 more past a 5-minute limit |
+| CPU time vs EPA, 8 speed-study models | SWMM6 new 2.09 (by the clock 1.99), legacy 1.15, swmm5-cplus R4 0.85 (0.79 with PGO) |
+| CPU time vs EPA, 5 networks of 345–8,683 links | SWMM6 new 1.14–1.40, and 0.92 on 8,683 links; legacy 1.01; swmm5-cplus 0.96 |
+| Instructions, continuous model | EPA 5.4 billion, SWMM6 new 11.5 billion; output 0.37 vs 2.7, memory 0.03 vs 1.0 |
+| One `fwrite` per period (test patch) | byte-identical on 48 of 48; CPU down 10 % on the continuous model, clock time unchanged |
+
+A line count of the three engines by purpose, from a parallel session, is in
+`tools/loc_buckets.py` and `docs/swmm6_loc.json`.
+
 ## Building
 
 Native (`tools/build_native.sh ENG API OUT [FLAGS]`):
@@ -161,7 +185,7 @@ caps each run at 3 GiB of address space and 2 GiB per file, deletes outputs as i
 and resumes from its own `.jsonl`. It runs each model with its own folder as the working
 directory, so data files resolve; models that save files (hot starts, rainfall interface
 files) write them there, and EPA leaves its `swmmXXXXXX` scratch files there when it crashes.
-Run it on a copy of the corpus. `tools/census.py`, `hazards.py` and `localtypes.py` are
+Run it on a copy of the corpus. The SWMM6 comparison's own tools and how to rerun them are in `tools/swmm6/README.md`. `tools/census.py`, `hazards.py` and `localtypes.py` are
 the libclang census that came before the lift; `features.py` is the corpus feature census
 used to choose the coverage set.
 
@@ -188,6 +212,9 @@ coupling, and carries the essay *Same Numbers, Different Bones* in its Doc tab.
   in dynamic wave is compiled out in every build tested.
 - The coupling is one-way and a demonstration, not a validated method.
 - `Project` is still one large class and the modules still share the big arrays.
+- The SWMM6 comparison is one alpha commit, built without its optional modules, on SWMM5
+  models that barely touch its new physics; agreement is on the 32-bit `.out` values, and no
+  field data were used. Speed was timed on 13 models on a two-core machine.
 
 ## Licence and credit
 
@@ -205,5 +232,8 @@ two generators and every hand-written change after them, found and fixed the res
 defects, wrote the C and C++ APIs, the coupling example, the WebAssembly builds, the gate
 and timing harnesses, the app and its essay. The checks are mechanical: byte comparison
 against EPA 5.2.4 built from the tag, AddressSanitizer, interleaved timing with a noise
-floor. No person has yet reviewed the generated C++ or the hand edits line by line, or
+floor. That evening two Claude sessions worked on SWMM6: one read its source and wrote
+`tools/loc_buckets.py`; the other, with Bob's go-ahead to build and run SWMM6's code, wrote
+`tools/swmm6/`, ran the four-engine gate, the timing, the profile and the attribution patches,
+and wrote the measured sections of the essay. No person has yet reviewed the generated C++ or the hand edits line by line, or
 rerun the gate on another machine.

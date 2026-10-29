@@ -206,6 +206,12 @@ FIGS = dict(
     shapes=F.fig_shapes(matrix_txt), multi=F.fig_multi(multi6), coupled=F.fig_coupled(coupled),
     timing=F.fig_timing(b_o2, b_lto), heat=F.fig_heat(cm), gate=F.fig_gate(list(fold.values()), gate_note))
 
+# ------------------------------------------------------------------ SWMM6 comparison (results/swmm6 in the repo)
+sys.path.insert(0, f'{AB}/doc')
+import build6
+_n6, _f6 = build6.build(REPO, NUM, LINKS)
+NUM.update(_n6); FIGS.update(_f6)
+
 # ------------------------------------------------------------------ essay -> html + json
 def code_html(t): return '<pre class="code"><code>' + html.escape(t) + '</code></pre>'
 parts = [f'<h1>{html.escape(E.TITLE)}</h1><p class="dek">{html.escape(E.SUBTITLE)}</p>']
@@ -234,6 +240,8 @@ for b in E.BLOCKS:
         parts.append(f'<{k}>' + ''.join(f'<li>{x}</li>' for x in items) + f'</{k}>')
         essay_json['blocks'].append(dict(kind=k, items=items))
 essay_html = '\n'.join(parts)
+_left = sorted(set(re.findall(r'\{[A-Z][A-Z0-9_]+\}', essay_html)))
+if _left: raise SystemExit('unfilled placeholders in the essay: ' + ', '.join(_left))
 os.makedirs(f'{AB}/doc/out', exist_ok=True)
 json.dump(essay_json, open(f'{AB}/doc/out/essay.json', 'w'), indent=1)
 for key, s in FIGS.items():
