@@ -5,6 +5,12 @@ computes differs from EPA's engine. What changes is that a program can hold, ste
 couple any number of models at once: in one process, on one thread each, or inside one
 WebAssembly instance in a browser.
 
+**Ready to use:** [`dist/swmm5-cplus.html`](dist/swmm5-cplus.html) is the browser app
+(download it and open it in a browser; it needs no server), and
+[`dist/swmm5-cplus-doc.docx`](dist/swmm5-cplus-doc.docx) is its essay, *Same Numbers,
+Different Bones*, as a Word document (32 pages, 20 figures), including the comparison with
+SWMM6.
+
 EPA 5.2.4 keeps 415 mutable variables at file or program scope, so a process can hold one
 model. Open a second one over the first and `swmm_open()` returns 0, the first model's
 report stays empty, and AddressSanitizer counts 361,322 bytes in 134 allocations that are
@@ -196,7 +202,9 @@ swmm5-cplus side by side in WebAssembly, opens many models in one instance, runs
 coupling, and carries the essay *Same Numbers, Different Bones* in its Doc tab.
 `app/build.py` reads the gate and timing results from the paths at its top;
 `app/doc/essay.py` is the single source of the essay, and `doc/prep_docx.py` plus
-`doc/build_docx.js` render the same text and figures to Word.
+`doc/build_docx.js` render the same text and figures to Word. `app/make_all.sh` runs the
+two passes (page, then Word, then the page again so it embeds the .docx). The built copies
+in `dist/` were made that way from the sources in this commit.
 
 ## What this does not show
 
