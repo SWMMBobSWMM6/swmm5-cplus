@@ -1,0 +1,20 @@
+{
+ "moved_over10": {
+  "n": 221,
+  "pumps": 34,
+  "controls": 16,
+  "subcatchments": 11,
+  "lid": 1,
+  "pollutants": 7,
+  "dynwave": 97
+ },
+ "unmoved": {
+  "n": 2523,
+  "pumps": 13,
+  "controls": 3,
+  "subcatchments": 19,
+  "lid": 6,
+  "pollutants": 5,
+  "dynwave": 91
+ }
+}

@@ -2,7 +2,7 @@
 """Turn cmp6u.py rows into cmp4-style rows for one SWMM6 build, so summarize.py reads them unchanged,
 and measure what changed between the builds.
 
-  views6u.py RESULTS6U.jsonl OUTDIR PREV.jsonl[,PREV2...]
+  views6u.py RESULTS6U.jsonl OUTDIR PREV.jsonl[,PREV2...] [SKIP.txt]
 
 Writes OUTDIR/view_B.jsonl (SWMM6 c40580c rebuilt without FP contraction) and OUTDIR/view_C.jsonl
 (SWMM6 at the new commit), and OUTDIR/deltas.json:
@@ -10,10 +10,13 @@ Writes OUTDIR/view_B.jsonl (SWMM6 c40580c rebuilt without FP contraction) and OU
   code    B against the new commit (C)
   moves   how each model's class against EPA, and new against legacy, moved from A to B to C
 Classes are summarize.py's: the largest element change as a percent of that element's peak.
+SKIP.txt lists models left out of the moves (A is read from the old gate, so a model whose input
+files changed since then, e.g. a hot-start file another model writes, would compare two inputs).
 """
 import sys, os, json, gzip, collections
 
 src, outdir, prevs = sys.argv[1], sys.argv[2], sys.argv[3]
+skip = {l.strip() for l in open(sys.argv[4]) if l.strip()} if len(sys.argv) > 4 else set()
 os.makedirs(outdir, exist_ok=True)
 prev = {}
 for p in prevs.split(','):
@@ -72,7 +75,7 @@ def old_size(m, pair):
     a, b = pair.split('|')
     return size(r, pair)
 
-D = {'models': len(rows), 'build': {}, 'code': {}, 'moves': {}}
+D = {'models': len(rows), 'build': {}, 'code': {}, 'moves': {}, 'moves_skipped': sorted(skip)}
 # build effect: A against B, by bytes first (old gate hashes), values where they differ
 for eng, kb, ka in (('new', 'NB', 'NA'), ('legacy', 'LB', 'LA')):
     c = collections.Counter(); ex = []
@@ -95,6 +98,7 @@ ORDER = ['identical', 'last digits', 'under 1 %', '1 to 10 %', 'off-network', 'o
 for name, pa, pb, pc in (('E|L', 'E|L', 'E|LB', 'E|LC'), ('L|N', 'L|N', 'LB|NB', 'LC|NC'), ('E|N', 'E|N', 'E|NB', 'E|NC')):
     ab, bc, ac = collections.Counter(), collections.Counter(), collections.Counter()
     for r in rows:
+        if r['inp'] in skip: continue
         A, B, C = old_size(r['inp'], pa), size(r, pb), size(r, pc)
         ab[A + ' -> ' + B] += 1; bc[B + ' -> ' + C] += 1; ac[A + ' -> ' + C] += 1
     D['moves'][name] = {'A->B': dict(ab), 'B->C': dict(bc), 'A->C': dict(ac)}

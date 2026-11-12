@@ -1,6 +1,7 @@
 # SWMM6 comparison: results
 
-SWMM6 = OpenSWMM `swmm6_rel` at commit `c40580c` (28 October 2026). Engines: E = EPA 5.2.4
+SWMM6 = OpenSWMM `swmm6_rel` at commit `c40580c` (28 October 2026), built with floating-point
+contraction left on (see `tools/swmm6/README.md`); the rerun at `db4634a` is in `db4634a/`. Engines: E = EPA 5.2.4
 (gcc -O2, Ubuntu defaults), C = swmm5-cplus R4 (`-O2 -flto`), L = SWMM6 legacy engine
 (5.3.0-beta.3), N = SWMM6 new engine (6.0.0-alpha.4). Scripts in `tools/swmm6/`.
 
@@ -22,3 +23,18 @@ Pair statuses: `identical values` (every reporting period's date and every float
 matched by time stamp), `differs`, `missing` (one or both wrote no readable `.out`), `no periods`,
 `not comparable` (different element sets). The three 1,000-year models with outputs of 0.7–1.6 GB
 were too large for the value comparison; their hashes are in the rows.
+
+## db4634a/: the rerun of 12 November 2026
+
+| File | What it holds |
+|---|---|
+| `builds.json` | the three builds (A, B, C), their flags and fused-instruction counts, and how much the 94 commits changed |
+| `gate6u.jsonl.gz` | `cmp6u.py` rows for all 3,562 models (`list_A.txt` and `list_B.txt`) |
+| `summary_B.json`, `summary_C.json` | `summarize.py` over the B and C views |
+| `deltas.json` | the flag effect (A against B), the code effect (B against C), and class moves A to B to C |
+| `moves.json` | per model the code changed: distance to EPA 5.2.4 before and after |
+| `ln_groups.json` | where C's two engines still differ by over 10 %, grouped, with the pump control |
+| `flag_features.json` | features of the models the flag moved |
+| `bisect.jsonl`, `bisect.changes.json` | output hashes per tested commit, and the commit that changed each model |
+| `bench6u_small.json`, `bench6u_large.json` | CPU timing of A, B and C beside EPA and swmm5-cplus |
+| `file_dependent.txt` | six models left out of comparisons across the two dates |

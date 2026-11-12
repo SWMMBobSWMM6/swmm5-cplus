@@ -1,3 +1,8 @@
+Modified 2026-10-28 by Robert Dickinson (made with Claude): DefaultOutputPlugin.cpp from OpenSWMM
+(HydroCouple/openswmm.engine, swmm6_rel, c40580c, Apache-2.0) changed to gather each reporting period
+into one buffer and write it with one fwrite, for a timing test. Not a fix proposed upstream.
+See NOTICE-SWMM6 and LICENSE-APACHE-2.0 at the repository root. Apply with: git apply swmm6_output_one_fwrite_per_period.patch
+
 diff --git a/src/engine/plugins/DefaultOutputPlugin.cpp b/src/engine/plugins/DefaultOutputPlugin.cpp
 index 67fce80..e92a6dd 100644
 --- a/src/engine/plugins/DefaultOutputPlugin.cpp

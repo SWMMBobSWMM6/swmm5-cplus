@@ -12,6 +12,41 @@ cmake -S openswmm.engine -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
 ninja -C build openswmm openswmm-legacy
 ```
 
+**Correction (12 November 2026).** That configure uses no preset, so at `c40580c` it leaves
+floating-point contraction at GCC's default, and `src/engine/CMakeLists.txt` adds `-mavx2 -mfma`:
+the new engine's library got 2,665 fused multiply-add instructions and the legacy engine's none.
+The essay first described this build as matching the repository's `-ffp-contract=off`; it did not.
+SWMM6's commit `7d7dcbc` (29 October) appends `-ffp-contract=off` when no preset sets it.
+
+## The rerun at db4634a (12 November 2026)
+
+Three builds, the same configure as above:
+
+| Build | Commit | Extra flags | FMA instructions, new / legacy |
+|---|---|---|---|
+| A | `c40580c` | none (the first build) | 2,665 / 0 |
+| B | `c40580c` | `-DCMAKE_C_FLAGS=-ffp-contract=off -DCMAKE_CXX_FLAGS=-ffp-contract=off` | 0 / 0 |
+| C | `db4634a` | none (the commit adds `-ffp-contract=off` itself) | 0 / 0 |
+
+A against B is the flag alone; B against C is the 94 commits alone. The bisection build adds
+`-DOPENSWMM_ENABLE_LTO=OFF` to B's flags so each commit rebuilds incrementally; at `c40580c` it
+wrote the same `.out` bytes as B on all 137 models it runs.
+
+| Script | What it does |
+|---|---|
+| `cmp6u.py LIST OUT.jsonl --epa --cplus --legacyA --newA --legacyB --newB --legacyC --newC --prev OLD...` | per model: EPA, swmm5-cplus, C's two engines twice each, B's two engines; A only where B's hash differs from A's in the old gate; every pair compared with `cmp4.js`; outputs over 400 MB compared by hash |
+| `views6u.py RESULTS OUTDIR PREV... [SKIP]` | B and C as `cmp4.py`-style rows for `summarize.py`, plus `deltas.json` (flag effect, code effect, class moves A to B to C) |
+| `moves6u.py RESULTS OUT.json [--skip LIST]` | each model the code changed: distance to EPA 5.2.4 before and after, closer, further or about the same |
+| `lngroups6u.py RESULTS OUT.json` | the models where C's two engines still differ by over 10 %, grouped (Type 1 pumps on junctions, code-review decks, other), with the storage-inlet control |
+| `flagfeat6u.py RESULTS FEATURES OUT.json` | features of the models the flag moved by over 10 % against those it left alone |
+| `bisect6.py WORKTREE BUILD OLD NEW MODELS OUT.jsonl` | builds both engines at commits between OLD and NEW (first parent, touching `src`, `include` or CMake), runs every model, and narrows each change of output to one commit |
+
+Six models read files that other corpus models write (hot-start and interface files), and EPA
+5.2.4's own output for them differed between the October and November runs. They are in
+`results/swmm6/db4634a/file_dependent.txt` and are left out of comparisons across the two dates.
+
+## Scripts of the first comparison (28 October 2026)
+
 | Script | What it does |
 |---|---|
 | `census6.py SWMM6_ROOT EPA_SOLVER CPLUS_ROOT OUT.json` | line counts, `PARITY` notes, environment variables, `throw`s, OpenMP pragmas, API size, and the token distance of SWMM6's legacy engine from EPA 5.2.4 |

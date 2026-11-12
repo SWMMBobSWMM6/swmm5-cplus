@@ -1,0 +1,80 @@
+{
+ "groups": {
+  "pump1_junction": [
+   "XPSWMM/416.inp",
+   "XPSWMM/ALEN10A5.inp",
+   "XPSWMM/ALEN10A7.inp",
+   "XPSWMM/ALENNEW1.inp",
+   "XPSWMM/ALENSMLL.inp",
+   "XPSWMM/ALL9BOB.inp",
+   "XPSWMM/BOXP2.inp",
+   "XPSWMM/BOXP2_v2.2.inp",
+   "XPSWMM/BTEMP.inp",
+   "XPSWMM/DYPUMP.inp",
+   "XPSWMM/EXAM10.inp",
+   "XPSWMM/FORCE.inp",
+   "XPSWMM/FORCE1.inp",
+   "XPSWMM/FORCE1_v1.44.inp",
+   "XPSWMM/HOU.inp",
+   "XPSWMM/LAIETST.inp",
+   "XPSWMM/MULPUMP.inp",
+   "XPSWMM/NEWPMP25.inp",
+   "XPSWMM/PS6204.inp",
+   "XPSWMM/PUMP.inp",
+   "XPSWMM/PUMP5.inp",
+   "XPSWMM/SM2.inp",
+   "XPSWMM/Sm22.inp",
+   "XPSWMM/TEMPE3.inp",
+   "XPSWMM/TREVOR.inp",
+   "XPSWMM/WINDSOR1.inp",
+   "XPSWMM/WJZJJJJJ.inp",
+   "XPSWMM/alennew.inp",
+   "XPSWMM/autopmp.inp",
+   "XPSWMM/mod101.inp",
+   "XPSWMM/mod102.inp",
+   "XPSWMM/n87-97.inp",
+   "XPSWMM/n87-97_v6.inp",
+   "XPSWMM/n87-97a.inp",
+   "XPSWMM/n87-97a_v6.inp",
+   "XPSWMM/n87-97b.inp"
+  ],
+  "code_review": [
+   "OpenSWMM_Code_Review_2026/1-numerical/NUM-22-transect-nc-inherits-meander-adjusted-n/NUM-22_transects.inp",
+   "OpenSWMM_Code_Review_2026/1-numerical/NUM-28-timeseries-backward-lookup/NUM-28_shared-series.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-06-tokens-past-40-dropped/IO-06_one-line-curve.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-09-outfall-gate-and-routeto/IO-09_gate-routeto.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-10-barrels-stored-as-char/IO-10_300-barrels.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-11-irregular-street-barrels-ignored/IO-11_irregular-barrels.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-16-link-properties-reset-by-section-order/IO-16_losses-first.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-16-link-properties-reset-by-section-order/IO-16_xsect-above-weirs.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-28-transect-not-finalized/IO-28_two-sections.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-32-grate-type-prefix-match/IO-32_pbar50x100-grate.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-38-timeseries-file-without-final-newline/IO-38_shared-file-series.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-38-timeseries-file-without-final-newline/IO-38_stage-file.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-46-runoff-file-groundwater-flow/IO-46_use.inp",
+   "OpenSWMM_Code_Review_2026/4-io/IO-47-runoff-file-groundwater-elevation-sign/IO-47_use.inp"
+  ],
+  "other": [
+   "NCIMM_Training/EPA-5.1.013-Hydraul/Hydraulic_a.inp",
+   "SWMM5_NCIMM/193_H&H_SI_Units_Elements.inp",
+   "Semi_Real_Models/193_H&H_SI_Units_Elements(2).inp",
+   "Semi_Real_Models/193_H&H_SI_Units_Elements.inp"
+  ]
+ },
+ "counts": {
+  "pump1_junction": 36,
+  "code_review": 14,
+  "other": 4
+ },
+ "pump1_control": {
+  "both differs": 13,
+  "both identical": 26,
+  "both missing": 1,
+  "junction differs": 23,
+  "junction identical": 84,
+  "junction missing": 3,
+  "junction other": 1,
+  "storage identical": 149,
+  "storage missing": 5
+ }
+}
