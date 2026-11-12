@@ -31,6 +31,7 @@ X = {k: os.path.abspath(getattr(a, k)) for k in ('epa', 'cplus', 'legacyA', 'new
 ALWAYS = [('E', X['epa']), ('C', X['cplus']), ('LC', X['legacyC']), ('LC2', X['legacyC']),
           ('NC', X['newC']), ('NC2', X['newC']), ('LB', X['legacyB']), ('NB', X['newB'])]
 os.makedirs(a.scratch, exist_ok=True)
+BIG = 400 << 20     # outputs above this are hashed, then deleted; their pairs are compared by hash only
 
 prev = {}
 for p in a.prev.split(','):
@@ -58,8 +59,11 @@ def run(exe, inp, d):
     if os.path.exists(out):
         with open(out, 'rb') as f:
             for b in iter(lambda: f.read(1 << 20), b''): h.update(b)
-    return dict(rc=rc, wall=round(wall, 4), out_bytes=os.path.getsize(out) if os.path.exists(out) else 0,
-                out_sha=h.hexdigest()[:16], stderr=err.decode('latin-1')[-200:] if err else '')
+    size = os.path.getsize(out) if os.path.exists(out) else 0
+    big = size > BIG
+    if big: os.remove(out)        # ten runs of a 1,000-year model would not fit on disk; compared by hash
+    return dict(rc=rc, wall=round(wall, 4), out_bytes=size, out_sha=h.hexdigest()[:16],
+                stderr=err.decode('latin-1')[-200:] if err else '', **({'deleted_big': True} if big else {}))
 
 def one(m):
     inp = os.path.join(a.corpus, m)
@@ -93,7 +97,9 @@ models = [l.rstrip('\n') for l in open(a.list) if l.strip()]
 done = set()
 if os.path.exists(a.results):
     for l in open(a.results):
-        try: done.add(json.loads(l)['inp'])
+        try:
+            r = json.loads(l)
+            if 'runs' in r: done.add(r['inp'])      # a row that failed (e.g. disk full) runs again
         except Exception: pass
 todo = [m for m in models if m not in done]
 print(f'{len(todo)} to run, {len(done)} already done', flush=True)
