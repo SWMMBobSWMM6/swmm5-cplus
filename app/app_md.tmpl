@@ -1,0 +1,117 @@
+---
+name: swmm5-cplus
+file: swmm5-cplus.html
+version: 2026.11.12
+date: 2026-11-12
+author: Robert Dickinson
+links: {repo: "https://github.com/SWMMBobSWMM6/swmm5-cplus", app: "dist/swmm5-cplus.html in the repo", essay_docx: "dist/swmm5-cplus-doc.docx in the repo"}
+engines:
+  - {name: EPA SWMM, version: 5.2.4, source: "USEPA/Stormwater-Management-Model tag v5.2.4", license: public domain}
+  - {name: swmm5-cplus, version: "commit {ENGINE_COMMIT} (stage R3b) in this app's WebAssembly; R4 natively for the timing", source: "SWMMBobSWMM6/swmm5-cplus", license: "not yet chosen; EPA's source is public domain"}
+  - {name: OpenSWMM (SWMM6), version: "6.0.0-alpha.4 and legacy 5.3.0-beta.3", branch: swmm6_rel, commits: "c40580c (read, counted, built twice) and db4634a (built, run)", license: Apache-2.0, bundled: no}
+units: US customary (CFS, ft) unless a model's FLOW_UNITS says otherwise; the app reports in the model's own units
+ai_use: built with Claude (Anthropic); see AI use
+---
+
+# swmm5-cplus: EPA SWMM 5.2.4 as reentrant C++17, byte-identical to EPA
+
+## What it does
+
+swmm5-cplus is EPA SWMM 5.2.4 restructured so that each simulation is a C++ object (`Project`) instead of
+process-wide globals. A program can open, step and couple any number of models at once. Every computed
+number is EPA's: `.out` byte for byte, `.rpt` byte for byte after removing the three wall-clock lines.
+The app runs EPA 5.2.4 and swmm5-cplus side by side in the browser (both compiled to WebAssembly), compares
+their outputs value by value, runs six models in one engine instance, and runs a two-model coupling demo.
+Its Doc tab is the essay *Same Numbers, Different Bones*, which also compares SWMM6 (OpenSWMM).
+
+## How it computes
+
+- Engine: EPA SWMM 5.2.4 source, lifted by `tools/make_cplus.py` (libclang). {MUTABLE} mutable file-scope
+  variables became `Project` fields; {FUNCS} functions became members; {EDITS} edits, each at a location
+  the compiler reported. No arithmetic was changed.
+- Six gated steps: Stage 1 (lift), R1 (resource safety), R2 (root finder, ODE solver, expression parser as
+  standalone components), R3 (cross sections as shape classes, `tools/transpose_xsect.py`), R3b (shape
+  table at namespace scope, C++ facade, coupling example), R4 (outfall normal and critical depth reused
+  when the flow is bitwise equal to the last call's; profile-guided build).
+- APIs: EPA's {EPA_API} `swmm_` functions unchanged (one default project per thread), plus
+  {CP_HANDLE} `swmm5cp_` handle functions and a header-only `swmm::Simulation` class.
+- Browser: Clang 18 + wasi-libc, reactor modules; files live in an in-memory WASI file system (13 calls).
+- Coupling demo: two models stepped in lock step; flow at upstream outfall OA is added as lateral inflow
+  at downstream node IN after each routing step (one-way).
+
+## Inputs and outputs
+
+- Reads any SWMM 5.2.4 `.inp` plus the data files it names (rain, inflow, hot-start); nothing is added to
+  or stripped from the `.inp`.
+- Writes `.rpt` and `.out` in EPA's formats; comparison tables export as CSV; the essay downloads as `.docx`.
+
+## Checks
+
+Mechanical checks, from the repository's result files:
+
+| Check | Result |
+|---|---|
+| Full corpus gate, native, swmm5-cplus vs EPA 5.2.4 | {FULL_SAME} of {FULL_DONE} identical; {FULL_CRASH} crash decks crash both alike; {FULL_DIFF} different; {FULL_INC} inconclusive |
+| WebAssembly gate, smoke + coverage sets | {WASM_SAME} of {WASM_N} identical |
+| Six models in one instance, round-robin | each `.out` identical to its solo EPA run |
+| Speed, exact builds, 8 models, CPU time | R4 with PGO: {SP_R4} of EPA 5.2.4's time; noise measured by timing EPA against itself |
+| Four-engine gate, SWMM6 {S6_COMMIT_TXT}, {S6_ALL} models | swmm5-cplus vs EPA identical on {S6_EC} of {S6_EC_N}; SWMM6 legacy vs EPA {S6_EL} of {S6_EL_N}; SWMM6 new vs legacy {S6_LN} of {S6_LN_N}; SWMM6 new vs EPA {S6_EN} of {S6_EN_N} |
+| SWMM6 controls (each engine run twice) | legacy {S6_LL} of {S6_LL_N} identical; new {S6_NN} of {S6_NN_N} identical |
+| FP contraction, SWMM6 c40580c built with and without | new-engine output changed on {UP_NB_CHANGED} models ({UP_NB_BIG} by over 10 % of an element's peak); new vs legacy identical {UP_A_LN} -> {UP_B_LN}; legacy unchanged |
+| Code, SWMM6 c40580c -> db4634a, both without contraction | legacy changed on {UP_CODE_L} models, new on {UP_CODE_N}; against EPA 5.2.4: {UP_FURTHER} further, {UP_CLOSER} closer (runs that hit the time limit left out) |
+| Bisection, {UP_SRC_COMMITS} commits touching source, {UP_BISECT_N} models, {UP_BISECT_BUILT} builds | `40f439a` (conduit evaporation and seepage limited by node water) changed {UP_C1_N}; all have evaporation or seepage, none of {UP_C1_NOLOSS} dynamic-wave models without either changed; six more commits changed 1 to 6 models each |
+| CPU time vs EPA 5.2.4, SWMM6 `db4634a` | new engine {S6_SP_SWMM6_NEW} on 8 small models (contraction on {S6_SP_SWMM6_NEW_A}, off {S6_SP_SWMM6_NEW_B}), {S6_LG_BIG} on 8,683 links; legacy {S6_SP_SWMM6_LEGACY}; noise {S6_SP_NOISE} |
+
+Difference classes: largest change in any link flow or node depth over the run, as a percent of that
+element's peak, above a floor of 1 L/s and 1 mm. Periods are matched by time stamp.
+
+Human review: none of the generated C++ or hand edits has been reviewed line by line by a person.
+
+## What this does not show
+
+1. Not more accurate. Every number is EPA 5.2.4's, its numerical defects included; no field data were used.
+2. Native and browser runs are not promised identical bits; EPA's own C differs native vs WebAssembly on {PLAT_DIFF} of {WASM_N} models.
+3. Fixes none of EPA's crashes; the {FULL_CRASH} crash decks crash both engines alike.
+4. Thread safety was tested (six models, six threads), not audited.
+5. The coupling is a one-way demonstration, not a validated method.
+6. SWMM6 is alpha. Its gate is SWMM5 models, which exercise its legacy-compatible paths, not its new physics; it was built without GeoPackage, HDF5, 2D and GPU. A difference from 5.2.4 is a difference, not a defect.
+7. All timing on one two-core machine; nothing over 8,683 links was timed.
+8. The first SWMM6 build (FP contraction on) was reported in the first version of the essay as if it were the repository's build. It was not; this version corrects it and reports both.
+
+Defect register (swmm5-cplus findings in EPA 5.2.4): S5CP-1 to S5CP-10, in the essay's "What turned up along the way".
+
+## How to reproduce
+
+- swmm5-cplus gate: `tools/gate.py` on any folder of models (EPA built from tag v5.2.4 at -O2).
+- SWMM6 gate: `tools/swmm6/cmp6u.py` (three builds), then `views6u.py`, `summarize.py`, `moves6u.py`,
+  `lngroups6u.py`, `flagfeat6u.py`; commits: `tools/swmm6/bisect6.py`. Results in `results/swmm6/db4634a/`.
+- Timing: `tools/perf/bench_variants.py`, interleaved, three repetitions, CPU time.
+- Corpus: SWMMBobSWMM6/1729-SWMM5-Models-2030.
+
+## Credits and licenses
+
+- EPA SWMM 5.2.4: U.S. EPA, public domain; engine design by Lewis Rossman.
+- swmm5-cplus: Robert Dickinson. No licence has been chosen yet for the restructuring; the EPA source it
+  restructures is public domain.
+- SWMM6 / OpenSWMM: HydroCouple, Caleb Buahin (lead developer), Corinne Wiesner-Friedman; Apache License 2.0
+  on branch swmm6_rel. Read, built and run for the comparison; not bundled in the app. Short excerpts are
+  quoted in the essay; see NOTICE-SWMM6 in the repository.
+- libclang/LLVM, GCC 13.3, Clang 18 + wasi-libc, valgrind (callgrind).
+
+## AI use
+
+Built with Claude, Anthropic's AI model (Claude Opus 5.5), on 27 and 28 October and 12 November 2026, at the
+request of Robert (Bob) Dickinson, who asked the question and supplies the corpus; responsibility is his.
+Claude ran the census, wrote the generators and every hand change, the APIs, the WebAssembly builds, the
+gate and timing harnesses, the app, the essay and this file; built and ran SWMM6; and on 12 November
+reran the SWMM6 comparison at db4634a, corrected the essay's account of the first SWMM6 build, and
+bisected the commits. Checks are mechanical (byte and value comparison with controls, AddressSanitizer,
+interleaved timing). No person has reviewed the generated C++ line by line or rerun the gates elsewhere.
+
+## Changes
+
+- `2026.11.12`: SWMM6 rerun at db4634a in three builds; FP-contraction correction; commits that moved
+  results; summaries at the top of the essay; this file.
+- `2026.10.28`: SWMM6 comparison at c40580c added to the essay.
+- `2026.10.28`: R4 (outfall memo, profile-guided build) and the speed section.
+- `2026.10.27`: first release (Stage 1 to R3b).

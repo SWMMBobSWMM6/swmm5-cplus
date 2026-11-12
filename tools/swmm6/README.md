@@ -39,6 +39,8 @@ wrote the same `.out` bytes as B on all 137 models it runs.
 | `moves6u.py RESULTS OUT.json [--skip LIST]` | each model the code changed: distance to EPA 5.2.4 before and after, closer, further or about the same |
 | `lngroups6u.py RESULTS OUT.json` | the models where C's two engines still differ by over 10 %, grouped (Type 1 pumps on junctions, code-review decks, other), with the storage-inlet control |
 | `flagfeat6u.py RESULTS FEATURES OUT.json` | features of the models the flag moved by over 10 % against those it left alone |
+| `losses6u.py RESULTS CHANGES.json COMMIT OUT.json` | control for the conduit-loss commit: dynamic-wave models with and without evaporation or seepage, which of them changed, and the legacy engine's continuity error before and after |
+| `run_bench6u.sh`, `run_bench6u_large.sh` | the timing runs: eight small models with all three builds; five larger networks with `db4634a` only (the first large run was cut off by a container restart) |
 | `bisect6.py WORKTREE BUILD OLD NEW MODELS OUT.jsonl` | builds both engines at commits between OLD and NEW (first parent, touching `src`, `include` or CMake), runs every model, and narrows each change of output to one commit |
 
 Six models read files that other corpus models write (hot-start and interface files), and EPA

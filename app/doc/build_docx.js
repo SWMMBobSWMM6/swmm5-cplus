@@ -25,7 +25,7 @@ children.push(new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ 
 children.push(new Paragraph({
   spacing: { after: 360 },
   border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: 'C9D3DE', space: 8 } },
-  children: [new TextRun({ text: 'The essay from the Doc tab of the swmm5-cplus app, October 2026', font: HEAD, size: 18, color: DIM })],
+  children: [new TextRun({ text: 'The essay from the Doc tab of the swmm5-cplus app, October 2026, updated 12 November 2026', font: HEAD, size: 18, color: DIM })],
 }));
 
 let listN = 0;
@@ -37,7 +37,9 @@ const numberingConfig = [{
 
 for (const b of src.blocks) {
   if (b.k === 'h2') {
-    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun({ text: b.t })] }));
+    // the one-page summary gets a page to itself, and the essay proper starts on the page after it
+    const ownPage = b.t === 'On one page' || b.t === 'One model per customer';
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, pageBreakBefore: ownPage, children: [new TextRun({ text: b.t })] }));
   } else if (b.k === 'p') {
     const nxt = src.blocks[src.blocks.indexOf(b) + 1];
     children.push(new Paragraph({ spacing: { after: 160, line: 300 }, keepNext: !!(nxt && nxt.k === 'code'), children: b.r.map(r => run(r)) }));
@@ -59,7 +61,9 @@ for (const b of src.blocks) {
       children: [new TextRun({ text: ln.length ? ln : ' ', font: MONO, size: 17, color: INK })],
     })));
   } else if (b.k === 'table') {
-    const widths = [1300, 4460, 1700, 1900];
+    const W = { 4: [1300, 4460, 1700, 1900], 5: [1000, 2200, 3060, 1200, 1900] };
+    const n = b.head.length;
+    const widths = W[n] || Array(n).fill(Math.floor(CONTENT_W / n));
     const cell = (t, i, head) => new TableCell({
       width: { size: widths[i], type: WidthType.DXA },
       shading: head ? { type: ShadingType.CLEAR, color: 'auto', fill: 'E4EAF2' } : undefined,
@@ -73,7 +77,8 @@ for (const b of src.blocks) {
     }));
     children.push(new Paragraph({ spacing: { after: 160 }, children: [] }));
   } else if (b.k === 'fig') {
-    const wpx = 624, hpx = Math.round(wpx * b.h / b.w);
+    // the one-page summary's figure is drawn a little smaller so the summary fits its page
+    const wpx = b.cap.startsWith('Figure 1.') ? 520 : 624, hpx = Math.round(wpx * b.h / b.w);
     children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 120, after: 80 }, keepNext: true,
       children: [new ImageRun({ type: 'png', data: fs.readFileSync(b.png), transformation: { width: wpx, height: hpx },
         altText: { title: b.cap.split('.')[0], description: b.cap, name: path.basename(b.png) } })] }));

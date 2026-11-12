@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <title>swmm5-cplus</title>
+<link rel="alternate" type="text/markdown" href="swmm5-cplus.md" title="Technical summary">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="color-scheme" content="dark light">
 <meta name="bore-shell" content="1.0.0">
@@ -424,6 +425,7 @@ double xsect_getAofY(TXsect* xsect, double y)
         <h2>About swmm5-cplus</h2>
         <p>swmm5-cplus is EPA SWMM 5.2.4 restructured as C++17 so that each simulation is an object. Nothing it computes differs from EPA's engine; what changes is that a program can hold, step and couple any number of models at once, in one process, a thread each, or one WebAssembly instance.</p>
         <p>The EPA Storm Water Management Model is a work of the U.S. Environmental Protection Agency, in the public domain. Version 5.2.4's engine is Lewis Rossman's design; swmm5-cplus keeps every algorithm as he wrote it.</p>
+        <p><a href="swmm5-cplus.md" id="mdLink">Technical summary (.md)</a>: what the engine computes, every check with its numbers, the limits and the provenance, in one plain Markdown file for AI tools and engineers. It ships beside this page and inside it.</p>
         <h3>Build provenance</h3>
         <div class="tablewrap"><table class="t" id="provTable"></table></div>
       </div>
@@ -431,16 +433,16 @@ double xsect_getAofY(TXsect* xsect, double y)
     <div class="stack">
       <div class="card" id="aiUse">
         <h2>AI use</h2>
-        <p>swmm5-cplus, this app and its Doc essay were built with Claude, Anthropic's AI model (Claude Opus 5.5), in one session on 27 and 28 October 2026, at the request of Robert (Bob) Dickinson, who asked the question and supplies the model corpus it was tested on. Responsibility for publishing the work is his.</p>
-        <p><b>What Claude did:</b> ran the libclang census of EPA's source; wrote the generators that made the C++ tree (<code>make_cplus.py</code>, <code>transpose_xsect.py</code>) and every hand-written change after them; found and fixed the resource defects; wrote the handle and C++ APIs, the coupling example, the WebAssembly builds, the in-memory file system they run on here, the gate and timing harnesses, this page, its figures and the essay. Later on 28 October it profiled the engine, ran the compiler, threading, routing-option and arithmetic experiments in the essay's speed section, and wrote the outfall memo that became R4. That evening two Claude sessions worked on SWMM6 side by side. One read its source, wrote <code>tools/loc_buckets.py</code> to count the three engines and wrote the Doc tab's section on the other C++ SWMM. The other, with Bob's go-ahead to build and run SWMM6's code, built SWMM6's new and legacy engines, ran the four-engine gate, the timing, the callgrind profile and the attribution patches, and wrote the sections from Records against columns onward. SWMM6 itself is the work of Caleb Buahin and the OpenSWMM team; nothing of it is redistributed in this page.</p>
-        <p><b>How it was checked:</b> mechanically, not by the AI's judgment. Byte comparison of every <code>.out</code> and <code>.rpt</code> against EPA 5.2.4 built from the official tag; AddressSanitizer; interleaved timing with a noise floor. <b>Not yet checked by a person:</b> the generated C++ and the hand edits have not been reviewed line by line by Bob, and the gate has not been rerun on his machine.</p>
+        <p>swmm5-cplus, this app and its Doc essay were built with Claude, Anthropic's AI model (Claude Opus 5.5), in one session on 27 and 28 October and 12 November 2026, at the request of Robert (Bob) Dickinson, who asked the question and supplies the model corpus it was tested on. Responsibility for publishing the work is his.</p>
+        <p><b>What Claude did:</b> ran the libclang census of EPA's source; wrote the generators that made the C++ tree (<code>make_cplus.py</code>, <code>transpose_xsect.py</code>) and every hand-written change after them; found and fixed the resource defects; wrote the handle and C++ APIs, the coupling example, the WebAssembly builds, the in-memory file system they run on here, the gate and timing harnesses, this page, its figures and the essay. Later on 28 October it profiled the engine, ran the compiler, threading, routing-option and arithmetic experiments in the essay's speed section, and wrote the outfall memo that became R4. That evening two Claude sessions worked on SWMM6 side by side. One read its source, wrote <code>tools/loc_buckets.py</code> to count the three engines and wrote the Doc tab's section on the other C++ SWMM. The other, with Bob's go-ahead to build and run SWMM6's code, built SWMM6's new and legacy engines, ran the four-engine gate, the timing, the callgrind profile and the attribution patches, and wrote the sections from Records against columns onward. On 12 November, when Bob asked for a deeper look, the same session rebuilt SWMM6 three ways (commit c40580c with and without floating-point contraction, and commit db4634a), reran the four-engine gate on all 3,562 models, found that the essay had described the first SWMM6 build wrongly and corrected it, bisected the 94 commits between the two SWMM6 versions on the models whose results changed, retimed the engines, and wrote the essay's three summaries, its section on the flag and the commits, and the technical summary file. SWMM6 itself is the work of Caleb Buahin and the OpenSWMM team; nothing of it is redistributed in this page.</p>
+        <p><b>How it was checked:</b> mechanically, not by the AI's judgment. Byte comparison of every <code>.out</code> and <code>.rpt</code> against EPA 5.2.4 built from the official tag; AddressSanitizer; interleaved timing with a noise floor. Value-by-value comparison of every SWMM6 output, with each engine run twice as a control. The error about the SWMM6 build was caught by counting fused instructions in the built library. <b>Not yet checked by a person:</b> the generated C++ and the hand edits have not been reviewed line by line by Bob, neither gate has been rerun on his machine, and nobody from the SWMM6 project has seen the comparison.</p>
       </div>
       <div class="card">
         <h2>Sources</h2>
         <ul style="margin:0;padding-left:18px">
           <li><a href="https://github.com/USEPA/Stormwater-Management-Model/tree/v5.2.4" target="_blank" rel="noopener">USEPA/Stormwater-Management-Model, tag v5.2.4</a> (the reference engine and the starting point)</li>
           <li><a href="https://github.com/SWMMBobSWMM6/1729-SWMM5-Models-2030" target="_blank" rel="noopener">SWMMBobSWMM6/1729-SWMM5-Models-2030</a> (the corpus the gate ran on; samples here come from its EPA folder)</li>
-          <li><a href="https://github.com/HydroCouple/openswmm.engine/tree/swmm6_rel" target="_blank" rel="noopener">HydroCouple/openswmm.engine, branch swmm6_rel</a> at commit c40580c of 28 October 2026 (SWMM6, OpenSWMM 6.0.0-alpha.4, and its 5.3.0-beta.3 legacy engine; Apache-2.0; read, counted, built and run for the Doc essay, not bundled)</li>
+          <li><a href="https://github.com/HydroCouple/openswmm.engine/tree/swmm6_rel" target="_blank" rel="noopener">HydroCouple/openswmm.engine, branch swmm6_rel</a> at commit c40580c of 28 October 2026 (read and counted; built with and without floating-point contraction) and commit db4634a of 12 November 2026 (built and run) (SWMM6, OpenSWMM 6.0.0-alpha.4, and its 5.3.0-beta.3 legacy engine; Apache-2.0; for the Doc essay only, not bundled)</li>
           <li>libclang 18 (LLVM) for the census and the generator; GCC 13.3 native; Clang 18 with wasi-libc for WebAssembly</li>
           <li>valgrind 3.22 (callgrind) for the instruction counts in the SWMM6 speed comparison</li>
         </ul>
@@ -481,6 +483,16 @@ double xsect_getAofY(TXsect* xsect, double y)
   </div>
 </div>
 
+<div class="modal" id="mdModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mdTitle" style="max-width:860px">
+    <h2 id="mdTitle">Technical summary</h2>
+    <p class="muted" style="margin:0 0 8px">swmm5-cplus.md, the same file that ships beside this page.</p>
+    <pre class="code" id="mdText" style="max-height:60vh;overflow:auto;white-space:pre-wrap;margin:0 0 12px"></pre>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" id="mdCopy" type="button">Copy</button><button class="btn ghost" id="mdSave" type="button">Save .md</button><button class="btn" id="mdClose" type="button">Close</button></div>
+  </div>
+</div>
+
+<script type="text/markdown" id="app-md">/*__APPMD__*/</script>
 <script type="application/octet-stream" id="wasm-cplus">/*__WASM_CPLUS__*/</script>
 <script type="application/octet-stream" id="wasm-epa">/*__WASM_EPA__*/</script>
 <script type="application/octet-stream" id="docx-b64">/*__DOCX__*/</script>
@@ -527,7 +539,7 @@ let DL = null;
 function updateSaveUI() {
   const note = DL ? '' : 'Saving files needs the claude.ai viewer; here the buttons are inactive.';
   $('#saveNote').textContent = note;
-  ['#saveSeries', '#saveZip', '#exportBtn', '#saveDocx', '#saveStats', '#saveRpt'].forEach(s => { const b = $(s); if (b) b.disabled = !DL; });
+  ['#saveSeries', '#saveZip', '#exportBtn', '#saveDocx', '#saveStats', '#saveRpt', '#mdSave'].forEach(s => { const b = $(s); if (b) b.disabled = !DL; });
 }
 async function save(filename, data) {
   if (!DL) { toast('Saving is available in the claude.ai viewer.'); return; }
@@ -1027,7 +1039,17 @@ function openWelcome() { $('#welcome').hidden = false; $('#welcomeClose').focus(
 $('#helpBtn').addEventListener('click', openWelcome);
 $('#welcomeClose').addEventListener('click', () => { $('#welcome').hidden = true; try { localStorage.setItem('swmm5cplus_seen', '1'); } catch (e) {} });
 $('#tourBtn').addEventListener('click', () => { $('#welcome').hidden = true; tourStep(0); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('#welcome').hidden = true; endTour(); } });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('#welcome').hidden = true; $('#mdModal').hidden = true; endTour(); } });
+/* technical summary (.md): the embedded copy, so it works when the file is not beside the page */
+const APP_MD = $('#app-md').textContent.replace(/^\n/, '');
+$('#mdLink').addEventListener('click', (e) => { e.preventDefault(); $('#mdText').textContent = APP_MD; $('#mdModal').hidden = false; $('#mdClose').focus(); });
+$('#mdClose').addEventListener('click', () => { $('#mdModal').hidden = true; });
+$('#mdSave').addEventListener('click', () => save('swmm5-cplus.md', new TextEncoder().encode(APP_MD)));
+$('#mdCopy').addEventListener('click', () => {
+  navigator.clipboard.writeText(APP_MD).then(() => toast('Copied'), () => {
+    const r = document.createRange(); r.selectNodeContents($('#mdText')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('Selected; copy with your keyboard');
+  });
+});
 
 /* ---------------------------------------------------------------- Make a GIF (html2canvas frames -> GIF, WebM fallback) */
 let REC = null;

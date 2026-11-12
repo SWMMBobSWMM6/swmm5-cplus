@@ -10,6 +10,50 @@ TITLE = "Same Numbers, Different Bones"
 SUBTITLE = "How EPA SWMM 5.2.4 could have been built in C++, and a working engine that proves it"
 
 BLOCKS = [
+('h2', 'In one sentence', 'sum1'),
+('p', "EPA SWMM 5.2.4 can be rebuilt as a C++ engine that holds any number of models in one program and still "
+      "writes EPA's output byte for byte, on {FULL_SAME} of the {FULL_DONE} corpus models run here, and setting it beside "
+      "SWMM6, the other C++ SWMM, shows that keeping the numbers takes a byte gate on the build as well as on the code."),
+
+('h2', 'In one paragraph', 'sum2'),
+('p', "EPA SWMM 5.2.4 keeps a simulation in global variables, so one program can hold one model. swmm5-cplus moves "
+      "all {MUTABLE} of them into a C++ object, with a program that edits the source only where the compiler points, "
+      "and keeps each later step only if the output bytes still match EPA's. It matches 5.2.4 byte for byte on "
+      "{FULL_SAME} of the {FULL_DONE} corpus models run, holds and couples many models in one process or one browser "
+      "tab, and with its best exact build takes {SP_R4} of EPA's CPU time. SWMM6, the OpenSWMM engine, is a fresh "
+      "C++20 engine held to its own 5.3 legacy engine rather than to 5.2.4; at commit {S6_COMMIT} its new engine "
+      "matches that legacy engine on {S6_LN} of {S6_LN_N} models and EPA 5.2.4 on {S6_EN} of {S6_EN_N}. My first "
+      "SWMM6 build let the compiler fuse multiplies and adds, and without that one flag {UP_FLAG_LN} of the "
+      "{UP_A_LN_DIFF} differences between its engines that the first version of this essay reported disappear. The "
+      "{UP_COMMITS} commits since then changed {UP_CODE_N} models, {UP_FURTHER} further from EPA 5.2.4 and "
+      "{UP_CLOSER} closer; {UP_COMMITS_TXT}"),
+
+('h2', 'Questions to carry, answered at the end', 'questions'),
+('ol', [
+    "EPA SWMM 5.2.4 reports success when you open a second model over the first. What happens to the first?",
+    "How do you show that a fifty-thousand-line refactor changed no computed number?",
+    "What made SWMM6's two engines agree on 3,031 models instead of 2,377, with no code changed?",
+    "Why can flows move by half a peak while the continuity error stays put?",
+    "Where did SWMM6's one array per quantity pay for itself in speed?",
+]),
+('h2', 'On one page', 'sum3'),
+('p', "<b>The problem.</b> Open a second model in EPA SWMM 5.2.4 without closing the first, and the engine reports "
+      "success while the first model vanishes and {LEAK_BYTES} bytes of it leak. SWMM 5 was built for one model per "
+      "process; GUIs, calibration loops, Python, browsers and coupled models all pay for that."),
+('p', "<b>What was built.</b> A generator driven by the C compiler's own parser moved EPA's {MUTABLE} run-time "
+      "variables and {FUNCS} functions into one C++ class, <code>Project</code>, in {EDITS} edits, and each later step "
+      "was kept only if the output still matched EPA's. Of the {FULL_DONE} corpus models run, {FULL_SAME} are "
+      "identical and {FULL_DIFF_TXT}: EPA's numbers, defects included, not better ones."),
+('p', "<b>The other C++ SWMM.</b> SWMM6 is {S6_X_EPA} times EPA's size, keeps one array per quantity, and checks "
+      "itself against its own legacy engine, not 5.2.4. The figure shows how far the two agree, and why that moved."),
+('fig', 'flags', "Agreement between engines for three builds of SWMM6 on the same corpus models: commit c40580c as "
+                 "first built here, with the compiler free to fuse a multiply and an add; the same commit with "
+                 "-ffp-contract=off; and commit {S6_COMMIT_TXT}, {UP_COMMITS} commits later, which turns contraction "
+                 "off by itself. swmm5-cplus against EPA 5.2.4 is on top for reference."),
+('p', "<b>What moved it.</b> A fused multiply-add rounds once where the source rounds twice. My first build let the "
+      "compiler use them in SWMM6's new engine and not its legacy engine, which put the two apart on {UP_FLAG_LN} models that agree without them. "
+      "The {UP_COMMITS} commits since then moved {UP_CODE_N} models, {UP_FURTHER} away from EPA 5.2.4 and "
+      "{UP_CLOSER} toward it; {UP_WHO_SHORT} No field data say which answer is closer to real water."),
 ('h2', 'One model per customer', 'opening'),
 ('p', "Here is an experiment you can run in about a second. Take EPA SWMM 5.2.4, the engine most of the stormwater "
       "world runs on, and open a model. Then, without closing it, open a second one. The second "
@@ -551,9 +595,12 @@ ctx.nodes.depth[j]"""),
                      "held to its legacy engine, a newer EPA version than 5.2.4. The counts on the solid arrows come from the "
                      "four-engine gate below."),
 ('h2', 'Four engines, one corpus', 's6gate'),
-('p', "So I built SWMM6 the way its repository builds it, Release with link-time optimization and "
-      "<code>-ffp-contract=off</code>, with the optional GeoPackage, HDF5, 2D and GPU modules turned off, and ran four "
-      "engines on the same models: EPA 5.2.4, swmm5-cplus, SWMM6's legacy engine and SWMM6's new engine. The model set "
+('p', "So I built SWMM6 and ran four engines on the same models: EPA 5.2.4, swmm5-cplus, SWMM6's legacy engine and "
+      "SWMM6's new engine. SWMM6 was built Release from its own CMake files, with the optional GeoPackage, HDF5, 2D "
+      "and GPU modules turned off. The first version of this section did that at commit <code>c40580c</code> and "
+      "said the build matched the repository's own, floating-point flags included. It did not, and the section after "
+      "this one says what that cost. The numbers here come from a rerun on {S6_DATE} at commit {S6_COMMIT}, which "
+      "turns floating-point contraction off by itself. The model set "
       "is every corpus model that took EPA under five seconds in the swmm5-cplus gate, {S6_MODELS} of them, plus a seeded "
       "sample of {S6_B_MODELS} larger ones. Each SWMM6 engine ran every model twice, because an engine that does not reproduce itself cannot "
       "be compared with anything. Then every reported value in every reporting period was compared, pair by pair."),
@@ -566,16 +613,69 @@ ctx.nodes.depth[j]"""),
                       "share of that element's peak, above 1 mm and 1 L/s. Controls first, then the three comparisons that matter."),
 ('p', "Then the comparisons that matter. SWMM6's legacy engine reproduced EPA 5.2.4 on {S6_EL} of {S6_EL_N} models that "
       "both ran. Its new engine reproduced the legacy engine on {S6_LN} of {S6_LN_N}, and EPA 5.2.4 on {S6_EN} of {S6_EN_N}. "
-      "Where the new engine and its legacy engine differ, {S6_LN_LAST} models differ only in the last digits, "
-      "{S6_LN_SMALL} by less than one percent of some element's peak, {S6_LN_MID} by one to ten percent and {S6_LN_BIG} by more; "
-      "in {S6_LN_OFF} only system totals, subcatchments or elements below the floor differ."),
+      "Where the new engine and its legacy engine differ, the difference is either large or out of sight: {S6_LN_BIG} "
+      "models differ by more than ten percent of some element's peak, {S6_LN_MIDALL} by less, and in {S6_LN_OFF} only "
+      "system totals, subcatchments or elements below the floor differ. The large ones fall into three groups. In "
+      "{S6_P1_DIFF_W} of them, all networks converted from XP-SWMM, a Type 1 pump, the kind whose flow steps with the "
+      "volume in its wet well, draws from an ordinary junction instead of a storage node. That detail decides it: of "
+      "{S6_P1_STOR} corpus models whose Type 1 pumps all draw from storage nodes, not one differs. The new engine's "
+      "code for that case carries a <code>PARITY</code> comment, so its authors meant it to match; I did not trace "
+      "where it does not. {S6_CR_DIFF} more are decks from the 2026 OpenSWMM code review, each written to expose an "
+      "input defect, which the two engines read differently. The last {S6_OTHER_DIFF} are {S6_OTHER_TXT}."),
 ('p', "That band is a strict test: one element out of hundreds is enough to put a model over ten percent. Seen from the "
       "outlet the picture is calmer. Where the new engine differs from EPA 5.2.4, the total outflow volume agrees within "
       "0.1 percent in {S6_EN_VOL01} of {S6_EN_VOLN} models and within 1 percent in {S6_EN_VOL1}; the peak outflow agrees within "
       "1 percent in {S6_EN_PK1}. Where the new engine differs from its own legacy engine, the outflow volume agrees within "
       "0.1 percent in {S6_LN_VOL01} of {S6_LN_VOLN}."),
-('p', "A difference in the last digits is how dynamic wave diverges, so it is worth watching one grow. Take a "
-      "27-junction training model, {S6_TR_MODEL}. SWMM6 ships trace switches in both of its engines, environment variables "
+('p', "Some models one engine runs and another refuses. {S6_N_REFUSE_TXT} {S6_SIX_TXT}"),
+('h2', 'One flag, then ninety-four commits', 's6update'),
+('p', "The sections above were first written at SWMM6 commit {S6_STATIC_COMMIT}, on {S6_STATIC_DATE}. By {S6_DATE} "
+      "SWMM6 had moved {UP_COMMITS} commits on, to {S6_COMMIT}, and its engine outside the 2D code had changed in "
+      "{UP_ENG_FILES} files, {UP_ENG_PLUS} lines added and {UP_ENG_MINUS} removed. Bob asked for the comparison to be "
+      "run again on the new code. Doing that properly meant building SWMM6 three times, and the first thing the three "
+      "builds showed was a mistake of mine."),
+('p', "The first version of this essay said I built SWMM6 with <code>-ffp-contract=off</code>, the way its "
+      "repository builds it. Its build presets do set that flag. I did not use a preset. I configured with plain "
+      "CMake, which leaves contraction at the compiler's default, and SWMM6's engine asks GCC for the AVX2 and FMA "
+      "instruction sets on x86 machines:"),
+('code', 'cmake', """# src/engine/CMakeLists.txt
+target_compile_options(openswmm_engine PRIVATE -mavx2 -mfma)"""),
+('p', "A fused multiply-add computes <code>a*b + c</code> with one rounding instead of two. Its answer is usually "
+      "a little more accurate and always a little different. With contraction allowed, GCC put {UP_FMA} fused "
+      "instructions into the new engine's library. The legacy engine is built without that option and got none. So "
+      "the two SWMM6 engines I compared were running the same formulas with different arithmetic. This essay's own "
+      "speed section had already found that fused instructions move SWMM5's answers, and I built past that finding."),
+('p', "SWMM6's developer hit the same trap from the other side the next day. Caleb Buahin's commit "
+      "<code>7d7dcbc</code> of 29 October explains it in its message: the bit-exact parity test needs "
+      "<code>-ffp-contract=off</code> in C as well as C++, only the presets set it, and a configure without a preset "
+      "compiled the legacy kernels with Clang's default contraction, so they drifted by one unit in the last "
+      "place at small depths. The fix appends the flag whenever it is missing:"),
+('code', 'cmake', """foreach(_lang C CXX)
+    if(CMAKE_${_lang}_COMPILER_ID MATCHES "Clang|GNU"
+       AND NOT CMAKE_${_lang}_FLAGS MATCHES "-ffp-contract=off")
+        string(APPEND CMAKE_${_lang}_FLAGS " -ffp-contract=off")
+    endif()
+endforeach()"""),
+('p', "That gives three builds to compare. A is {S6_STATIC_COMMIT} as I first built it. B is the same commit with "
+      "<code>-ffp-contract=off</code> added by hand, which leaves {UP_FMA_B} fused instructions. C is {S6_COMMIT}, "
+      "configured exactly as A was, which the new CMake code turns into a build without contraction. A against B "
+      "measures the flag and nothing else. B against C measures {UP_COMMITS} commits of code and nothing else. All "
+      "three ran on the same {S6_ALL} models, beside EPA 5.2.4 and swmm5-cplus, in one gate."),
+('p', "The flag first. Turning contraction off left the legacy engine's output unchanged on every model, as it "
+      "should, since nothing in it had been fused. It changed the new engine's output on {UP_NB_CHANGED} models: "
+      "{UP_NB_LAST} in the last digits only, {UP_NB_SMALL} by under one percent of some element's peak, {UP_NB_MID} "
+      "by one to ten percent, {UP_NB_BIG} by more than ten percent, and {UP_NB_OFF} only off the network. Against its "
+      "legacy engine, the new engine went from identical on {UP_A_LN} models to identical on {UP_B_LN}. Against EPA "
+      "5.2.4, it went from {UP_A_EN} to {UP_B_EN}. No model went the other way. Of the {UP_A_LN_DIFF} models where "
+      "the first version of this essay found SWMM6's two engines apart, {UP_B_LN_DIFF} are still apart without the "
+      "fused instructions."),
+('p', "The flag hit pumps and control rules hardest. Pumps are in {UP_FL_PUMP} percent of the models it moved by "
+      "more than ten percent and in {UP_UN_PUMP} percent of the models it left alone; control rules are in "
+      "{UP_FL_CTL} percent against {UP_UN_CTL}. A pump or a rule acts at a threshold, and a depth one bit either side "
+      "of a threshold switches a pump one step early or late. That is the likely mechanism. It was not traced model "
+      "by model."),
+('p', "A difference in the last digits is how dynamic wave diverges, and the first version of this essay watched "
+      "one grow. Take a 27-junction training model, {S6_TR_MODEL}, run on the first build. SWMM6 ships trace switches in both of its engines, environment variables "
       "that write a fingerprint of the whole hydraulic state after every routing step, and they put the first difference "
       "at step {S6_TR_STEP} of about {S6_TR_STEPS}, {S6_TR_T} seconds into the run. The hash of every flow and depth "
       "differs; their sums do not. Dumping that step element by element, the lowest-numbered link that differs is "
@@ -586,30 +686,105 @@ ctx.nodes.depth[j]"""),
       "{S6_TR_DY} ft apart in depth. Between storms the gap closes completely: in {S6_TR_SAME} of the {S6_TR_PER} "
       "reporting periods every node depth and link flow is identical again, because the network drains and forgets."),
 ('fig', 's6_growth', "The largest link-flow difference between SWMM6's two engines in each five-minute reporting period of "
-                     "{S6_TR_MODEL_TXT}, on a log scale, over the largest link flow. It appears at the storm peaks and vanishes between them."),
-('p', "I could not pin that first difference to a line of code. Both engines compute the area with the same formula, "
-      "and SWMM6's batch geometry kernel is written operation for operation like EPA's <code>lookup()</code>. But "
-      "neither traced area equals that formula applied to the traced depth, so the trace does not show the depth the "
-      "area was computed from. That is the honest state of it: located to a step, a link and a variable, not to a line."),
-('p', "Some models one engine runs and another refuses. {S6_N_REFUSE_TXT} {S6_SIX_TXT}"),
+                     "{S6_TR_MODEL_TXT}, on a log scale, over the largest link flow, with SWMM6 at c40580c as first built. "
+                     "It appears at the storm peaks and vanishes between them. Built without contraction, the line is not there."),
+('p', "The first version could not pin that first difference to a line of code. Both engines compute the area with "
+      "the same formula, and SWMM6's batch geometry kernel is written operation for operation like EPA's "
+      "<code>lookup()</code>. Now we know why no line was found: there was none. The formulas were the same and the "
+      "arithmetic was not. Built from the same commit with contraction off, the two engines write identical values "
+      "for every node, link and subcatchment in every one of the {S6_TR_PER} reporting periods of this model. The "
+      "{S6_TR_DQ} cfs in the figure was the build."),
+('p', "Then the code. Between B and C nothing changed but SWMM6's source. The legacy engine's output changed on "
+      "{UP_CODE_L} models and the new engine's on {UP_CODE_N}. Every model that changed in the legacy engine changed "
+      "in the new engine too, and moved the same way relative to EPA 5.2.4, which points at commits that edited both "
+      "engines together. {UP_CODE_ONLYN}"),
+('p', "Which commits? A bisection answers that mechanically. Of the {UP_COMMITS} commits, {UP_SRC_COMMITS} touch the "
+      "engines' source or build files, and only those can change an output. I built both engines at the two ends, and "
+      "then, model by model, at the commit halfway between any two that gave a model different bytes, until every "
+      "change sat between two neighbouring commits. The bisection build left out link-time optimization so that each "
+      "commit could build on the last; at both ends it wrote the same bytes as the gate's builds, on every model. It "
+      "followed the {UP_BISECT_N} models whose results changed and that EPA 5.2.4 runs, and needed {UP_BISECT_BUILT} "
+      "builds."),
+('p', "One commit did almost all of it. Of the {UP_BISECT_N} models, {UP_C1_N} changed at <code>40f439a</code>, Caleb "
+      "Buahin's &ldquo;fix: bound conduit losses by per-barrel and node water budgets&rdquo; of 29 October, which "
+      "cites EPA SWMM issue 216 and pull request 234. EPA's code limits a conduit's evaporation and seepage only by "
+      "the water in the conduit. The commit also limits them by the water at the two nodes the conduit joins, and in "
+      "the legacy engine's <code>link.c</code> it fixes a mismatch between a loss rate per barrel and a volume for all "
+      "barrels together:"),
+('code', 'c', """-            q = Link[j].newVolume / tstep;
++            q = Link[j].newVolume / (tstep * Conduit[Link[j].subIndex].barrels);"""),
+('p', "The node limit is a new routine in <code>dynwave.c</code>, called on every iteration of every time step "
+      "whenever the model has any evaporation or seepage at all:"),
+('code', 'c', """HasConduitLosses = Evap.rate > 0.0;
+for (i = 0; i < Nobjects[LINK]; i++) {
+    if (Link[i].type == CONDUIT && Link[i].seepRate > 0.0)
+        HasConduitLosses = TRUE;
+    ...
+findLinkFlows(tStep);
+if (HasConduitLosses)
+    limitConduitLosses(tStep);
+converged = findNodeDepths(tStep);
+
+/* inside limitConduitLosses: what each node can afford */
+available = Node[i].inflow - Node[i].outflow + rate;
+storageRate = MAX(0.0, Node[i].oldDepth - FUDGE) * area / dt;
+available = MIN(available + storageRate,
+                available + Node[i].oldNetInflow + 2.0 * storageRate);
+Xnode[i].lossFactor = MIN(1.0, MAX(0.0, available / rate));"""),
+('p', "That condition is the whole pattern. Every one of the {UP_C1_N} models has evaporation or seepage. Of the "
+      "{UP_C1_NOLOSS} dynamic-wave models with neither, not one changed; of the {UP_C1_LOSSY} with either, {UP_C1_N} "
+      "did. The routine leaves a model alone while every node holds enough water for its pipes' losses. It changes the "
+      "answer when a node runs short, and nodes run short where something draws them down: {UP_C1_PUMPS} of the "
+      "{UP_C1_N} have pumps and {UP_C1_CTL} have control rules. Of the {UP_C1_N}, {UP_C1_FURTHER} moved further from "
+      "EPA 5.2.4, {UP_C1_FROM_EXACT} of those from exact agreement, by up to {UP_C1_MAXF} percent of some element's peak; "
+      "{UP_C1_CLOSER} moved closer; and {UP_C1_SAME} changed without moving their distance to EPA."),
+('p', "The engine's own bookkeeping barely noticed. The legacy engine's reported routing continuity error is the same, "
+      "to the report's three decimals and within 0.005 percent, for {UP_C1_CONT_SAME} of the {UP_C1_N}, including PID "
+      "and orifice-rule models whose largest element moved by half its peak or more. Corinne Wiesner-Friedman made "
+      "the same point about cross-section tables this summer: a continuity balance is computed from the engine's own "
+      "state, so it can close whether or not the answer moved. Further from 5.2.4 is not the same as wrong, either. "
+      "The commit's own test deck went from a continuity error of &minus;304.589 percent to +1.021 percent, and in "
+      "the corpus model with the worst balance, {UP_C1_WORST_MODEL}, the error went from {UP_C1_WORST_B} to "
+      "{UP_C1_WORST_C} percent while its distance from EPA grew from {UP_C1_WORST_D0} to {UP_C1_WORST_D1} percent "
+      "of a peak. Which answer is closer to the water is a question for observed data, and there were none here."),
+('p', "The other {UP_REST_N} commits that changed a result are small and local. Three fix low-impact development "
+      "defects that the 2026 OpenSWMM code review found in both engines: the new engine now reads a rain barrel's "
+      "covered flag (<code>a47a3dc</code>), a covered barrel returns only the rain that falls on it "
+      "(<code>fe8f84f</code>), and LID water returned to the pervious area is mixed into the ponded water whose "
+      "pollutants it carries (<code>ab1d439</code>). Between them they changed {UP_LID_N} models, most of them the "
+      "review's own decks, and none moved further from EPA 5.2.4 or closer by this measure, which looks only at link "
+      "flows and node depths; a fix to rain-barrel water or to pollutant mixing shows first in subcatchment runoff and "
+      "quality. The last three refuse decks the engines used to run. Commit <code>e5f96a4</code>, which gives junctions "
+      "an optional storage area, checks that the area times the junction's full depth is a finite number:"),
+('code', 'c', """if (!isfinite(Node[nodeIndex].storageArea * Node[nodeIndex].fullDepth))
+    report_writeErrorMsg(ERR_NUMBER, Node[nodeIndex].ID);"""),
+('p', "A junction without a storage area has an area of zero, and zero times infinity is not a number. So the code "
+      "review's deck that gives a junction a maximum depth of <code>inf</code>, which EPA 5.2.4 runs, now stops with "
+      "ERROR 211 in both SWMM6 engines. Whether that was the aim or a bonus, the review's complaint is answered. "
+      "<code>7bcb4f4</code> validates snow fractions and refuses snow removal that names no destination, and "
+      "<code>79e8e34</code> rejects a pavement regeneration degree outside 0 to 1 in two decks that EPA 5.2.4 cannot "
+      "run either. {UP_TWICE_TXT}The table lists every commit that changed a result, in order."),
+('table_num', 'UP_TABLE_COMMITS'),
 ('h2', 'Speed, and what each could borrow', 's6speed'),
-('p', "Speed is where the columns were supposed to pay, so I timed the four engines the same way the speed section "
+('p', "Speed is where the columns were supposed to pay, so I timed the engines the same way the speed section "
       "timed swmm5-cplus: the same eight models, CPU time, three interleaved runs, and EPA timed against itself for the "
-      "noise, which came out at {S6_SP_NOISE} per model. Each engine was built the way its own project builds it. The numbers do not "
-      "care what anybody expected. SWMM6's new engine took {S6_SP_SWMM6_NEW} times EPA's CPU time on average, from "
+      "noise, which came out at {S6_SP_NOISE} per model. All three SWMM6 builds ran in the same rotation, so the fused "
+      "instructions could be priced as well as counted. The numbers do not care what anybody expected. At {S6_COMMIT}, "
+      "SWMM6's new engine took {S6_SP_SWMM6_NEW} times EPA's CPU time on average, from "
       "{S6_SP_SWMM6_NEW_RANGE} across the models; CPU time counts its background output thread too, and by the clock "
-      "the average was {S6_SP_WALL}. Its legacy engine took {S6_SP_SWMM6_LEGACY}. swmm5-cplus R4 took "
+      "the average was {S6_SP_WALL}. {S6_SP_AB_TXT} SWMM6's legacy engine took {S6_SP_SWMM6_LEGACY}. swmm5-cplus R4 took "
       "{S6_SP_CPLUS_LTO} built plainly and {S6_SP_CPLUS_PGO} with the profile-guided build, every byte the same as EPA's."),
-('fig', 's6_speed', "CPU time against EPA 5.2.4 on the eight timing models of the speed section, three interleaved runs, "
-                    "each engine built the way its own project builds it."),
+('fig', 's6_speed', "CPU time against EPA 5.2.4 on the eight timing models of the speed section, three interleaved runs. "
+                    "SWMM6's new engine appears three times: commit c40580c with and without fused instructions, and "
+                    "commit db4634a."),
 ('p', "Those eight models are small, the largest a few hundred links, and columns are meant to pay on big networks. So "
       "I timed {S6_LG_N} larger ones the same way, from {S6_LG_MIN} to {S6_LG_MAX} links, with the noise this time at "
       "{S6_LG_NOISE}. The gap narrowed. On the four networks of {S6_LG_MIDLINKS} links SWMM6's new engine took {S6_LG_MID} "
-      "times EPA's CPU time, and on the {S6_LG_MAX}-link network it took {S6_LG_BIG}: faster than EPA, by more than the "
-      "noise, while taking slightly more routing steps. The legacy engine averaged {S6_LG_LEG} on these five and "
+      "times EPA's CPU time, and on the {S6_LG_MAX}-link network it took {S6_LG_BIG}: {S6_LG_BIG_TXT} "
+      "The legacy engine averaged {S6_LG_LEG} on these five and "
       "swmm5-cplus {S6_LG_CP}."),
 ('p', "To see where the time goes, I counted instructions with callgrind, which does not care what else the machine "
-      "is doing, on the model with the widest gap: {S6_PR_MODEL}, eight months of continuous simulation in five-minute steps. "
+      "is doing, on the first build and the model with the widest gap: {S6_PR_MODEL}, eight months of continuous simulation in five-minute steps. "
       "EPA executed {S6_PR_EPA} billion instructions; SWMM6's new engine executed {S6_PR_NEW} billion. The hydraulics are "
       "not where the difference lies. Routing and cross-section geometry took {S6_PR_HYD_EPA} billion in EPA and "
       "{S6_PR_HYD_NEW} billion in SWMM6. Writing results took {S6_PR_OUT_EPA} billion in EPA and {S6_PR_OUT_NEW} billion in "
@@ -669,15 +844,24 @@ yCrit = xsect::getYcrit(xs, q);"""),
     "to a member function. The next section says what the rest would take.",
     "The two-model coupling is one-way and lagged by nothing more than the order of the two step calls; it is a "
     "demonstration of what the architecture allows, not a validated coupling method.",
-    "The SWMM6 line counts are a reading of its source at one commit. Lines were counted by one simple rule for all "
+    "The SWMM6 line counts, the <code>PARITY</code> count and the reading of its tests are of one commit, "
+    "{S6_STATIC_COMMIT} of {S6_STATIC_DATE}, and were not redone at {S6_COMMIT}. Lines were counted by one simple rule for all "
     "three engines, a code line with a trailing comment counts as code, and SWMM6's files were sorted into piles by "
     "file name, so each share is good to a few percent.",
-    "The SWMM6 comparison is of one commit, {S6_COMMIT}, read and run on {S6_DATE}; SWMM6 is in alpha and changes daily. "
+    "The SWMM6 gate and timing are of {S6_COMMIT}, run on {S6_DATE}, with {S6_STATIC_COMMIT} beside it in two builds; "
+    "SWMM6 is in alpha and changes daily. "
     "It was built without its optional GeoPackage, HDF5, 2D and GPU modules, so none of those were run, and the corpus "
     "is SWMM5 models, which exercise SWMM6's legacy-compatible paths and almost none of its new physics. SWMM6 measures "
-    "itself against its own legacy engine, not against 5.2.4, so a difference from 5.2.4 is a difference, not a defect. Its speed was "
+    "itself against its own legacy engine, not against 5.2.4, so a difference from 5.2.4 is a difference, not a defect, "
+    "and a commit that moves a model away from 5.2.4 may be a fix. Its speed was "
     "timed on the eight models of the speed section and five larger ones on the same two-core machine, and the "
-    "instruction profile is of one model; nothing larger than 8,683 links was timed.",
+    "instruction profile is of one model, in the first build; nothing larger than 8,683 links was timed.",
+    "The first SWMM6 build let the compiler fuse multiplies and adds in the new engine, and the first version of this "
+    "essay reported its results as if it had not. Every SWMM6 number above is from builds without contraction except "
+    "where a sentence names the first build. Builds B and C still differ from the repository's Linux preset in "
+    "<code>-fno-math-errno</code> and hidden symbol visibility, which should not change a result and were not tested. "
+    "{UP_SKIP_TXT}",
+    "{UP_BISECT_LIMIT}",
     "Agreement is measured on the binary output, which stores 32-bit numbers at each reporting step. Two engines that "
     "agree there may still differ in the last bits of their 64-bit state, as the trace in that section shows. Agreement "
     "says nothing about which engine is closer to the real system; no field data were used.",
@@ -741,10 +925,44 @@ yCrit = xsect::getYcrit(xs, q);"""),
       "worked on SWMM6 side by side. One read its source, wrote <code>tools/loc_buckets.py</code> to count the three "
       "engines, and wrote the section on the other C++ SWMM. The other, with Bob's go-ahead to build and run SWMM6's "
       "code, built its two engines, wrote the four-engine gate, the attribution patches, the trace and profile "
-      "analysis and the output-writer test, and wrote the sections from Records against columns onward."),
+      "analysis and the output-writer test, and wrote the sections from Records against columns onward. On "
+      "{S6_DATE}, when Bob asked for a deeper look, the same session rebuilt SWMM6 three ways, reran the four-engine "
+      "gate on all {S6_ALL} models, found that the essay's account of the first SWMM6 build was wrong and corrected it, "
+      "bisected the {UP_COMMITS} commits between the two SWMM6 versions on the {UP_BISECT_N} models whose results "
+      "changed, retimed the engines, and wrote the three summaries at the top, the section on the flag and the "
+      "commits, and the app's technical summary file."),
 ('p', "<b>How it was checked.</b> The checks are mechanical, not the AI's judgment: byte comparison of "
       "<code>.out</code> and <code>.rpt</code> files against EPA SWMM 5.2.4 built from the official tag, "
-      "AddressSanitizer runs, and interleaved timing with a noise floor. <b>What no person has checked yet:</b> "
-      "Bob has not yet reviewed the generated C++ or the hand-written changes line by line, nor rerun the gate "
-      "on his own machine."),
+      "AddressSanitizer runs, value-by-value comparison of every SWMM6 output with repeat runs as controls, and "
+      "interleaved timing with a noise floor. The error about the SWMM6 build was caught by counting fused "
+      "instructions in the built library, not by reading the essay. <b>What no person has checked yet:</b> "
+      "Bob has not yet reviewed the generated C++ or the hand-written changes line by line, nor rerun either gate "
+      "on his own machine, and nobody from the SWMM6 project has seen this comparison."),
+
+('h2', 'Answers to the questions', 'answers'),
+('ol', [
+    "It is overwritten. SWMM 5 keeps every array, clock and running total in variables that belong to the whole "
+    "program, so the second open writes over the first. Its report stays empty, its output is never written and "
+    "{LEAK_BYTES} bytes of it are never freed. Nothing checks, because the engine was built for one model per process. "
+    "In swmm5-cplus each model is a <code>Project</code> object with its own copy of all {MUTABLE} variables.",
+    "Make the edits with a program, not by hand, and let the output decide. A generator driven by the compiler's own "
+    "parser made the {EDITS} edits, every one at a place the compiler pointed to, and after each of six steps the "
+    "<code>.out</code> and <code>.rpt</code> files were compared with EPA's byte for byte. In the full gate {FULL_SAME} "
+    "of the {FULL_DONE} corpus models run are identical and {FULL_DIFF_TXT}; the rest crash both engines alike or hit "
+    "the same limit.",
+    "The arithmetic. My first build let the compiler fuse a multiply and an add into one instruction, which rounds once "
+    "instead of twice, in the new engine and not in the legacy engine. That changed the last bits, and dynamic wave grows "
+    "last bits, especially near pump and control-rule thresholds. With <code>-ffp-contract=off</code> the formulas are "
+    "computed the way they are written in both engines.",
+    "Continuity is computed from the engine's own state, so it balances whether or not the answer moved: for "
+    "{UP_C1_CONT_SAME} of the {UP_C1_N} models changed by <code>40f439a</code> the reported routing continuity error is "
+    "unchanged, while some link flows moved by half their peak or more. And the commit is a fix: it stops a pipe from "
+    "losing more water to evaporation and seepage than its end nodes hold, and its own test case went from &minus;304.6 "
+    "to +1.0 percent continuity. Only observed data can say which answer is closer to the real system.",
+    "On the biggest network timed, {S6_LG_MAX} links, SWMM6's new engine took {S6_LG_BIG} of EPA's CPU time. On the "
+    "eight small models it took {S6_SP_SWMM6_NEW} on average, because the work around the solver, the snapshots, "
+    "allocation and output, outweighs what the columns save in the solver itself. swmm5-cplus kept EPA's layout and "
+    "arithmetic and took {S6_SP_CPLUS_PGO} with its best exact build.",
+]),
 ]
+

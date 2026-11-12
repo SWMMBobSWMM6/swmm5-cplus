@@ -6,10 +6,11 @@ couple any number of models at once: in one process, on one thread each, or insi
 WebAssembly instance in a browser.
 
 **Ready to use:** [`dist/swmm5-cplus.html`](dist/swmm5-cplus.html) is the browser app
-(download it and open it in a browser; it needs no server), and
+(download it and open it in a browser; it needs no server),
 [`dist/swmm5-cplus-doc.docx`](dist/swmm5-cplus-doc.docx) is its essay, *Same Numbers,
-Different Bones*, as a Word document (32 pages, 20 figures), including the comparison with
-SWMM6.
+Different Bones*, as a Word document (40 pages, 21 figures), including the comparison with
+SWMM6, and [`dist/swmm5-cplus.md`](dist/swmm5-cplus.md) is the technical summary for AI tools
+and engineers: what it computes, every check with its numbers, the limits and the provenance.
 
 EPA 5.2.4 keeps 415 mutable variables at file or program scope, so a process can hold one
 model. Open a second one over the first and `swmm_open()` returns 0, the first model's
@@ -136,24 +137,38 @@ model, for the check.
 
 ## Compared with SWMM6
 
-OpenSWMM's SWMM6 (github.com/HydroCouple/openswmm.engine, branch `swmm6_rel`, commit `c40580c`,
-6.0.0-alpha.4) is the other C++ SWMM. It was read, built (Release, optional GeoPackage, HDF5, 2D
-and GPU modules off) and run beside EPA 5.2.4 and swmm5-cplus. The Doc essay has the full account;
-the raw rows are in `results/swmm6/`, the scripts in `tools/swmm6/`.
+OpenSWMM's SWMM6 (github.com/HydroCouple/openswmm.engine, branch `swmm6_rel`, 6.0.0-alpha.4) is the
+other C++ SWMM. It was read and counted at commit `c40580c` (28 October 2026) and built and run beside
+EPA 5.2.4 and swmm5-cplus, Release with the optional GeoPackage, HDF5, 2D and GPU modules off. On
+12 November the comparison was rerun on all 3,562 models with three SWMM6 builds: A, `c40580c` as
+first built; B, the same commit with `-ffp-contract=off`; C, `db4634a`, 94 commits later. The Doc essay
+has the full account; the raw rows are in `results/swmm6/` and `results/swmm6/db4634a/`, the scripts
+in `tools/swmm6/`.
 
-| Measured | Result |
+**Correction.** The first build (A) was described as using `-ffp-contract=off`. It did not: a plain
+CMake configure at `c40580c` leaves contraction on, and SWMM6's engine is compiled with `-mavx2 -mfma`,
+so its library held 2,665 fused multiply-add instructions and the legacy engine's none. SWMM6's own
+commit `7d7dcbc` (29 October) turns contraction off when no preset does. The table below is build C.
+
+| Measured, build C (`db4634a`) | Result |
 |---|---|
-| Models run, six runs each | 3,522 small corpus models (EPA under 5 s) plus a seeded sample of 40 larger |
-| Controls | swmm5-cplus = EPA on 3,133 of 3,133 that wrote results; each SWMM6 engine = its own rerun (3,316 of 3,316; 3,228 of 3,228) |
-| SWMM6 legacy (5.3.0-beta.3) = EPA 5.2.4 | 1,497 of 3,089 |
-| SWMM6 new = SWMM6 legacy | 2,377 of 3,146 |
-| SWMM6 new = EPA 5.2.4 | 1,095 of 2,977; where they differ, outflow volume within 0.1 % in 924 of 1,340 |
-| Why the legacy engine differs from 5.2.4 | its free/normal outfall depth rule alone explains 915 of 1,558; with its storage and conveyance changes, 956 |
-| Models SWMM6 new refuses that EPA runs | 147 (72 ERROR 145, 25 ERROR 203, ...), 2 more past a 5-minute limit |
-| CPU time vs EPA, 8 speed-study models | SWMM6 new 2.09 (by the clock 1.99), legacy 1.15, swmm5-cplus R4 0.85 (0.79 with PGO) |
-| CPU time vs EPA, 5 networks of 345–8,683 links | SWMM6 new 1.14–1.40, and 0.92 on 8,683 links; legacy 1.01; swmm5-cplus 0.96 |
-| Instructions, continuous model | EPA 5.4 billion, SWMM6 new 11.5 billion; output 0.37 vs 2.7, memory 0.03 vs 1.0 |
-| One `fwrite` per period (test patch) | byte-identical on 48 of 48; CPU down 10 % on the continuous model, clock time unchanged |
+| Models run | 3,522 small corpus models (EPA under 5 s) plus a seeded sample of 40 larger |
+| Controls | swmm5-cplus = EPA on 3,133 of 3,133 that wrote results; each SWMM6 engine = its own rerun (3,314 of 3,314; 3,226 of 3,226) |
+| SWMM6 legacy (5.3.0-beta.3) = EPA 5.2.4 | 1,449 of 3,092 |
+| SWMM6 new = SWMM6 legacy | 3,034 of 3,148; of the 54 more than 10 % apart, 36 have a Type 1 pump drawing from a junction (none of 149 with Type 1 pumps on storage nodes differs) and 14 are code-review decks |
+| SWMM6 new = EPA 5.2.4 | 1,327 of 2,979 |
+| Models SWMM6 new refuses that EPA runs | 144 (72 ERROR 145, 25 ERROR 203, ...) |
+| Why the legacy engine differs from 5.2.4 (at `c40580c`) | its free/normal outfall depth rule alone explains 915 of 1,558; with its storage and conveyance changes, 956 |
+
+| The flag and the code | Result |
+|---|---|
+| A to B, contraction off, same commit | new engine's output changed on 700 models (221 by over 10 % of an element's peak); legacy unchanged; new = legacy 2,377 -> 3,031; new = EPA 1,095 -> 1,376; no model went the other way |
+| B to C, 94 commits, no contraction | legacy changed on 117 models, new on 138 (runs that hit the time limit left out); every legacy change also in the new engine, in the same direction; against EPA 5.2.4, 30 further and 5 closer |
+| Commits that moved them (bisection, 23 builds over 72 commits, 121 models) | `40f439a` (conduit evaporation and seepage limited by node water) moved 107 models in both engines: 30 further from EPA, 5 closer, 72 same distance; all 107 have evaporation or seepage, none of 2,711 dynamic-wave models without either changed. Six more commits changed 2 to 6 models each: three LID fixes from the code review (`a47a3dc`, `fe8f84f`, `ab1d439`) and three new refusals (`e5f96a4`, `7bcb4f4`, `79e8e34`) |
+| CPU time vs EPA, 8 speed-study models | SWMM6 new 2.17 (by the clock 2.04); with contraction on (build A) 2.10, off (B) 2.09, per model 0.93–1.06 of A, inside the noise; legacy 1.17; swmm5-cplus R4 0.86 (0.78 with PGO); EPA against itself 0.96–1.04 |
+| CPU time vs EPA, 5 networks of 345–8,683 links | SWMM6 new 1.20–1.37, and 0.83 on 8,683 links with EPA's average routing step (build A's smaller step there came from contraction); legacy 1.05; swmm5-cplus 0.97; EPA against itself 0.97–1.02 |
+| Instructions, continuous model (build A) | EPA 5.4 billion, SWMM6 new 11.5 billion; output 0.37 vs 2.7, memory 0.03 vs 1.0 |
+| One `fwrite` per period (test patch on build A) | byte-identical on 48 of 48; CPU down 10 % on the continuous model, clock time unchanged |
 
 A line count of the three engines by purpose, from a parallel session, is in
 `tools/loc_buckets.py` and `docs/swmm6_loc.json`.
@@ -203,8 +218,11 @@ coupling, and carries the essay *Same Numbers, Different Bones* in its Doc tab.
 `app/build.py` reads the gate and timing results from the paths at its top;
 `app/doc/essay.py` is the single source of the essay, and `doc/prep_docx.py` plus
 `doc/build_docx.js` render the same text and figures to Word. `app/make_all.sh` runs the
-two passes (page, then Word, then the page again so it embeds the .docx). The built copies
-in `dist/` were made that way from the sources in this commit.
+two passes (page, then Word, then the page again so it embeds the .docx). `app/app_md.tmpl` is
+the technical summary, filled from the same numbers as the essay and written beside the page as
+`swmm5-cplus.md` and inside it. `app/bisect_text.py` turns the SWMM6 bisection into the essay's
+numbers and commit table. The built copies in `dist/` were made that way from the sources in this
+commit.
 
 ## What this does not show
 
@@ -220,9 +238,13 @@ in `dist/` were made that way from the sources in this commit.
   in dynamic wave is compiled out in every build tested.
 - The coupling is one-way and a demonstration, not a validated method.
 - `Project` is still one large class and the modules still share the big arrays.
-- The SWMM6 comparison is one alpha commit, built without its optional modules, on SWMM5
-  models that barely touch its new physics; agreement is on the 32-bit `.out` values, and no
-  field data were used. Speed was timed on 13 models on a two-core machine.
+- The SWMM6 comparison reads one alpha commit (`c40580c`) and runs two (`c40580c` in two builds,
+  `db4634a`), built without the optional modules, on SWMM5 models that barely touch its new
+  physics; agreement is on the 32-bit `.out` values, and no field data were used. Speed was timed
+  on 13 models on a two-core machine. The first SWMM6 build had floating-point contraction on and
+  was first reported as if it had not; see the correction above. The commits were found by
+  bisection with a build without link-time optimization that reproduced the gate's builds at both
+  ends.
 
 ## Licence and credit
 
@@ -230,10 +252,18 @@ EPA SWMM is a work of the U.S. Environmental Protection Agency and is in the pub
 its engine is Lewis Rossman's design, and swmm5-cplus keeps every algorithm as he wrote it.
 No licence has been chosen yet for the restructuring itself.
 
+SWMM6 (OpenSWMM Engine) is Copyright 2026 HydroCouple Developers, licensed under the Apache
+License, Version 2.0, branch `swmm6_rel`, commits `c40580c` and `db4634a`
+(https://github.com/HydroCouple/openswmm.engine); Caleb Buahin is lead developer, with Corinne
+Wiesner-Friedman on development and documentation. No SWMM6 engine is bundled here. The one patch
+to its source (`tools/swmm6/swmm6_output_one_fwrite_per_period.patch`, marked as modified) and the
+short excerpts quoted in the essay come under that licence: see [NOTICE-SWMM6](NOTICE-SWMM6) and
+[LICENSE-APACHE-2.0](LICENSE-APACHE-2.0). The USEPA does not endorse this project.
+
 ## AI use
 
 swmm5-cplus, its tools, its app and this README were made with Claude, Anthropic's AI
-model (Claude Opus 5.5), in one session on 27 and 28 October 2026, at the request of
+model (Claude Opus 5.5), in one session on 27 and 28 October and 12 November 2026, at the request of
 Robert (Bob) Dickinson, who asked the question and supplied the model corpus.
 Responsibility for publishing the work is his. Claude ran the libclang census, wrote the
 two generators and every hand-written change after them, found and fixed the resource
@@ -243,5 +273,10 @@ against EPA 5.2.4 built from the tag, AddressSanitizer, interleaved timing with 
 floor. That evening two Claude sessions worked on SWMM6: one read its source and wrote
 `tools/loc_buckets.py`; the other, with Bob's go-ahead to build and run SWMM6's code, wrote
 `tools/swmm6/`, ran the four-engine gate, the timing, the profile and the attribution patches,
-and wrote the measured sections of the essay. No person has yet reviewed the generated C++ or the hand edits line by line, or
-rerun the gate on another machine.
+and wrote the measured sections of the essay. On 12 November, at Bob's request for a deeper look,
+the same session rebuilt SWMM6 three ways, reran the four-engine gate on all 3,562 models, found
+and corrected the essay's account of the first SWMM6 build, bisected the 94 commits between the
+two SWMM6 versions, retimed the engines, and wrote `tools/swmm6/cmp6u.py` and its companions, the
+essay's summaries and its section on the flag and the commits, and `swmm5-cplus.md`. No person has
+yet reviewed the generated C++ or the hand edits line by line, or rerun either gate on another
+machine, and nobody from the SWMM6 project has seen the comparison.

@@ -160,6 +160,55 @@ def fig_s6_classes(sm):
         if lx > 640: lx, ly = 24, ly + 18
     return svg(W, H, ''.join(b), 'Difference classes by engine pair')
 
+# ------------------------------------------------------------ one flag against ninety-four commits
+def fig_s6_flags(sA, sB, sC, cplus_same, cplus_n):
+    """Class bars for three SWMM6 builds: c40580c as first built (A), the same commit without FP
+    contraction (B), and the newer commit (C), with swmm5-cplus against EPA on top for reference."""
+    groups = [('SWMM6 new engine against its legacy engine', 'L|N'),
+              ('SWMM6 new engine against EPA 5.2.4', 'E|N'),
+              ('SWMM6 legacy engine against EPA 5.2.4', 'E|L')]
+    builds = [('c40580c, built with contraction', sA), ('c40580c, contraction off', sB), ('db4634a, 94 commits later', sC)]
+    W, LX, RX = 760, 250, 730
+    rh, gh = 22, 26
+    T = 84
+    nrows = 1 + len(groups) * len(builds)
+    H = T + rh * nrows + gh * (len(groups) + 1) + 60
+    b = [text(24, 28, 'One compiler flag moved more models than 94 commits', 14, weight=600),
+         text(24, 46, 'Each model in one band by the largest change in any link flow or node depth, as a share of that element\'s peak.', 11, 'var(--f-dim)'),
+         text(24, 60, 'Same 3,562 corpus models every time; counted where both engines wrote comparable results.', 11, 'var(--f-dim)')]
+    y = T
+    def bar(y, lab, c, bold=False, solid=None):
+        n = sum(c.get(k, 0) for k, _ in CLS)
+        b.append(text(36, y + 14, lab, 11, weight=600 if bold else 400))
+        x = LX
+        for k, col in CLS:
+            v = c.get(k, 0)
+            if not v: continue
+            w = (RX - LX) * v / n
+            b.append(f'<rect x="{x:.1f}" y="{y + 3}" width="{w:.1f}" height="16" fill="{col}"/>')
+            if k == 'identical' and w > 40:
+                b.append(text(x + 6, y + 15, f'{v:,} identical', 9, 'var(--f-face)', 'start', 600))
+            x += w
+    b.append(text(24, y + 14, 'swmm5-cplus against EPA 5.2.4', 11, weight=600))
+    y0 = y
+    b.append(f'<rect x="{LX}" y="{y0 + 3}" width="{RX - LX}" height="16" fill="var(--f-c)"/>')
+    b.append(text(LX + 6, y0 + 15, f'{cplus_same:,} of {cplus_n:,} identical, byte for byte', 9, 'var(--f-face)', 'start', 600))
+    y += rh + gh
+    for gl, p in groups:
+        b.append(text(24, y - 6, gl, 11, 'var(--f-ink)', 'start', 600))
+        for bl, s in builds:
+            bar(y, bl, s['classes'][p])
+            y += rh
+        y += gh
+    lx, ly = 24, H - 28
+    for k, col in CLS:
+        lab = {'off-network': 'only totals or tiny elements differ'}.get(k, k)
+        b.append(f'<rect x="{lx}" y="{ly - 10}" width="12" height="12" fill="{col}"/>')
+        b.append(text(lx + 16, ly, lab, 10, 'var(--f-dim)'))
+        lx += 28 + len(lab) * 5.6
+        if lx > 640: lx, ly = 24, ly + 18
+    return svg(W, H, ''.join(b), 'Engine agreement for three SWMM6 builds')
+
 # ------------------------------------------------------------ last bit to visible: growth over a run
 def fig_s6_growth(g, title_model):
     rows = g['rows']

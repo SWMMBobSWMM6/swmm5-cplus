@@ -230,7 +230,8 @@ for b in E.BLOCKS:
         essay_json['blocks'].append(dict(kind='fig', key=b[1], caption=cap))
     elif k == 'code':
         parts.append(code_html(b[2])); essay_json['blocks'].append(dict(kind='code', text=b[2]))
-    elif k == 'table':
+    elif k in ('table', 'table_num'):
+        if k == 'table_num': b = ('table',) + tuple(NUM[b[1]])      # (header, rows) computed from results
         rows = [[sub(c) for c in r] for r in b[2]]
         parts.append('<div class="tablewrap"><table class="t"><thead><tr>' + ''.join(f'<th>{h}</th>' for h in b[1]) +
                      '</tr></thead><tbody>' + ''.join('<tr>' + ''.join(f'<td>{c}</td>' for c in r) + '</tr>' for r in rows) + '</tbody></table></div>')
@@ -385,6 +386,15 @@ data = dict(samples=samples, coupling=coupling, schematic=schematic(), figs=FIGS
             verify=dict(parity=parity, tiles=verify_tiles, controls=controls, limits=limits, csv=gate_csv),
             prov=prov, commit=commit, essayHtml=essay_html, toc=toc, leak=dict(bytes=361322, allocs=134))
 
+# ------------------------------------------------------------------ technical summary for AI and engineers (app-md)
+NUM['ENGINE_COMMIT'] = commit[:7]
+APP_MD = sub(open(f'{AB}/app_md.tmpl').read())
+_left = sorted(set(re.findall(r'\{[A-Z][A-Z0-9_]+\}', APP_MD)))
+if _left: raise SystemExit('unfilled placeholders in the .md: ' + ', '.join(_left))
+APP_MD = re.sub(r'</?(code|b)>', '`', APP_MD).replace('&amp;', '&').replace('&rarr;', '->')
+assert '</script' not in APP_MD.lower()
+open(f'{AB}/swmm5-cplus.md', 'w').write(APP_MD)
+
 DOCX = f'{AB}/doc/out/swmm5-cplus-doc.docx'   # built by doc/prep_docx.py + doc/build_docx.js from this run's essay.json
 tpl = open(f'{AB}/app_template.html').read()
 tpl = tpl.replace('{MUTABLE}', str(NUM['MUTABLE'])).replace('{N}', 'separate')
@@ -392,6 +402,7 @@ out = (tpl.replace('/*__WASM_CPLUS__*/', base64.b64encode(open(f'{W}/swmm5cplus.
           .replace('/*__WASM_EPA__*/', base64.b64encode(open(f'{W}/swmm524_epa.wasm', 'rb').read()).decode())
           .replace('/*__ENGINE_CORE__*/', open(f'{AB}/engine_core.js').read())
           .replace('/*__CMP__*/', open(f'{AB}/rpt_compare.js').read())
+          .replace('/*__APPMD__*/', APP_MD)
           .replace('/*__DOCX__*/', base64.b64encode(open(DOCX, 'rb').read()).decode() if os.path.exists(DOCX) else '')
           .replace('/*__DATA__*/', json.dumps(data).replace('</', '<\\/')))
 open(f'{AB}/swmm5-cplus.html', 'w').write(out)
