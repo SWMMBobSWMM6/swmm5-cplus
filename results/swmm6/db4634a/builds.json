@@ -1,9 +1,44 @@
 {
  "note": "Three builds of SWMM6 (OpenSWMM, swmm6_rel). Fused multiply-add instructions counted with: objdump -d LIB | grep -c -E 'vfn?m(add|sub)[0-9]+[sp][sd]'. GCC 13.3, Ubuntu 24.04, x86_64.",
  "configure": "cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DOPENSWMM_WITH_GEOPACKAGE=OFF -DOPENSWMM_WITH_HDF5=OFF -DOPENSWMM_BUILD_2D=OFF -DOPENSWMM_BUILD_GPU_PLUGIN=OFF -DOPENSWMM_BUILD_PYTHON=OFF -DOPENSWMM_INSTALL=OFF (no preset); OPENSWMM_ENABLE_LTO defaults ON",
- "A": {"commit": "c40580c", "extra_flags": "", "fma_new_engine": 2665, "fma_legacy_engine": 0},
- "B": {"commit": "c40580c", "extra_flags": "-DCMAKE_C_FLAGS=-ffp-contract=off -DCMAKE_CXX_FLAGS=-ffp-contract=off", "fma_new_engine": 0, "fma_legacy_engine": 0},
- "C": {"commit": "db4634a", "extra_flags": "", "fma_new_engine": 0, "fma_legacy_engine": 0, "why": "7d7dcbc appends -ffp-contract=off to CMAKE_C_FLAGS and CMAKE_CXX_FLAGS for GCC and Clang when missing"},
- "bisection": {"build_dir": "build_step", "extra_flags": "-DCMAKE_C_FLAGS=-ffp-contract=off -DCMAKE_CXX_FLAGS=-ffp-contract=off -DOPENSWMM_ENABLE_LTO=OFF", "why": "incremental rebuilds per commit; checked against B and C hashes at both ends"},
- "engine_source_change": {"range": "c40580c..db4634a", "commits": 94, "src_engine_excluding_2d": {"files": 148, "insertions": 13943, "deletions": 1150}, "src_legacy": {"files": 12, "insertions": 355, "deletions": 16}}
+ "A": {
+  "commit": "c40580c",
+  "extra_flags": "",
+  "fma_new_engine": 2665,
+  "fma_legacy_engine": 0
+ },
+ "B": {
+  "commit": "c40580c",
+  "extra_flags": "-DCMAKE_C_FLAGS=-ffp-contract=off -DCMAKE_CXX_FLAGS=-ffp-contract=off",
+  "fma_new_engine": 0,
+  "fma_legacy_engine": 0
+ },
+ "C": {
+  "commit": "db4634a",
+  "extra_flags": "",
+  "fma_new_engine": 0,
+  "fma_legacy_engine": 0,
+  "why": "7d7dcbc appends -ffp-contract=off to CMAKE_C_FLAGS and CMAKE_CXX_FLAGS for GCC and Clang when missing"
+ },
+ "bisection": {
+  "build_dir": "build_step",
+  "extra_flags": "-DCMAKE_C_FLAGS=-ffp-contract=off -DCMAKE_CXX_FLAGS=-ffp-contract=off -DOPENSWMM_ENABLE_LTO=OFF",
+  "why": "incremental rebuilds per commit; checked against B and C hashes at both ends",
+  "check": "At c40580c the bisection build wrote the same .out bytes as build B, and at db4634a the same as build C, for both engines on all 137 models first listed (a run with no output counted as the empty file).",
+  "models": "bisect_models_epa.txt: the 121 models whose output the code changed and that EPA 5.2.4 runs; SWMM6-only decks (no distance to EPA) were dropped after the first two commits."
+ },
+ "engine_source_change": {
+  "range": "c40580c..db4634a",
+  "commits": 94,
+  "src_engine_excluding_2d": {
+   "files": 148,
+   "insertions": 13943,
+   "deletions": 1150
+  },
+  "src_legacy": {
+   "files": 12,
+   "insertions": 355,
+   "deletions": 16
+  }
+ }
 }
