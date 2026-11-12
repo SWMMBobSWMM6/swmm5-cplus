@@ -12,6 +12,7 @@ element's peak, the same measure as summarize.py's classes); 0 where the bytes a
   about same   otherwise (the output changed, but not its distance to EPA)
   no EPA       EPA wrote no comparable output for this model
 --skip drops models (one per line) whose results depend on files other corpus models write.
+A model whose run hit the time limit in either build is listed under timed_out and not counted.
 """
 import sys, json, collections
 
@@ -47,12 +48,14 @@ def verdict(d0, d1):
 
 R = {'models': len(rows), 'skipped': sorted(skip & set(rows)), 'engines': {}}
 for eng, kb, kc in (('legacy', 'LB', 'LC'), ('new', 'NB', 'NC')):
-    lst, cnt = [], collections.Counter()
+    lst, cnt, timeouts = [], collections.Counter(), []
     for m, r in sorted(rows.items()):
         if m in skip: continue
         ru = r['runs']
         if ru[kb]['out_bytes'] == 0 and ru[kc]['out_bytes'] == 0: continue
         if same(r, kb, kc): continue
+        if 'timeout' in (ru[kb]['rc'], ru[kc]['rc']):
+            timeouts.append(m); continue          # a run stopped by the time limit is not a result
         p = r.get('pairs', {}).get(kb + '|' + kc, {})
         if p.get('status') == 'identical values': continue
         d0, d1 = dist(r, 'E', kb), dist(r, 'E', kc)
@@ -68,7 +71,7 @@ for eng, kb, kc in (('legacy', 'LB', 'LC'), ('new', 'NB', 'NC')):
     R['engines'][eng] = dict(counts=dict(cnt), changed=len(lst),
                              left_exact=sum(1 for x in lst if x['exact_before'] and not x['exact_after']),
                              became_exact=sum(1 for x in lst if x['exact_after'] and not x['exact_before']),
-                             models=lst)
+                             timed_out=timeouts, models=lst)
 # models that changed in both engines, and whether they moved the same way
 L = {x['inp']: x for x in R['engines']['legacy']['models']}
 N = {x['inp']: x for x in R['engines']['new']['models']}

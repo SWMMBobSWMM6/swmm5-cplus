@@ -15,11 +15,14 @@
     "about same": 79,
     "closer": 5,
     "now refused": 1,
-    "no EPA": 3
+    "no EPA": 2
    },
-   "changed": 118,
+   "changed": 117,
    "left_exact": 50,
    "became_exact": 0,
+   "timed_out": [
+    "SWMM5_NCIMM/FALSEPUMPS.inp"
+   ],
    "models": [
     {
      "inp": "EPA/4687079-extran_pid_3_master.inp",
@@ -1166,19 +1169,6 @@
      "rc_after": 0
     },
     {
-     "inp": "SWMM5_NCIMM/FALSEPUMPS.inp",
-     "verdict": "no EPA",
-     "before": null,
-     "after": null,
-     "change": null,
-     "vol_before": null,
-     "vol_after": null,
-     "exact_before": false,
-     "exact_after": false,
-     "rc_before": "timeout",
-     "rc_after": "timeout"
-    },
-    {
      "inp": "SWMM5_NCIMM/New_RTCExample.inp",
      "verdict": "further",
      "before": 0.0,
@@ -1562,12 +1552,19 @@
     "further": 30,
     "about same": 82,
     "closer": 5,
-    "no EPA": 22,
+    "no EPA": 17,
     "now refused": 4
    },
-   "changed": 143,
+   "changed": 138,
    "left_exact": 51,
    "became_exact": 0,
+   "timed_out": [
+    "OpenSWMM_Code_Review_2026/4-io/IO-02-time-options-accept-nan-inf-huge/IO-02_start-time-nan.inp",
+    "SWMM5_NCIMM/FALSEPUMPS.inp",
+    "z1000Years/1000yearSimulation_Case1.inp",
+    "z1000Years/1000yearSimulation_Case2.inp",
+    "z1000Years/1000yearSimulation_Case6.inp"
+   ],
    "models": [
     {
      "inp": "EPA/4687079-extran_pid_3_master.inp",
@@ -2727,19 +2724,6 @@
      "rc_after": 9
     },
     {
-     "inp": "OpenSWMM_Code_Review_2026/4-io/IO-02-time-options-accept-nan-inf-huge/IO-02_start-time-nan.inp",
-     "verdict": "no EPA",
-     "before": null,
-     "after": null,
-     "change": null,
-     "vol_before": null,
-     "vol_after": null,
-     "exact_before": false,
-     "exact_after": false,
-     "rc_before": "timeout",
-     "rc_after": "timeout"
-    },
-    {
      "inp": "OpenSWMM_Code_Review_2026/4-io/IO-24-rain-barrel-covered-default/IO-24_covrd.inp",
      "verdict": "about same",
      "before": 0,
@@ -2998,19 +2982,6 @@
      "exact_after": false,
      "rc_before": 0,
      "rc_after": 0
-    },
-    {
-     "inp": "SWMM5_NCIMM/FALSEPUMPS.inp",
-     "verdict": "no EPA",
-     "before": null,
-     "after": null,
-     "change": null,
-     "vol_before": null,
-     "vol_after": null,
-     "exact_before": false,
-     "exact_after": false,
-     "rc_before": "timeout",
-     "rc_after": "timeout"
     },
     {
      "inp": "SWMM5_NCIMM/New_RTCExample.inp",
@@ -3388,53 +3359,14 @@
      "exact_after": false,
      "rc_before": 0,
      "rc_after": 0
-    },
-    {
-     "inp": "z1000Years/1000yearSimulation_Case1.inp",
-     "verdict": "no EPA",
-     "before": null,
-     "after": null,
-     "change": null,
-     "vol_before": null,
-     "vol_after": null,
-     "exact_before": false,
-     "exact_after": false,
-     "rc_before": "timeout",
-     "rc_after": "timeout"
-    },
-    {
-     "inp": "z1000Years/1000yearSimulation_Case2.inp",
-     "verdict": "no EPA",
-     "before": null,
-     "after": null,
-     "change": null,
-     "vol_before": null,
-     "vol_after": null,
-     "exact_before": false,
-     "exact_after": false,
-     "rc_before": "timeout",
-     "rc_after": "timeout"
-    },
-    {
-     "inp": "z1000Years/1000yearSimulation_Case6.inp",
-     "verdict": "no EPA",
-     "before": null,
-     "after": null,
-     "change": null,
-     "vol_before": null,
-     "vol_after": null,
-     "exact_before": false,
-     "exact_after": false,
-     "rc_before": "timeout",
-     "rc_after": "timeout"
     }
    ]
   }
  },
  "both": {
-  "n": 118,
-  "same_verdict": 118,
+  "n": 117,
+  "same_verdict": 117,
   "only_legacy": 0,
-  "only_new": 25
+  "only_new": 21
  }
 }

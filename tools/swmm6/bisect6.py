@@ -23,6 +23,7 @@ ap.add_argument('--corpus', default='/home/claude/corpus1729')
 ap.add_argument('--jobs', type=int, default=2)
 ap.add_argument('--timeout', type=float, default=300)
 ap.add_argument('--scratch', default='/tmp/claude-0/bisect6')
+ap.add_argument('--max-steps', type=int, default=0, help='stop after this many builds (0: no limit); rerun to continue')
 a = ap.parse_args()
 os.makedirs(a.scratch, exist_ok=True)
 git = lambda *x: subprocess.run(['git', '-C', a.repo, *x], capture_output=True, text=True, check=True).stdout.strip()
@@ -112,7 +113,11 @@ def pending():
     return want
 
 test(commits[0], models); test(commits[-1], models)
+steps = 0
 while True:
+    if a.max_steps and steps >= a.max_steps:
+        print('stopped after', steps, 'builds; rerun to continue', flush=True); sys.exit(0)
+    steps += 1
     want = pending()
     if os.environ.get('BISECT_DRY'):
         print({c: len(v) for c, v in sorted(want.items(), key=lambda x: idx[x[0]])}); sys.exit()
